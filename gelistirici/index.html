@@ -312,15 +312,15 @@
 
   <header class="header">
     <div class="header-left">
-      <a href="index.html" class="header-logo"><img src="turkod.png" alt="TÜRKOD"><span>TÜRKOD</span></a>
+      <a href="/" class="header-logo"><img src="../turkod.png" alt="TÜRKOD"><span>TÜRKOD</span></a>
       <span style="font-size:13px;color:var(--tx3);">Geliştirici</span>
     </div>
     <div class="header-links">
-      <a href="index.html" class="header-link">Ana Sayfa</a>
-      <a href="referans.html" class="header-link">Referans</a>
-      <a href="moduller.html" class="header-link">Modüller</a>
-      <a href="deneme.html" class="header-link">Canlı Deneme</a>
-      <a href="gelistirici.html" class="header-link active">Geliştirici</a>
+      <a href="/" class="header-link">Ana Sayfa</a>
+      <a href="/referans/" class="header-link">Referans</a>
+      <a href="/moduller/" class="header-link">Modüller</a>
+      <a href="/deneme/" class="header-link">Canlı Deneme</a>
+      <a href="/gelistirici/" class="header-link active">Geliştirici</a>
     </div>
   </header>
 
@@ -328,7 +328,7 @@
 
     <!-- BASLIK + LOGO -->
     <div class="wiki-title-section">
-      <img src="metogram.png" alt="MetogramStudios" class="wiki-logo">
+      <img src="../metogram.png" alt="MetogramStudios" class="wiki-logo">
       <div class="wiki-title-info">
         <h1>MetogramStudios</h1>
         <div class="subtitle">Yazılım geliştirme şirketi &middot; Ankara, Türkiye</div>
@@ -365,7 +365,7 @@
     <!-- INFO BOX -->
     <div class="wiki-infobox">
       <div class="wiki-infobox-header">
-        <img src="metogram.png" alt="MetogramStudios">
+        <img src="../metogram.png" alt="MetogramStudios">
         <h3>MetogramStudios</h3>
         <p>Yazılım Geliştirme Şirketi</p>
       </div>
@@ -756,7 +756,7 @@
         const hedef = document.activeElement;
         if (hedef.tagName !== 'INPUT' && hedef.tagName !== 'TEXTAREA' && !hedef.isContentEditable) {
           e.preventDefault();
-          window.location.href = 'index.html';
+          window.location.href = '/';
         }
       }
     });
