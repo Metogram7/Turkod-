@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://turkod.com/sitemap.xml
+Sitemap: https://xn--trkod-kva.com/sitemap.xml
