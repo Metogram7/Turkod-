@@ -1,0 +1,1028 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>TÜRKOD Referans</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #0a0a0f;
+      --bg2: #111118;
+      --bg3: #18181f;
+      --bg4: #1e1e28;
+      --tx: #e8e8f0;
+      --tx2: #8888a0;
+      --tx3: #555568;
+      --red: #e53e3e;
+      --red-dim: rgba(229,62,62,0.12);
+      --red-glow: rgba(229,62,62,0.25);
+      --bd: #222230;
+      --gn: #4ade80;
+      --cy: #22d3ee;
+      --pk: #f472b6;
+      --yl: #facc15;
+    }
+    * { margin:0; padding:0; box-sizing:border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: 'Inter', system-ui, -apple-system, sans-serif;
+      background: var(--bg);
+      color: var(--tx);
+      line-height: 1.6;
+    }
+
+    /* HEADER */
+    .header {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 100;
+      background: rgba(10,10,15,0.92);
+      backdrop-filter: blur(20px);
+      border-bottom: 1px solid var(--bd);
+      padding: 0 32px;
+      height: 60px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .header-left {
+      display: flex;
+      align-items: center;
+      gap: 20px;
+    }
+    .header-logo {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      text-decoration: none;
+      color: var(--tx);
+    }
+    .header-logo-icon {
+      width: 32px;
+      height: 32px;
+      border-radius: 8px;
+      background: linear-gradient(135deg, var(--red) 0%, #b91c1c 100%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 16px;
+      font-weight: 900;
+      color: #fff;
+    }
+    .header-logo-text {
+      font-size: 16px;
+      font-weight: 700;
+      color: #fff;
+    }
+    .search-wrap {
+      position: relative;
+      width: 320px;
+    }
+    .search-wrap input {
+      width: 100%;
+      padding: 10px 16px 10px 40px;
+      background: var(--bg3);
+      border: 1px solid var(--bd);
+      border-radius: 10px;
+      color: var(--tx);
+      font-size: 14px;
+      font-family: inherit;
+      outline: none;
+      transition: all 0.2s;
+    }
+    .search-wrap input:focus {
+      border-color: var(--red);
+      box-shadow: 0 0 0 3px var(--red-dim);
+    }
+    .search-wrap input::placeholder { color: var(--tx3); }
+    .search-wrap::before {
+      content: '🔍';
+      position: absolute;
+      left: 14px;
+      top: 50%;
+      transform: translateY(-50%);
+      font-size: 14px;
+    }
+    .header-links {
+      display: flex;
+      gap: 8px;
+    }
+    .header-link {
+      padding: 8px 14px;
+      background: var(--bg3);
+      border: 1px solid var(--bd);
+      border-radius: 8px;
+      color: var(--tx2);
+      font-size: 13px;
+      text-decoration: none;
+      transition: all 0.2s;
+      font-weight: 500;
+    }
+    .header-link:hover {
+      border-color: var(--red);
+      color: var(--red);
+    }
+
+    /* LAYOUT */
+    .layout {
+      display: flex;
+      margin-top: 60px;
+      min-height: calc(100vh - 60px);
+    }
+
+    /* SIDEBAR */
+    .sidebar {
+      width: 240px;
+      position: fixed;
+      top: 60px;
+      left: 0;
+      bottom: 0;
+      background: var(--bg2);
+      border-right: 1px solid var(--bd);
+      overflow-y: auto;
+      padding: 20px 0;
+    }
+    .sidebar::-webkit-scrollbar { width: 4px; }
+    .sidebar::-webkit-scrollbar-thumb { background: var(--bd); border-radius: 2px; }
+    .sidebar-cat {
+      padding: 8px 20px;
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 1.5px;
+      color: var(--tx3);
+      margin-top: 12px;
+    }
+    .sidebar-link {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 9px 20px;
+      color: var(--tx2);
+      text-decoration: none;
+      font-size: 13px;
+      transition: all 0.15s;
+      border-left: 2px solid transparent;
+    }
+    .sidebar-link:hover {
+      background: var(--bg3);
+      color: var(--tx);
+      border-left-color: var(--red);
+    }
+    .sidebar-link .badge {
+      margin-left: auto;
+      background: var(--bg4);
+      color: var(--tx3);
+      font-size: 10px;
+      padding: 2px 6px;
+      border-radius: 4px;
+      font-weight: 600;
+    }
+
+    /* MAIN */
+    .main {
+      margin-left: 240px;
+      flex: 1;
+      padding: 32px 40px;
+      max-width: 1000px;
+    }
+
+    /* SECTION */
+    .section {
+      margin-bottom: 56px;
+    }
+    .section-title {
+      font-size: 22px;
+      font-weight: 700;
+      color: #fff;
+      margin-bottom: 24px;
+      padding-bottom: 12px;
+      border-bottom: 1px solid var(--bd);
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .section-title .icon {
+      width: 28px;
+      height: 28px;
+      border-radius: 6px;
+      background: var(--red-dim);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 14px;
+    }
+
+    /* CARD */
+    .card {
+      background: var(--bg2);
+      border: 1px solid var(--bd);
+      border-radius: 12px;
+      margin-bottom: 12px;
+      overflow: hidden;
+      transition: all 0.2s;
+    }
+    .card:hover {
+      border-color: var(--red);
+      box-shadow: 0 4px 20px rgba(229,62,62,0.08);
+    }
+    .card-header {
+      padding: 14px 18px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      cursor: pointer;
+      user-select: none;
+    }
+    .card-header h3 {
+      font-size: 15px;
+      font-weight: 600;
+      color: #fff;
+      font-family: 'JetBrains Mono', monospace;
+    }
+    .card-header .tags {
+      display: flex;
+      gap: 6px;
+    }
+    .tag {
+      display: inline-block;
+      padding: 3px 8px;
+      border-radius: 6px;
+      font-size: 11px;
+      font-weight: 600;
+    }
+    .tag-red { background: var(--red-dim); color: var(--red); }
+    .tag-gn { background: rgba(74,222,128,0.12); color: var(--gn); }
+    .tag-cy { background: rgba(34,211,238,0.12); color: var(--cy); }
+    .card-body {
+      padding: 0 18px 16px;
+      display: none;
+    }
+    .card.open .card-body { display: block; }
+    .card-desc {
+      font-size: 13px;
+      color: var(--tx2);
+      margin-bottom: 12px;
+      line-height: 1.6;
+    }
+    .card-code {
+      background: var(--bg);
+      border: 1px solid var(--bd);
+      border-radius: 8px;
+      padding: 12px 14px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 12.5px;
+      line-height: 1.7;
+      color: var(--tx);
+      white-space: pre-wrap;
+      overflow-x: auto;
+    }
+    .card-code .kw { color: var(--pk); }
+    .card-code .fn { color: var(--cy); }
+    .card-code .str { color: var(--gn); }
+    .card-code .cm { color: var(--tx3); }
+
+    /* BACK TO TOP */
+    .back-top {
+      position: fixed;
+      bottom: 24px;
+      right: 24px;
+      width: 44px;
+      height: 44px;
+      border-radius: 12px;
+      background: var(--red);
+      color: #fff;
+      border: none;
+      cursor: pointer;
+      font-size: 20px;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 4px 16px rgba(229,62,62,0.3);
+      transition: all 0.2s;
+      z-index: 50;
+    }
+    .back-top:hover { transform: translateY(-2px); }
+    .back-top.show { display: flex; }
+
+    /* MOBILE MENU */
+    .menu-toggle {
+      display: none;
+      background: none;
+      border: none;
+      color: var(--tx);
+      font-size: 24px;
+      cursor: pointer;
+      padding: 4px;
+    }
+
+    /* RESPONSIVE */
+    @media (max-width: 900px) {
+      .sidebar {
+        transform: translateX(-100%);
+        transition: transform 0.3s;
+        z-index: 90;
+        width: 260px;
+      }
+      .sidebar.open { transform: translateX(0); }
+      .main { margin-left: 0; padding: 24px 16px; }
+      .menu-toggle { display: block; }
+      .search-wrap { width: 180px; }
+      .header-links { display: none; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- HEADER -->
+  <header class="header">
+    <div class="header-left">
+      <button class="menu-toggle" onclick="document.querySelector('.sidebar').classList.toggle('open')">&#9776;</button>
+      <a href="index.html" class="header-logo">
+        <div class="header-logo-icon">T</div>
+        <span class="header-logo-text">TÜRKOD</span>
+      </a>
+    </div>
+    <div class="search-wrap">
+      <input type="text" id="search" placeholder="Komut, anahtar kelime veya kategori ara..." oninput="filterCards(this.value)">
+    </div>
+    <div class="header-links">
+      <a href="index.html" class="header-link">Ana Sayfa</a>
+      <a href="moduller.html" class="header-link">Modüller</a>
+      <a href="deneme.html" class="header-link">Canlı Deneme</a>
+      <a href="gelistirici.html" class="header-link">Geliştirici</a>
+      <a href="https://github.com/aelif7826-ai/T-rkod/releases/download/T%C3%BCrkod/Turkod.Studyosu.Installer.3.exe" class="header-link" style="background:var(--red);color:#fff;border-color:var(--red);font-weight:700;padding:8px 18px;">&#10515; Yükle</a>
+    </div>
+  </header>
+
+  <div class="layout">
+    <!-- SIDEBAR -->
+    <nav class="sidebar" id="sidebar"></nav>
+
+    <!-- MAIN -->
+    <main class="main" id="main"></main>
+  </div>
+
+  <button class="back-top" id="backTop" onclick="window.scrollTo({top:0})">&#8593;</button>
+
+  <script>
+    const DATA = {
+      "TÜRKOD Dil Temelleri": {
+        "icon": "&#128214;",
+        "items": {
+          "Değişken Tanımlama": [
+            { name: "değişken", desc: "Yeni bir değişken tanımlar.", code: 'değişken ad := "Ali"\ndeğişken yaş := 25\ndeğişken aktif := doğru', tags: ["temel"] },
+            { name: "sabit", desc: "Değeri değiştirilemeyen sabit tanımlar.", code: 'sabit PI := 3.14159\nsabit MAX_UZUNLUK := 1024', tags: ["temel"] },
+            { name: "tür", desc: "Bir değişkenin türünü döndürür.", code: 'yazdır(tür(10))      // tam sayı\nyazdır(tür("merhaba")) // metin\nyazdır(tür(3.14))     // ondalıklı', tags: ["tur"] },
+            { name: "türAta", desc: "Değişkenin türünü zorunlu olarak belirtir.", code: 'değişken yaş : tam sayı = 25\ndeğişken ad : metin = "Ali"', tags: ["tur"] },
+          ],
+          "Koşullar": [
+            { name: "eger...ise", desc: "Koşul doğru ise çalışır.", code: 'eger yaş >= 18 ise\n  yazdır("Reşitsiniz")\nson', tags: ["kontrol"] },
+            { name: "değilse", desc: "Koşul yanlış ise çalışır.", code: 'eger yaş >= 18 ise\n  yazdır("Reşitsiniz")\ndeğilse\n  yazdır("Reşit değilsiniz")\nson', tags: ["kontrol"] },
+            { name: "değilse eger", desc: "Çoklu koşul kontrolü.", code: 'eger puans >= 90 ise\n  harf := "AA"\ndeğilse eger puans >= 80 ise\n  harf := "BA"\ndeğilse\n  harf := "FF"\nson', tags: ["kontrol"] },
+          ],
+          "Döngüler": [
+            { name: "döngü N kez", desc: "Belirtilen sayı kadar tekrar eder.", code: 'döngü 5 kez\n  yazdır("Merhaba")\nson', tags: ["dongu"] },
+            { name: "için...içinde", desc: "Aralık üzerinden döngü.", code: 'için i içinde aralık(1, 10)\n  yazdır(i)\nson', tags: ["dongu"] },
+            { name: "SonsuzDoğru", desc: "Sonsuz döngü, kırılma koşuluyla.", code: 'SonsuzDoğru\n  değer := iste("Komut: ")\n  eger değer == "çıkış" ise kırıl\nson', tags: ["dongu"] },
+            { name: "herİçinde...için", desc: "Liste/Sözlük üzerinde döngü.", code: 'değişken meyveler := ["elma", "armut", "kavun"]\nher meyve için meyveler için\n  yazdır(meyve)\nson', tags: ["dongu"] },
+            { name: "kırıl", desc: "Döngüyü erken bitirir.", code: 'için i içinde aralık(1, 100)\n  eger i == 10 ise kırıl\n  yazdır(i)\nson', tags: ["dongu"] },
+            { name: "devam", desc: "Sıradaki döngü adımına geçer.", code: 'için i içinde aralık(1, 10)\n  eger i % 2 == 0 ise devam\n  yazdır(i)\nson', tags: ["dongu"] },
+          ],
+          "Fonksiyonlar": [
+            { name: "fonksiyon", desc: "Yeni bir fonksiyon tanımlar.", code: 'fonksiyon topla(a, b)\n  dön a + b\nson\nyazdır(topla(3, 5)) // 8', tags: ["fonksiyon"] },
+            { name: "dön", desc: "Fonksiyondan değer döndürür.", code: 'fonksiyon kare(x)\n  dön x * x\nson', tags: ["fonksiyon"] },
+            { name: "varsayılan değer", desc: "Parametrelere varsayılan değer atar.", code: 'fonksiyon selamla(ad = "Dünya")\n  yazdır("Merhaba " + ad)\nson\nselamla()       // Merhaba Dünya\nselamla("Ali")  // Merhaba Ali', tags: ["fonksiyon"] },
+            { name: "lambda", desc: "Anonim fonksiyon oluşturur.", code: 'değişken kare := (x) => x * x\nyazdır(kare(5)) // 25\n\nliste.map((x) => x * 2)', tags: ["fonksiyon"] },
+          ],
+          "Veri Yapıları": [
+            { name: "Liste", desc: "Sıralı koleksiyon tanımlar.", code: 'değişken meyveler := ["elma", "armut", "kavun"]\nmeyveler.ekle("portakal")\nyazdır(meyveler[0]) // elma', tags: ["veri"] },
+            { name: "Sözlük", desc: "Anahtar-değer çiftleri saklar.", code: 'değişken kişi := { "ad": "Ali", "yaş": 25 }\nyazdır(kişi["ad"]) // Ali', tags: ["veri"] },
+            { name: "Küme", desc: "Tekrar eden değer olmayan küme.", code: 'değişken rakamlar := {1, 2, 3, 4, 5}\nrakamlar.ekle(6)\nrakamlar.çıkart(1)', tags: ["veri"] },
+            { name: "Aralık", desc: "Sayı aralığı oluşturur.", code: 'değişken aralık1 := aralık(1, 10)\niçin i içinde aralık1\n  yazdır(i)\nson', tags: ["veri"] },
+            { name: "demo", desc: "Listeyi harf harf ayırır.", code: 'değişken harfler := "Merhaba".demo()\n// ["M", "e", "r", "h", "a", "b", "a"]', tags: ["veri"] },
+            { name: "ekle", desc: "Listeye eleman ekler.", code: 'değişken l := [1, 2, 3]\nl.ekle(4)\n// [1, 2, 3, 4]', tags: ["veri"] },
+            { name: "çıkart", desc: "Listeden eleman çıkartır.", code: 'değişken l := [1, 2, 3]\nl.çıkart(2)\n// [1, 3]', tags: ["veri"] },
+            { name: "uzunluk", desc: "Liste/metin uzunluğunu döndürür.", code: 'yazdır("Merhaba".uzunluk())  // 7\nyazdır([1,2,3].uzunluk())     // 3', tags: ["veri"] },
+          ],
+          "Metin İşlemleri": [
+            { name: "uzunluk", desc: "Metin uzunluğunu döndürür.", code: 'yazdır("Merhaba".uzunluk()) // 7', tags: ["metin"] },
+            { name: "büyükHarf", desc: "Metni büyük harfe çevirir.", code: 'yazdır("merhaba".büyükHarf()) // MERHABA', tags: ["metin"] },
+            { name: "küçükHarf", desc: "Metni küçük harfe çevirir.", code: 'yazdır("MERHABA".küçükHarf()) // merhaba', tags: ["metin"] },
+            { name: "değiştir", desc: "Metin içindeki kısmı değiştirir.", code: 'yazdır("Merhaba Dünya".değiştir("Dünya", "Türkiye"))\n// Merhaba Türkiye', tags: ["metin"] },
+            { name: "böl", desc: "Metni ayraç ile böler.", code: 'değişken kelimeler := "Merhaba Dünya".böl(" ")\n// ["Merhaba", "Dünya"]', tags: ["metin"] },
+            { name: "birleştir", desc: "Listeyi metin birleştirir.", code: 'değişken l := ["Merhaba", " ", "Dünya"]\nyazdır(l.birleştir()) // Merhaba Dünya', tags: ["metin"] },
+            { name: "içeriyorMu", desc: "Metin içeriip içermediğini kontrol eder.", code: 'yazdır("Merhaba".içeriyorMu("Merh"))  // doğru\nyazdır("Merhaba".içeriyorMu("xyz"))  // yanlış', tags: ["metin"] },
+            { name: "başlangıç", desc: "Metinle başlayıp başlamadığını kontrol eder.", code: 'yazdır("Merhaba".başlangıç("Mer")) // doğru', tags: ["metin"] },
+            { name: "bitiş", desc: "Metinle bitip bitmediğini kontrol eder.", code: 'yazdır("Merhaba".bitiş("haba")) // doğru', tags: ["metin"] },
+            { name: "kira", desc: "Metnin belirli bir kesimini döndürür.", code: 'yazdır("Merhaba".kira(0, 3)) // Mer', tags: ["metin"] },
+            { name: "temizle", desc: "Başındaki/sonundaki boşlukları temizler.", code: 'yazdır("  Merhaba  ".temizle()) // "Merhaba"', tags: ["metin"] },
+            { name: "tekrarEt", desc: "Metni belirtilen sayı kadar tekrar eder.", code: 'yazdır("Ha".tekrarEt(3)) // HaHaHa', tags: ["metin"] },
+            { name: "harflerBüyükMü", desc: "Tüm harflerin büyük olup olmadığını kontrol eder.", code: 'yazdır("MERHABA".harflerBüyükMü()) // doğru', tags: ["metin"] },
+            { name: "harflerKüçükMü", desc: "Tüm harflerin küçük olup olmadığını kontrol eder.", code: 'yazdır("merhaba".harflerKüçükMü()) // doğru', tags: ["metin"] },
+            { name: "rakamMı", desc: "Metnin tamamen rakamlardan oluşup oluşmadığını kontrol eder.", code: 'yazdır("12345".rakamMı())  // doğru\nyazdır("12a45".rakamMı()) // yanlış', tags: ["metin"] },
+            { name: "sayıyaDönüştür", desc: "Metni sayıya dönüştürür.", code: 'değişken sayı := "42".sayıyaDönüştür()\nyazdır(sayı + 8) // 50', tags: ["metin"] },
+          ],
+          "Kapsam (Scope)": [
+            { name: "değişken gölgelenmesi", desc: "İç içe tanımlamalarda değişken gölgelenmesi.", code: 'değişken x := 10\neger doğru ise\n  değişken x := 20\n  yazdır(x)  // 20\nson\nyazdır(x)    // 10', tags: ["kapsam"] },
+            { name: "closure", desc: "Dış kapsamdaki değişkenlere erişim.", code: 'fonksiyon sayaçOluştur()\n  değişken sayaç := 0\n  fonksiyon artır()\n    sayaç := sayaç + 1\n    dön sayaç\n  son\n  dön artır\nson\n\ndeğişken artır := sayaçOluştur()\nyazdır(artır()) // 1\nyazdır(artır()) // 2', tags: ["kapsam"] },
+          ],
+          "Modül Sistemi": [
+            { name: "içe_aktar", desc: "Harici modülü içeri aktarır.", code: 'içe_aktar Matematik\niçe_aktar "dosya.yol/türkod-dosya.türkod"', tags: ["modul"] },
+            { name: "dışa_aktar", desc: "Mevcut modülü dışarı aktarır.", code: 'dışa_aktar benimModülüm', tags: ["modul"] },
+          ],
+          "Hata Yakalama": [
+            { name: "dene...yakala", desc: "Hataları yakalar ve işler.", code: 'dene\n  sonuç := 10 / 0\nyakala hata\n  yazdır("Hata: " + hata.mesajı)\nson', tags: ["hata"] },
+            { name: "neden", desc: "Hata oluşturur.", code: 'eger değer < 0 ise\n  neden "Değer negatif olamaz"\nson', tags: ["hata"] },
+          ],
+          "Girdi Çıkış": [
+            { name: "yazdır", desc: "Ekrana metin yazdırır.", code: 'yazdır("Merhaba Dünya")\nyazdır("Değer:", 42)', tags: ["io"] },
+            { name: "iste", desc: "Kullanıcıdan girdi alır.", code: 'değişken ad := iste("Adınızı girin: ")\nyazdır("Merhaba " + ad)', tags: ["io"] },
+            { name: "temizle", desc: "Ekranı temizler.", code: 'temizle()', tags: ["io"] },
+          ],
+          "Tür Dönüşümleri": [
+            { name: "tamSayıya", desc: "Değeri tam sayıya dönüştürür.", code: 'değişken sayı := "42".tamSayıya()', tags: ["tur"] },
+            { name: "ondalıkluya", desc: "Değeri ondalıklı sayiya dönüştürür.", code: 'değişken sayı := "3.14".ondalıkluya()', tags: ["tur"] },
+            { name: "metne", desc: "Değeri metne dönüştürür.", code: 'değişken metin := 42.metne()', tags: ["tur"] },
+            { name: "doğru", desc: "Değeri doğru/yanlış dönüştürür.", code: 'yazdır("true".doğru())  // doğru\nyazdır("0".doğru())     // yanlış', tags: ["tur"] },
+          ],
+          "Sabitler": [
+            { name: "doğru", desc: "Mantıksal değer: doğru.", code: 'değişken aktif := doğru', tags: ["sabit"] },
+            { name: "yanlış", desc: "Mantıksal değer: yanlış.", code: 'değişken aktif := yanlış', tags: ["sabit"] },
+            { name: "boş", desc: "Boş değer.", code: 'değişken sonuç := boş', tags: ["sabit"] },
+            { name: "pi", desc: "Pi sayısı (3.14159...).", code: 'yazdır(pi) // 3.141592653589793', tags: ["sabit"] },
+            { name: "e", desc: "Euler sayısı (2.71828...).", code: 'yazdır(e) // 2.718281828459045', tags: ["sabit"] },
+          ],
+          "Rastgele": [
+            { name: "Rastgele", desc: "0 ile 1 arasında rastgele ondalıklı sayı üretir.", code: 'değişken r := Rastgele()\nyazdır(r) //örnek: 0.7364...', tags: ["rastgele"] },
+            { name: "RastgeleSeç", desc: "Verilen değerlerden rastgele birini seçer.", code: 'değişken renk := RastgeleSeç("kırmızı", "yeşil", "mavi")\nyazdır(renk)', tags: ["rastgele"] },
+            { name: "RastgeleTamSayı", desc: "Belirli aralıkta rastgele tam sayı üretir.", code: 'değişken zar := RastgeleTamSayı(1, 6)\nyazdır(zar)', tags: ["rastgele"] },
+            { name: "RastgeleHarf", desc: "Rastgele bir harf üretir.", code: 'değişken harf := RastgeleHarf()\nyazdır(harf)', tags: ["rastgele"] },
+            { name: "RastgeleMetin", desc: "Rastgele metin üretir.", code: 'değişken metin := RastgeleMetin(8)\nyazdır(metin) //örnek: "a3kx9p2m"', tags: ["rastgele"] },
+            { name: "RastgeleRenk", desc: "Rastgele hex renk kodu üretir.", code: 'değişken renk := RastgeleRenk()\nyazdır(renk) //örnek: "#e3f2a1"', tags: ["rastgele"] },
+          ],
+          "Girdi İşlemleri": [
+            { name: "iste", desc: "Kullanıcıdan girdi alır.", code: 'değişken ad := iste("Adın: ")\nyazdır("Merhaba " + ad)', tags: ["giris"] },
+            { name: "evetHayır", desc: "Evet/Hayır sorusu sorar.", code: 'değişken cevap := evetHayır("Devam edilsin mi?")\neger cevap ise\n  yazdır("Devam ediliyor...")\nson', tags: ["giris"] },
+            { name: "sayıIste", desc: "Sayı girdisi alır.", code: 'değişken yaş := sayıIste("Yaşın: ")\nyazdır("Yaşın: " + yaş)', tags: ["giris"] },
+            { name: "şifreIste", desc: "Şifre girdisi alır (* ile gösterir).", code: 'değişken şifre := şifreIste("Şifren: ")\nyazdır("Şifre alındı.")', tags: ["giris"] },
+            { name: "seçimIste", desc: "Listeden seçim yapılmasını sağlar.", code: 'değişken seçenekler := ["Evet", "Hayır", "İptal"]\ndeğişken seçim := seçimIste("Bir seçenek seç:", seçenekler)\nyazdır("Seçim: " + seçim)', tags: ["giris"] },
+            { name: "renkIste", desc: "Renk seçici açar.", code: 'değişken renk := renkIste("Bir renk seç:")\nyazdır("Seçilen renk: " + renk)', tags: ["giris"] },
+            { name: "dosyaIste", desc: "Dosya seçme dialogu açar.", code: 'değişken dosyaYolu := dosyaIste("Bir dosya seç:", ["txt", "png", "jpg"])\neger dosyaYolu != boş ise\n  yazdır("Seçilen dosya: " + dosyaYolu)\nson', tags: ["giris"] },
+            { name: "klasörIste", desc: "Klasör seçme dialogu açar.", code: 'değişken klasörYolu := klasörIste("Bir klasör seç:")\nyazdır("Seçilen klasör: " + klasörYolu)', tags: ["giris"] },
+          ],
+          "Sayı İşlemleri": [
+            { name: "MutlakDeğer", desc: "Mutlak değeri döndürür.", code: 'yazdır(MutlakDeğer(-5))   // 5\nyazdır(MutlakDeğer(5))    // 5', tags: ["matematik"] },
+            { name: "Üst", desc: "Üs alma işlemi yapar.", code: 'yazdır(Üst(2, 3))  // 8\nyazdır(Üst(5, 2))  // 25', tags: ["matematik"] },
+            { name: "Kök", desc: "Karekök alır.", code: 'yazdır(Kök(16))  // 4\nyazdır(Kök(2))    // 1.4142...', tags: ["matematik"] },
+            { name: "Yuvarla", desc: "Sayıyı en yakın tam sayıya yuvarlar.", code: 'yazdır(Yuvarla(3.7))   // 4\nyazdır(Yuvarla(3.2))   // 3\nyazdır(Yuvarla(3.5))   // 4', tags: ["matematik"] },
+            { name: "YuvarlaAşağı", desc: "Sayıyı aşağı yuvarlar.", code: 'yazdır(YuvarlaAşağı(3.7))  // 3\nyazdır(YuvarlaAşağı(3.2))  // 3', tags: ["matematik"] },
+            { name: "YuvarlaYukarı", desc: "Sayıyı yukarı yuvarlar.", code: 'yazdır(YuvarlaYukarı(3.2))  // 4\nyazdır(YuvarlaYukarı(3.7))  // 4', tags: ["matematik"] },
+            { name: "min", desc: "İki sayıdan küçük olanı döndürür.", code: 'yazdır(min(3, 7))  // 3', tags: ["matematik"] },
+            { name: "max", desc: "İki sayıdan büyük olanı döndürür.", code: 'yazdır(max(3, 7))  // 7', tags: ["matematik"] },
+            { name: "sınır", desc: "Sayıyı sınırlar içinde tutar.", code: 'yazdır(sınır(15, 0, 10))  // 10\nyazdır(sınır(-5, 0, 10))  // 0\nyazdır(sınır(5, 0, 10))   // 5', tags: ["matematik"] },
+          ],
+          "Rakam İşlemleri": [
+            { name: "BasamakToplam", desc: "Rakamların toplamını döndürür.", code: 'yazdır(BasamakToplam(12345))  // 15\nyazdır(BasamakToplam(909))     // 18', tags: ["matematik"] },
+            { name: "BasamakUzunluk", desc: "Basamak sayısını döndürür.", code: 'yazdır(BasamakUzunluk(12345))  // 5\nyazdır(BasamakUzunluk(0))       // 1', tags: ["matematik"] },
+            { name: "BasamakDiğerleri", desc: "Basamakların diğer toplamlarını döndürür.", code: 'yazdır(BasamakDiğerleri(12345))  // 14\nyazdır(BasamakDiğerleri(909))     // 9', tags: ["matematik"] },
+            { name: "BasamakTersDon", desc: "Rakamları ters sıralar.", code: 'yazdır(BasamakTersDon(12345))  // 54321\nyazdır(BasamakTersDon(909))     // 909', tags: ["matematik"] },
+            { name: "BasamakÇarpım", desc: "Rakamların çarpımını döndürür.", code: 'yazdır(BasamakÇarpım(12345))  // 120\nyazdır(BasamakÇarpım(909))     // 0', tags: ["matematik"] },
+            { name: "Basamakİlk", desc: "İlk basamağı döndürür.", code: 'yazdır(Basamakİlk(12345))  // 1\nyazdır(Basamakİlk(9))      // 9', tags: ["matematik"] },
+            { name: "BasamakSon", desc: "Son basamağı döndürür.", code: 'yazdır(BasamakSon(12345))  // 5\nyazdır(BasamakSon(9))      // 9', tags: ["matematik"] },
+            { name: "BasamakOrta", desc: "Ortadaki basamağı döndürür.", code: 'yazdır(BasamakOrta(12345))    // 3\nyazdır(BasamakOrta(123456))    // 3', tags: ["matematik"] },
+          ],
+          "Sayı Kontrol": [
+            { name: "BasamakMükemmelMİ", desc: "Mükemmel sayı mı kontrol eder.", code: 'yazdır(BasamakMükemmelMİ(6))   // doğru (1+2+3=6)\nyazdır(BasamakMükemmelMİ(28))  // doğru\nyazdır(BasamakMükemmelMİ(12))  // yanlış', tags: ["matematik"] },
+            { name: "BasamakAsalMİ", desc: "Asal sayı mı kontrol eder.", code: 'yazdır(BasamakAsalMİ(7))   // doğru\nyazdır(BasamakAsalMİ(10))  // yanlış\nyazdır(BasamakAsalMİ(2))   // doğru', tags: ["matematik"] },
+            { name: "BasamakArmstrongMu", desc: "Armstrong sayısı mı kontrol eder.", code: 'yazdır(BasamakArmstrongMu(153))  // doğru (1^3+5^3+3^3=153)\nyazdır(BasamakArmstrongMu(370))  // doğru\nyazdır(BasamakArmstrongMu(123))  // yanlış', tags: ["matematik"] },
+            { name: "BasamakPalindromMu", desc: "Palindrom sayı mı kontrol eder.", code: 'yazdır(BasamakPalindromMu(121))  // doğru\nyazdır(BasamakPalindromMu(12321)) // doğru\nyazdır(BasamakPalindromMu(123))   // yanlış', tags: ["matematik"] },
+            { name: "BasamakArmstrongListesi", desc: "Belirli aralıktaki Armstrong sayılarını listeler.", code: 'yazdır(BasamakArmstrongListesi(1, 1000))\n// [1, 2, 3, 4, 5, 6, 7, 8, 9, 153, 370, 371, 407]', tags: ["matematik"] },
+            { name: "BasamakAsalÇarpanlar", desc: "Asal çarpanlarını listeler.", code: 'yazdır(BasamakAsalÇarpanlar(12))  // [2, 2, 3]\nyazdır(BasamakAsalÇarpanlar(100)) // [2, 2, 5, 5]', tags: ["matematik"] },
+            { name: "BasamakRakamlar", desc: "Rakamları liste olarak döndürür.", code: 'yazdır(BasamakRakamlar(12345))  // [1, 2, 3, 4, 5]\nyazdır(BasamakRakamlar(0))       // [0]', tags: ["matematik"] },
+            { name: "BasamakBasamakDeğerleri", desc: "Her basamağın değerini döndürür.", code: 'yazdır(BasamakBasamakDeğerleri(12345))\n// [10000, 2000, 300, 40, 5]', tags: ["matematik"] },
+          ],
+          "Geliştirici Araçları": [
+            { name: "çalıştır", desc: "Harici bir programı çalıştırır.", code: 'çalıştır("notepad.exe")\nçalıştır("cmd", ["/c", "dir"])', tags: ["sis"] },
+            { name: "başlat", desc: "Bir programı arka planda başlatır.", code: 'başlat("notepad.exe")', tags: ["sis"] },
+            { name: "bekle", desc: "Belirtilen süre kadar bekler (milisaniye).", code: 'bekle(2000) // 2 saniye bekle', tags: ["sis"] },
+            { name: "platform", desc: "Çalışma platformunu döndürür.", code: 'yazdır(platform) // "windows", "mac" veya "linux"', tags: ["sis"] },
+            { name: "sürüm", desc: "TÜRKOD sürümünü döndürür.", code: 'yazdır(sürüm) // "1.0.0"', tags: ["sis"] },
+          ],
+        }
+      },
+      "TürkUI": {
+        "icon": "&#127912;",
+        "items": {
+          "Pencere İşlevleri": [
+            { name: "PencereOluştur", desc: "Yeni bir pencere oluşturur.", code: 'PencereOluştur("Benim Pencerem", 800, 600)', tags: ["ui"] },
+            { name: "PencereAç", desc: "Pencereyi ekranda gösterir.", code: 'PencereAç()', tags: ["ui"] },
+            { name: "PencereKapat", desc: "Pencereyi kapatır.", code: 'PencereKapat()', tags: ["ui"] },
+            { name: "PencereBaşlıkAta", desc: "Pencere başlığını değiştirir.", code: 'PencereBaşlıkAta("Yeni Başlık")', tags: ["ui"] },
+            { name: "PencereYenidenBoyutlandır", desc: "Pencere boyutunu değiştirir.", code: 'PencereYenidenBoyutlandır(1024, 768)', tags: ["ui"] },
+            { name: "PencereKonumlandır", desc: "Pencere konumunu değiştirir.", code: 'PencereKonumlandır(100, 100)', tags: ["ui"] },
+            { name: "PencereBoyutuAl", desc: "Mevcut pencere boyutunu alır.", code: 'değişken boyut := PencereBoyutuAl()\nyazdır(boyut.genişlik + "x" + boyut.yükseklik)', tags: ["ui"] },
+            { name: "PencereKonumuAl", desc: "Mevcut pencere konumunu alır.", code: 'değişken konum := PencereKonumuAl()\nyazdır(konum.x + ", " + konum.y)', tags: ["ui"] },
+            { name: "PencereTamEkran", desc: "Pencereyi tam ekrana geçirir.", code: 'PencereTamEkran(doğru)', tags: ["ui"] },
+            { name: "PencereMinimizeEt", desc: "Pencereyi küçültür.", code: 'PencereMinimizeEt()', tags: ["ui"] },
+            { name: "PencereMaximizeEt", desc: "Pencereyi büyütür.", code: 'PencereMaximizeEt()', tags: ["ui"] },
+            { name: "PencereDahili", desc: "Pencere çerçevesiz modda açar.", code: 'PencereDahili(doğru)', tags: ["ui"] },
+            { name: "PencereSimgeDurumunaKüçült", desc: "Pencereyi simge durumuna küçültür.", code: 'PencereSimgeDurumunaKüçült()', tags: ["ui"] },
+            { name: "PencereBüyükDurumunaGetir", desc: "Pencereyi büyük durumuna getirir.", code: 'PencereBüyükDurumunaGetir()', tags: ["ui"] },
+          ],
+          "Renkler ve Tema": [
+            { name: "TemaAta", desc: "Pencere temasını değiştirir.", code: 'TemaAta("açık")   // açık tema\nTemaAta("karanlık") // karanlık tema\nTemaAta("sistem")  // sistem ayarını kullan', tags: ["tema"] },
+            { name: "TemaAl", desc: "Mevcut temayı alır.", code: 'değişken tema := TemaAl()\nyazdır(tema)', tags: ["tema"] },
+            { name: "RenkPaletiOluştur", desc: "Özel renk paleti oluşturur.", code: 'RenkPaletiOluştur("turuncu", ["#FF6B35", "#F7C59F", "#EFEFD0"])', tags: ["tema"] },
+            { name: "ArkaPlanRengiAta", desc: "Pencere arka plan rengini değiştirir.", code: 'ArkaPlanRengiAta("#1a1a2e")', tags: ["tema"] },
+            { name: "MetinRengiAta", desc: "Varsayılan metin rengini değiştirir.", code: 'MetinRengiAta("#e8e8f0")', tags: ["tema"] },
+            { name: "VurguRengiAta", desc: "Vurgu rengini değiştirir.", code: 'VurguRengiAta("#e53e3e")', tags: ["tema"] },
+          ],
+          "Metin Bileşenleri": [
+            { name: "MetinEkle", desc: "Metin kutusu ekler.", code: 'MetinEkle("metin1", "Varsayılan metin")', tags: ["bilesen"] },
+            { name: "MetinOku", desc: "Metin kutusundaki değeri okur.", code: 'değişken değer := MetinOku("metin1")\nyazdır(değer)', tags: ["bilesen"] },
+            { name: "MetinTemizle", desc: "Metin kutusunu temizler.", code: 'MetinTemizle("metin1")', tags: ["bilesen"] },
+            { name: "MetinDoldur", desc: "Metin kutusunu doldurur.", code: 'MetinDoldur("metin1", "Yeni değer")', tags: ["bilesen"] },
+            { name: "MetinOdağı", desc: "Metin kutusuna odaklanır.", code: 'MetinOdağı("metin1")', tags: ["bilesen"] },
+            { name: "MetinPasifYap", desc: "Metin kutusunu pasif yapar.", code: 'MetinPasifYap("metin1", doğru)', tags: ["bilesen"] },
+            { name: "MetinGizle", desc: "Metin kutusunu gizler.", code: 'MetinGizle("metin1", doğru)', tags: ["bilesen"] },
+            { name: "MetinGöster", desc: "Metin kutusunu gösterir.", code: 'MetinGöster("metin1")', tags: ["bilesen"] },
+            { name: "MetinMaksUzunluk", desc: "Metin kutusunda izin verilen maksimum uzunluk.", code: 'MetinMaksUzunluk("metin1", 50)', tags: ["bilesen"] },
+            { name: "MetinSilinemezYap", desc: "Metin kutusunu silinemez yapar.", code: 'MetinSilinemezYap("metin1", doğru)', tags: ["bilesen"] },
+          ],
+          "Butonlar": [
+            { name: "ButonEkle", desc: "Buton ekler.", code: 'ButonEkle("buton1", "Tıkla")', tags: ["bilesen"] },
+            { name: "ButonDinle", desc: "Buton tıklama olayını dinler.", code: 'ButonDinle("buton1")\n  yazdır("Butona tıklandı!")\nson', tags: ["bilesen"] },
+            { name: "ButonMetniAta", desc: "Butonun yazısını değiştirir.", code: 'ButonMetniAta("buton1", "Yeni Yazı")', tags: ["bilesen"] },
+            { name: "ButonPasifYap", desc: "Butonu pasif yapar.", code: 'ButonPasifYap("buton1", doğru)', tags: ["bilesen"] },
+            { name: "ButonRengiAta", desc: "Buton rengini değiştirir.", code: 'ButonRengiAta("buton1", "#e53e3e")', tags: ["bilesen"] },
+            { name: "ButonGizle", desc: "Butonu gizler.", code: 'ButonGizle("buton1")', tags: ["bilesen"] },
+            { name: "ButonGöster", desc: "Butonu gösterir.", code: 'ButonGöster("buton1")', tags: ["bilesen"] },
+            { name: "ButonSimgeAta", desc: "Butona simge ekler.", code: 'ButonSimgeAta("buton1", "kaydet")', tags: ["bilesen"] },
+            { name: "ButonArkaPlanRengiAta", desc: "Buton arka plan rengini değiştirir.", code: 'ButonArkaPlanRengiAta("buton1", "#4ade80")', tags: ["bilesen"] },
+            { name: "ButonYazıRengiAta", desc: "Buton yazı rengini değiştirir.", code: 'ButonYazıRengiAta("buton1", "#ffffff")', tags: ["bilesen"] },
+          ],
+          "Giriş Kutuları": [
+            { name: "SayıGirişi", desc: "Sayı girişi alanı ekler.", code: 'SayıGirişi("sayi1", 0, 100, 1)', tags: ["bilesen"] },
+            { name: "SayıGirişiDeğeri", desc: "Sayı girişi değerini alır.", code: 'değişken sayı := SayıGirişiDeğeri("sayi1")\nyazdır(sayı)', tags: ["bilesen"] },
+            { name: "SayıGirişiAta", desc: "Sayı girişi değerini atar.", code: 'SayıGirişiAta("sayi1", 42)', tags: ["bilesen"] },
+            { name: "OnayKutusu", desc: "Onay kutusu ekler.", code: 'OnayKutusu("onay1", "Şartları kabul ediyorum")', tags: ["bilesen"] },
+            { name: "OnayKutusuDeğeri", desc: "Onay kutusu değerini alır.", code: 'değişken onay := OnayKutusuDeğeri("onay1")\nyazdır(onay) // doğru veya yanlış', tags: ["bilesen"] },
+            { name: "AçılırMenü", desc: "Açılır menü ekler.", code: 'AçılırMenü("menu1", ["Seçenek 1", "Seçenek 2", "Seçenek 3"])', tags: ["bilesen"] },
+            { name: "AçılırMenüSeçimi", desc: "Açılır menü seçimini alır.", code: 'değişken seçim := AçılırMenüSeçimi("menu1")\nyazdır(seçim)', tags: ["bilesen"] },
+            { name: "Çubuk", desc: "Süreç çubuğu ekler.", code: 'Çubuk("çubuk1", 0, 100, 50)', tags: ["bilesen"] },
+            { name: "ÇubukDeğeri", desc: "Süreç çubuğu değerini alır.", code: 'değişken değer := ÇubukDeğeri("çubuk1")\nyazdır(değer)', tags: ["bilesen"] },
+          ],
+          "Tablo ve Liste": [
+            { name: "TabloOluştur", desc: "Tablo oluşturur.", code: 'TabloOluştur("tablo1", ["ID", "Ad", "Yaş"])', tags: ["bilesen"] },
+            { name: "TabloSatırEkle", desc: "Tabloya satır ekler.", code: 'TabloSatırEkle("tablo1", [1, "Ali", 25])\nTabloSatırEkle("tablo1", [2, "Ayşe", 30])', tags: ["bilesen"] },
+            { name: "TabloTemizle", desc: "Tabloyu temizler.", code: 'TabloTemizle("tablo1")', tags: ["bilesen"] },
+            { name: "ListeKutusu", desc: "Liste kutusu ekler.", code: 'ListeKutusu("liste1", ["Elma", "Armut", "Kavun"])', tags: ["bilesen"] },
+            { name: "ListeKutusuSeçimi", desc: "Liste kutusu seçimini alır.", code: 'değişken seçim := ListeKutusuSeçimi("liste1")\nyazdır(seçim)', tags: ["bilesen"] },
+            { name: "ListeKutusuEkle", desc: "Liste kutusuna eleman ekler.", code: 'ListeKutusuEkle("liste1", "Portakal")', tags: ["bilesen"] },
+            { name: "ListeKutusuÇıkar", desc: "Liste kutusundan eleman çıkartır.", code: 'ListeKutusuÇıkar("liste1", "Armut")', tags: ["bilesen"] },
+          ],
+          "Görsel ve Medya": [
+            { name: "GörselEkle", desc: "Görsel dosyası ekler.", code: 'GörselEkle("görsel1", "dosya.yol/şekil.png")', tags: ["bilesen"] },
+            { name: "GörselYükle", desc: "URL'den görsel yükler.", code: 'GörselYükle("görsel1", "https://ornek.com/gorsel.jpg")', tags: ["bilesen"] },
+            { name: "GörselBoyutlandır", desc: "Görsel boyutunu değiştirir.", code: 'GörselBoyutlandır("görsel1", 200, 150)', tags: ["bilesen"] },
+            { name: "VideoOynat", desc: "Video oynatır.", code: 'VideoOynat("video1", "dosya.yol/video.mp4")', tags: ["bilesen"] },
+            { name: "SesOynat", desc: "Ses dosyası oynatır.", code: 'SesOynat("dosya.yol/ses.wav")', tags: ["bilesen"] },
+          ],
+          "Durum Çubuğu": [
+            { name: "DurumÇubuğu", desc: "Durum çubuğu ekler.", code: 'DurumÇubuğu("Hazır")', tags: ["bilesen"] },
+            { name: "DurumÇubuğuGüncelle", desc: "Durum çubuğunu günceller.", code: 'DurumÇubuğuGüncelle("İşlem devam ediyor...")', tags: ["bilesen"] },
+          ],
+          "Olaylar": [
+            { name: "TıklamaDinle", desc: "Tıklama olayını dinler.", code: 'TıklamaDinle("buton1")\n  yazdır("Tıklandı!")\nson', tags: ["olay"] },
+            { name: "KlavyeDinle", desc: "Klavye olayını dinler.", code: 'KlavyeDinle("tuşaBasıldı")\n  yazdır("Basılan tuş: " + tuş)\nson', tags: ["olay"] },
+            { name: "FareDinle", desc: "Fare olayını dinler.", code: 'FareDinle("hareket")\n  yazdır("Fare: " + x + ", " + y)\nson', tags: ["olay"] },
+            { name: "PencereOlayDinle", desc: "Pencere olayını dinler.", code: 'PencereOlayDinle("kapatma")\n  yazdır("Pencere kapatılıyor...")\nson', tags: ["olay"] },
+          ],
+          "İlerleme Çubuğu": [
+            { name: "İlerlemeÇubuğu", desc: "İlerleme çubuğu ekler.", code: 'İlerlemeÇubuğu("ileri1", 0, 100, 0)', tags: ["bilesen"] },
+            { name: "İlerlemeÇubuğuGüncelle", desc: "İlerleme çubuğunu günceller.", code: 'İlerlemeÇubuğuGüncelle("ileri1", 50)', tags: ["bilesen"] },
+          ],
+          "Mesaj Kutuları": [
+            { name: "MesajKutusu", desc: "Bilgi mesaj kutusu gösterir.", code: 'MesajKutusu("İşlem başarılı!", "Bilgi")', tags: ["mesaj"] },
+            { name: "UyarıKutusu", desc: "Uyarı mesaj kutusu gösterir.", code: 'UyarıKutusu("Dikkat edin!", "Uyarı")', tags: ["mesaj"] },
+            { name: "HataKutusu", desc: "Hata mesaj kutusu gösterir.", code: 'HataKutusu("Bir hata oluştu!", "Hata")', tags: ["mesaj"] },
+            { name: "OnayKutusu", desc: "Onay mesaj kutusu gösterir.", code: 'değişken cevap := OnayKutusu("Devam edilsin mi?", "Onay")\neger cevap ise\n  yazdır("Devam ediliyor...")\nson', tags: ["mesaj"] },
+          ],
+        }
+      },
+      "Dosyaİşlemleri": {
+        "icon": "&#128193;",
+        "items": {
+          "Dosya İşlemleri": [
+            { name: "DosyaAç", desc: "Dosya okuma/açma işlemi.", code: 'değişken içerik := DosyaAç("dosya.txt")\nyazdır(içerik)', tags: ["dosya"] },
+            { name: "DosyaOku", desc: "Dosyayı okur.", code: 'değişken içerik := DosyaOku("dosya.txt")\nyazdır(içerik)', tags: ["dosya"] },
+            { name: "DosyaYaz", desc: "Dosyaya yazar.", code: 'DosyaYaz("dosya.txt", "Merhaba Dünya")', tags: ["dosya"] },
+            { name: "DosyaEkle", desc: "Dosyaya içerik ekler.", code: 'DosyaEkle("dosya.txt", "Yeni satır")', tags: ["dosya"] },
+            { name: "DosyaSil", desc: "Dosyayı siler.", code: 'DosyaSil("dosya.txt")', tags: ["dosya"] },
+            { name: "DosyaKopyala", desc: "Dosyayı kopyalar.", code: 'DosyaKopyala("kaynak.txt", "hedef.txt")', tags: ["dosya"] },
+            { name: "DosyaTaşı", desc: "Dosyayı taşır.", code: 'DosyaTaşı("eski.txt", "yeni/yer.txt")', tags: ["dosya"] },
+            { name: "DosyaYenidenAdlandır", desc: "Dosyayı yeniden adlandırır.", code: 'DosyaYenidenAdlandır("eski.txt", "yeni.txt")', tags: ["dosya"] },
+            { name: "DosyaVarMı", desc: "Dosyanın var olup olmadığını kontrol eder.", code: 'eger DosyaVarMı("dosya.txt") ise\n  yazdır("Dosya mevcut")\ndeğilse\n  yazdır("Dosya bulunamadı")\nson', tags: ["dosya"] },
+            { name: "DosyaBoyutu", desc: "Dosya boyutunu döndürür.", code: 'değişken boyut := DosyaBoyutu("dosya.txt")\nyazdır("Boyut: " + boyut + " byte")', tags: ["dosya"] },
+            { name: "DosyaUzantısı", desc: "Dosya uzantısını döndürür.", code: 'değişken uzantı := DosyaUzantısı("dosya.txt")\nyazdır(uzantı) // ".txt"', tags: ["dosya"] },
+            { name: "DosyaAdı", desc: "Dosya adını döndürür.", code: 'değişken ad := DosyaAdı("yol/dosya.txt")\nyazdır(ad) // "dosya.txt"', tags: ["dosya"] },
+            { name: "DosyaYolu", desc: "Dosya yolunu döndürür.", code: 'değişken yol := DosyaYolu("dosya.txt")\nyazdır(yol)', tags: ["dosya"] },
+            { name: "DosyaGüncellemeTarihi", desc: "Dosya güncelleme tarihini döndürür.", code: 'değişken tarih := DosyaGüncellemeTarihi("dosya.txt")\nyazdır(tarih)', tags: ["dosya"] },
+            { name: "DosyaOluşturmaTarihi", desc: "Dosya oluşturma tarihini döndürür.", code: 'değişken tarih := DosyaOluşturmaTarihi("dosya.txt")\nyazdır(tarih)', tags: ["dosya"] },
+            { name: "DosyaSaltOkunur", desc: "Dosyayı salt okunur yapar.", code: 'DosyaSaltOkunur("dosya.txt", doğru)', tags: ["dosya"] },
+            { name: "DosyaGizli", desc: "Dosyayı gizli yapar.", code: 'DosyaGizli("dosya.txt", doğru)', tags: ["dosya"] },
+            { name: "EXEOluştur", desc: "Çalıştırılabilir EXE dosyası oluşturur.", code: 'EXEOluştur("uygulama.türkod", "uygulama.exe")', tags: ["dosya"] },
+          ],
+          "Klasör İşlemleri": [
+            { name: "KlasörOluştur", desc: "Yeni klasör oluşturur.", code: 'KlasörOluştur("yeni-klasor")', tags: ["klasor"] },
+            { name: "KlasörSil", desc: "Klasörü siler.", code: 'KlasörSil("klasor")', tags: ["klasor"] },
+            { name: "KlasörKopyala", desc: "Klasörü kopyalar.", code: 'KlasörKopyala("kaynak", "hedef")', tags: ["klasor"] },
+            { name: "KlasörTaşı", desc: "Klasörü taşır.", code: 'KlasörTaşı("eski", "yeni/yer")', tags: ["klasor"] },
+            { name: "KlasörVarMı", desc: "Klasörün var olup olmadığını kontrol eder.", code: 'eger KlasörVarMı("klasor") ise\n  yazdır("Klasör mevcut")\nson', tags: ["klasor"] },
+            { name: "Klasörİçeriği", desc: "Klasör içeriğini listeler.", code: 'değişken dosyalar := Klasörİçeriği(".")\nher dosya için dosyalar için\n  yazdır(dosya)\nson', tags: ["klasor"] },
+            { name: "KlasörAltKlasörleri", desc: "Alt klasörleri listeler.", code: 'değişken altlar := KlasörAltKlasörleri(".")\nher alt için altlar için\n  yazdır(alt)\nson', tags: ["klasor"] },
+            { name: "KlasörDosyaları", desc: "Klasördeki dosyaları listeler.", code: 'değişken dosyalar := KlasörDosyaları(".")\nher dosya için dosyalar için\n  yazdır(dosya)\nson', tags: ["klasor"] },
+            { name: "MevcutDizin", desc: "Mevcut çalışma dizinini döndürür.", code: 'değişken dizin := MevcutDizin()\nyazdır(dizin)', tags: ["klasor"] },
+            { name: "DizinDeğiştir", desc: "Çalışma dizinini değiştirir.", code: 'DizinDeğiştir("yeni/dizin")', tags: ["klasor"] },
+          ],
+        }
+      },
+      "JSON": {
+        "icon": "&#129518;",
+        "items": {
+          "JSON İşlemleri": [
+            { name: "JSON.oku", desc: "JSON dosyasını okur.", code: 'değişken veri := JSON.oku("veri.json")\nyazdır(veri)', tags: ["json"] },
+            { name: "JSON.yaz", desc: "JSON dosyasına yazar.", code: 'JSON.yaz("veri.json", veri)', tags: ["json"] },
+            { name: "JSON.parse", desc: "JSON metnini nesneye çevirir.", code: 'değişken nesne := JSON.parse(\'{"ad": "Ali", "yaş": 25}\')\nyazdır(nesne.ad)', tags: ["json"] },
+            { name: "JSON.oluştur", desc: "JSON metni oluşturur.", code: 'değişken json := JSON.oluştur({ "ad": "Ali", "yaş": 25 })\nyazdır(json)', tags: ["json"] },
+            { name: "JSON.doğrula", desc: "JSON formatını doğrular.", code: 'eger JSON.doğrula(json) ise\n  yazdır("Geçerli JSON")\ndeğilse\n  yazdır("Geçersiz JSON")\nson', tags: ["json"] },
+            { name: "JSON.boş", desc: "Boş JSON oluşturur.", code: 'değişken boşJSON := JSON.boş()', tags: ["json"] },
+            { name: "JSON.ekle", desc: "JSON nesnesine eleman ekler.", code: 'JSON.ekle(nesne, "anahtar", "değer")', tags: ["json"] },
+            { name: "JSON.çıkart", desc: "JSON nesnesinden eleman çıkartır.", code: 'JSON.çıkart(nesne, "anahtar")', tags: ["json"] },
+            { name: "JSON.anahtarlar", desc: "JSON nesnesinin anahtarlarını döndürür.", code: 'değişken anahtarlar := JSON.anahtarlar(nesne)\nher anahtar için anahtarlar için\n  yazdır(anahtar + ": " + nesne[anahtar])\nson', tags: ["json"] },
+            { name: "JSON.değerler", desc: "JSON nesnesinin değerlerini döndürür.", code: 'değişken değerler := JSON.değerler(nesne)\nher değer için değerler için\n  yazdır(değer)\nson', tags: ["json"] },
+            { name: "JSON.boyut", desc: "JSON nesnesinin boyutunu döndürür.", code: 'değişken boyut := JSON.boyut(nesne)\nyazdır("Eleman sayısı: " + boyut)', tags: ["json"] },
+            { name: "JSON.dönüştür", desc: "JSON nesnesini metne dönüştürür.", code: 'değişken metin := JSON.dönüştür(nesne)\nyazdır(metin)', tags: ["json"] },
+          ],
+        }
+      },
+      "Matematik": {
+        "icon": "&#129518;",
+        "items": {
+          "Temel İşlemler": [
+            { name: "Toplama", desc: "Toplama işlemi yapar.", code: 'yazdır(3 + 5)    // 8', tags: ["matematik"] },
+            { name: "Çıkarma", desc: "Çıkarma işlemi yapar.", code: 'yazdır(10 - 3)   // 7', tags: ["matematik"] },
+            { name: "Çarpma", desc: "Çarpma işlemi yapar.", code: 'yazdır(4 * 5)    // 20', tags: ["matematik"] },
+            { name: "Bölme", desc: "Bölme işlemi yapar.", code: 'yazdır(10 / 3)   // 3.3333...', tags: ["matematik"] },
+            { name: "Mod", desc: "Kalanı döndürür.", code: 'yazdır(10 % 3)   // 1', tags: ["matematik"] },
+            { name: "Üs", desc: "Üs alma işlemi yapar.", code: 'yazdır(2 ** 3)   // 8\nyazdır(Üst(2, 3)) // 8', tags: ["matematik"] },
+          ],
+          "İleri Matematik": [
+            { name: "Kök", desc: "Karekök işlemi.", code: 'yazdır(Kök(16))   // 4', tags: ["matematik"] },
+            { name: "MutlakDeğer", desc: "Mutlak değeri döndürür.", code: 'yazdır(MutlakDeğer(-5))  // 5', tags: ["matematik"] },
+            { name: "Yuvarla", desc: "En yakın tam sayıya yuvarlar.", code: 'yazdır(Yuvarla(3.7))  // 4', tags: ["matematik"] },
+            { name: "YuvarlaAşağı", desc: "Aşağı yuvarlar.", code: 'yazdır(YuvarlaAşağı(3.7)) // 3', tags: ["matematik"] },
+            { name: "YuvarlaYukarı", desc: "Yukarı yuvarlar.", code: 'yazdır(YuvarlaYukarı(3.2)) // 4', tags: ["matematik"] },
+          ],
+          "Trigonometri": [
+            { name: "sin", desc: "Sinüs değeri.", code: 'yazdır(sin(90))  // 1', tags: ["matematik"] },
+            { name: "cos", desc: "Kosinüs değeri.", code: 'yazdır(cos(0))   // 1', tags: ["matematik"] },
+            { name: "tan", desc: "Tanjant değeri.", code: 'yazdır(tan(45))  // 1', tags: ["matematik"] },
+            { name: "asin", desc: "Arcsinüs değeri.", code: 'yazdır(asin(1))  // 90', tags: ["matematik"] },
+            { name: "acos", desc: "Arkkosinüs değeri.", code: 'yazdır(acos(1))  // 0', tags: ["matematik"] },
+            { name: "atan", desc: "Arktanjant değeri.", code: 'yazdır(atan(1))  // 45', tags: ["matematik"] },
+          ],
+          "İstatistik": [
+            { name: "ortalama", desc: "Ortalamayı hesaplar.", code: 'yazdır(ortalama([10, 20, 30]))  // 20', tags: ["matematik"] },
+            { name: "medyan", desc: "Medyani hesaplar.", code: 'yazdır(medyan([1, 2, 3, 4, 5]))  // 3', tags: ["matematik"] },
+            { name: "mod", desc: "Mod değerini hesaplar.", code: 'yazdır(mod([1, 2, 2, 3, 3, 3]))  // 3', tags: ["matematik"] },
+            { name: "standartSapma", desc: "Standart sapmayı hesaplar.", code: 'yazdır(standartSapma([10, 20, 30]))', tags: ["matematik"] },
+            { name: "varyans", desc: "Varyansı hesaplar.", code: 'yazdır(varyans([10, 20, 30]))', tags: ["matematik"] },
+            { name: "min", desc: "Minimum değeri bulur.", code: 'yazdır(min(3, 7))  // 3', tags: ["matematik"] },
+            { name: "max", desc: "Maksimum değeri bulur.", code: 'yazdır(max(3, 7))  // 7', tags: ["matematik"] },
+          ],
+          "Sayı Teorisi": [
+            { name: "asalMı", desc: "Asal sayı mı kontrol eder.", code: 'yazdır(asalMı(7))  // doğru\nyazdır(asalMı(10)) // yanlış', tags: ["matematik"] },
+            { name: "mükemmelMı", desc: "Mükemmel sayı mı kontrol eder.", code: 'yazdır(mükemmelMı(6))  // doğru (1+2+3=6)\nyazdır(mükemmelMı(28)) // doğru', tags: ["matematik"] },
+            { name: "ebob", desc: "En büyük ortak böleni bulur.", code: 'yazdır(ebob(12, 18))  // 6', tags: ["matematik"] },
+            { name: "ekok", desc: "En küçük ortak katını bulur.", code: 'yazdır(ekok(4, 6))  // 12', tags: ["matematik"] },
+            { name: "fibonacci", desc: "Fibonacci sayısını döndürür.", code: 'yazdır(fibonacci(10))  // 55', tags: ["matematik"] },
+            { name: "faktöriyel", desc: "Faktöriyel hesaplar.", code: 'yazdır(faktöriyel(5))  // 120', tags: ["matematik"] },
+            { name: "basamakToplam", desc: "Rakamların toplamını döndürür.", code: 'yazdır(basamakToplam(12345))  // 15', tags: ["matematik"] },
+          ],
+          "Geometri": [
+            { name: "alanHesapla", desc: "Dikdörtgen alanı hesaplar.", code: 'yazdır(alanHesapla(5, 10))  // 50', tags: ["matematik"] },
+            { name: "çevreHesapla", desc: "Dikdörtgen çevresini hesaplar.", code: 'yazdır(çevreHesapla(5, 10))  // 30', tags: ["matematik"] },
+            { name: "daireAlanı", desc: "Daire alanı hesaplar.", code: 'yazdır(daireAlanı(5))  // 78.54', tags: ["matematik"] },
+            { name: "daireÇevresi", desc: "Daire çevresini hesaplar.", code: 'yazdır(daireÇevresi(5))  // 31.42', tags: ["matematik"] },
+            { name: "üçgenAlanı", desc: "Üçgen alanı hesaplar.", code: 'yazdır(üçgenAlanı(10, 5))  // 25', tags: ["matematik"] },
+            { name: "hipotenüz", desc: "Hipotenüzü hesaplar.", code: 'yazdır(hipotenüz(3, 4))  // 5', tags: ["matematik"] },
+          ],
+          "Yüzde Hesaplama": [
+            { name: "yüzdeHesapla", desc: "Yüzde hesaplar.", code: 'yazdır(yüzdeHesapla(200, 15))  // 30', tags: ["matematik"] },
+            { name: "yüzdeOran", desc: "Yüzde oranını hesaplar.", code: 'yazdır(yüzdeOran(30, 200))  // 15', tags: ["matematik"] },
+            { name: "yüzdeArtır", desc: "Yüzde olarak artırır.", code: 'yazdır(yüzdeArtır(200, 15))  // 230', tags: ["matematik"] },
+            { name: "yüzdeAzalt", desc: "Yüzde olarak azaltır.", code: 'yazdır(yüzdeAzalt(200, 15))  // 170', tags: ["matematik"] },
+            { name: "iskonto", desc: "İskonto fiyatını hesaplar.", code: 'yazdır(iskonto(1000, 20))  // 800', tags: ["matematik"] },
+            { name: "kdvHesapla", desc: "KDV dahil fiyat hesaplar.", code: 'yazdır(kdvHesapla(100, 20))  // 120', tags: ["matematik"] },
+            { name: "kdvDahil", desc: "KDV dahil fiyattan KDV'yi hesaplar.", code: 'yazdır(kdvDahil(120, 20))  // 20', tags: ["matematik"] },
+          ],
+          "Birim Dönüşümü": [
+            { name: "metreToFeet", desc: "Metreyi fit'e çevirir.", code: 'yazdır(metreToFeet(1))  // 3.28', tags: ["matematik"] },
+            { name: "feetToMetre", desc: "Fit'i metreye çevirir.", code: 'yazdır(feetToMetre(3.28))  // 1', tags: ["matematik"] },
+            { name: "kmToMil", desc: "Kilometreyi mile çevirir.", code: 'yazdır(kmToMil(1))  // 0.62', tags: ["matematik"] },
+            { name: "milToKm", desc: "Mili kilometreye çevirir.", code: 'yazdır(milToKm(1))  // 1.61', tags: ["matematik"] },
+            { name: "kgToPound", desc: "Kilogramı pounda çevirir.", code: 'yazdır(kgToPound(1))  // 2.2', tags: ["matematik"] },
+            { name: "poundToKg", desc: "Poundu kilograma çevirir.", code: 'yazdır(poundToKg(2.2))  // 1', tags: ["matematik"] },
+            { name: "celsiusToFahrenheit", desc: "Selsiyusu fahrenhayta çevirir.", code: 'yazdır(celsiusToFahrenheit(0))  // 32', tags: ["matematik"] },
+            { name: "fahrenheitToCelsius", desc: "Fahrenhayti selsiyuse çevirir.", code: 'yazdır(fahrenheitToCelsius(32))  // 0', tags: ["matematik"] },
+            { name: "litreToGalpon", desc: "Litreyi galona çevirir.", code: 'yazdır(litreToGalpon(1))  // 0.26', tags: ["matematik"] },
+            { name: "galponToLitre", desc: "Galonu litreye çevirir.", code: 'yazdır(galponToLitre(1))  // 3.79', tags: ["matematik"] },
+            { name: "wattToKilowatt", desc: "Watt'ı kilowatt'a çevirir.", code: 'yazdır(wattToKilowatt(1000))  // 1', tags: ["matematik"] },
+            { name: "kilowattToWatt", desc: "Kilowatt'ı watt'a çevirir.", code: 'yazdır(kilowattToWatt(1))  // 1000', tags: ["matematik"] },
+          ],
+          "Geliştirici Araçları": [
+            { name: "çalıştır", desc: "Harici bir programı çalıştırır.", code: 'çalıştır("notepad.exe")\nçalıştır("cmd", ["/c", "dir"])', tags: ["sis"] },
+            { name: "başlat", desc: "Bir programı arka planda başlatır.", code: 'başlat("notepad.exe")', tags: ["sis"] },
+            { name: "bekle", desc: "Belirtilen süre kadar bekle (milisaniye).", code: 'bekle(2000) // 2 saniye bekle', tags: ["sis"] },
+            { name: "platform", desc: "Çalışma platformunu döndürür.", code: 'yazdır(platform) // "windows", "mac" veya "linux"', tags: ["sis"] },
+            { name: "sürüm", desc: "TÜRKOD sürümünü döndürür.", code: 'yazdır(sürüm) // "1.0.0"', tags: ["sis"] },
+          ],
+        }
+      },
+      "Web": {
+        "icon": "&#127760;",
+        "items": {
+          "HTTP İşlemleri": [
+            { name: "Web.istek", desc: "HTTP isteği gönderir.", code: 'değişken yanıt := Web.istek("GET", "https://api.ornek.com/veriler")\nyazdır(yanıt)', tags: ["web"] },
+            { name: "Web.post", desc: "POST isteği gönderir.", code: 'değişken yanıt := Web.post("https://api.ornek.com/kayıt", { "ad": "Ali" })\nyazdır(yanıt)', tags: ["web"] },
+            { name: "Web.put", desc: "PUT isteği gönderir.", code: 'değişken yanıt := Web.put("https://api.ornek.com/güncelle/1", { "ad": "Ayşe" })', tags: ["web"] },
+            { name: "Web.sil", desc: "DELETE isteği gönderir.", code: 'Web.sil("https://api.ornek.com/sil/1")', tags: ["web"] },
+            { name: "Web.indir", desc: "Dosya indirir.", code: 'Web.indir("https://ornek.com/dosya.zip", "dosya.zip")', tags: ["web"] },
+            { name: "Web.başlıkEkle", desc: "HTTP başlığı ekler.", code: 'Web.başlıkEkle("Authorization", "Bearer " + token)', tags: ["web"] },
+          ],
+          "JSON Veri": [
+            { name: "Web.JSONoku", desc: "JSON verisi çeker.", code: 'değişken veri := Web.JSONoku("https://api.ornek.com/kullanıcılar")\nyazdır(veri)', tags: ["web"] },
+            { name: "Web.JSONgönder", desc: "JSON verisi gönderir.", code: 'Web.JSONgönder("https://api.ornek.com/kayıt", { "ad": "Ali", "yaş": 25 })', tags: ["web"] },
+          ],
+          "Web Sayfası": [
+            { name: "Web.sayfaOku", desc: "Web sayfasını okur.", code: 'değişken html := Web.sayfaOku("https://www.ornek.com")\nyazdır(html)', tags: ["web"] },
+            { name: "Web.bağlantıKontrol", desc: "Internet bağlantısını kontrol eder.", code: 'eger Web.bağlantıKontrol() ise\n  yazdır("Internet bağlantısı aktif")\ndeğilse\n  yazdır("Internet bağlantısı yok")\nson', tags: ["web"] },
+          ],
+          "Durum Kodları": [
+            { name: "200", desc: "Başarılı.", code: 'Başarılı', tags: ["web"] },
+            { name: "400", desc: "Kötü İstek.", code: 'Kötüİstek', tags: ["web"] },
+            { name: "401", desc: "Yetkisiz Erişim.", code: 'YetkisizErişim', tags: ["web"] },
+            { name: "403", desc: "Yasak.", code: 'Yasak', tags: ["web"] },
+            { name: "404", desc: "Bulunamadı.", code: 'Bulunamadı', tags: ["web"] },
+            { name: "500", desc: "Sunucu Hatası.", code: 'SunucuHatası', tags: ["web"] },
+          ],
+        }
+      },
+      "Sistem": {
+        "icon": "&#128421;",
+        "items": {
+          "İşletim Sistemi Bilgileri": [
+            { name: "Sistem.işletimSistemi", desc: "İşletim sistemi adını döndürür.", code: 'yazdır(Sistem.işletimSistemi) // "Windows 10"', tags: ["sis"] },
+            { name: "Sistem.işlemci", desc: "İşlemci bilgisini döndürür.", code: 'yazdır(Sistem.işlemci)', tags: ["sis"] },
+            { name: "Sistem.bellek", desc: "RAM bilgisini döndürür.", code: 'yazdır(Sistem.bellek + " GB")', tags: ["sis"] },
+            { name: "Sistem.diskAlanı", desc: "Disk alanını döndürür.", code: 'yazdır(Sistem.diskAlanı + " GB")', tags: ["sis"] },
+            { name: "Sistem.ekranÇözünürlüğü", desc: "Ekran çözünürlüğünü döndürür.", code: 'yazdır(Sistem.ekranÇözünürlüğü)', tags: ["sis"] },
+            { name: "Sistem.kullanıcıAdı", desc: "Kullanıcı adını döndürür.", code: 'yazdır(Sistem.kullanıcıAdı)', tags: ["sis"] },
+            { name: "Sistem.bilgisayarAdı", desc: "Bilgisayar adını döndürür.", code: 'yazdır(Sistem.bilgisayarAdı)', tags: ["sis"] },
+          ],
+          "Program Yönetimi": [
+            { name: "Sistem.programÇalıştır", desc: "Bir programı çalıştırır.", code: 'Sistem.programÇalıştır("notepad.exe")', tags: ["sis"] },
+            { name: "Sistem.programDurdur", desc: "Bir programı durdurur.", code: 'Sistem.programDurdur("notepad.exe")', tags: ["sis"] },
+            { name: "Sistem.programListesi", desc: "Çalışan programları listeler.", code: 'değişken programlar := Sistem.programListesi()\nher p için programlar için\n  yazdır(p.ad + " - " + p.pid)\nson', tags: ["sis"] },
+            { name: "Sistem.programVarMı", desc: "Programın çalışıp çalışmadığını kontrol eder.", code: 'eger Sistem.programVarMı("notepad.exe") ise\n  yazdır("Program çalışıyor")\nson', tags: ["sis"] },
+          ],
+          "Dosya Yönetimi": [
+            { name: "Sistem.dosyaAç", desc: "Varsayılan uygulama ile dosya açar.", code: 'Sistem.dosyaAç("dosya.txt")', tags: ["sis"] },
+            { name: "Sistem.klasörAç", desc: "Klasörü dosya yöneticisinde açar.", code: 'Sistem.klasörAç(".")', tags: ["sis"] },
+            { name: "Sistem.sürükle", desc: "Dosyayı sürükleme işlemi başlatır.", code: 'Sistem.sürükle("dosya.txt")', tags: ["sis"] },
+          ],
+          "Sistem Kontrolü": [
+            { name: "Sistem.bekle", desc: "Belirtilen süre kadar bekle.", code: 'Sistem.bekle(2000) // 2 saniye bekle', tags: ["sis"] },
+            { name: "Sistem.platform", desc: "Çalışma platformunu döndürür.", code: 'yazdır(Sistem.platform) // "windows"', tags: ["sis"] },
+            { name: "Sistem.sürüm", desc: "TÜRKOD sürümünü döndürür.", code: 'yazdır(Sistem.sürüm)', tags: ["sis"] },
+          ],
+        }
+      },
+      "Klavye": {
+        "icon": "&#9000;",
+        "items": {
+          "Tuş İşlemleri": [
+            { name: "Klavye.basılabilir", desc: "Bir tuşun basılıp basılmadığını kontrol eder.", code: 'eger Klavye.basılabilir("Space") ise\n  yazdır("Space basılı")\nson', tags: ["klavye"] },
+            { name: "Klavye.tuşaBasma", desc: "Tuşa basılma olayını dinler.", code: 'Klavye.tuşaBasma("Escape")\n  yazdır("Escape basıldı!")\nson', tags: ["klavye"] },
+            { name: "Klavye.tuşBırakma", desc: "Tuş bırakma olayını dinler.", code: 'Klavye.tuşBırakma("Space")\n  yazdır("Space bırakıldı!")\nson', tags: ["klavye"] },
+            { name: "Klavye.bekle", desc: "Belirli bir tuşa basılmayı bekler.", code: 'Klavye.bekle("Enter")\nyazdır("Enter basıldı!")', tags: ["klavye"] },
+            { name: "Klavye.bekleme", desc: "Süre dolana kadar bekler.", code: 'Klavye.bekleme(2000) // 2 saniye bekle', tags: ["klavye"] },
+          ],
+          "Klavye Kombinasyonları": [
+            { name: "Klavye.kombinasyon", desc: "Tuş kombinasyonlarını dinler.", code: 'Klavye.kombinasyon("ctrl+s")\n  yazdır("Kaydedildi!")\nson', tags: ["klavye"] },
+            { name: "Klavye.ctrl", desc: "Ctrl tuşu basılıp basılmadığını kontrol eder.", code: 'eger Klavye.ctrl() ise\n  yazdır("Ctrl basılı")\nson', tags: ["klavye"] },
+            { name: "Klavye.shift", desc: "Shift tuşu basılıp basılmadığını kontrol eder.", code: 'eger Klavye.shift() ise\n  yazdır("Shift basılı")\nson', tags: ["klavye"] },
+            { name: "Klavye.alt", desc: "Alt tuşu basılıp basılmadığını kontrol eder.", code: 'eger Klavye.alt() ise\n  yazdır("Alt basılı")\nson', tags: ["klavye"] },
+          ],
+          "Klavye Bilgisi": [
+            { name: "Klavye.dil", desc: "Klavye dilini döndürür.", code: 'yazdır(Klavye.dil) // "Türkçe"', tags: ["klavye"] },
+            { name: "Klavye.düz", desc: "Klavye düzenini döndürür.", code: 'yazdır(Klavye.düz) // "QWERTY"', tags: ["klavye"] },
+          ],
+        }
+      },
+      "Ses": {
+        "icon": "&#128266;",
+        "items": {
+          "Ses Çıkışı": [
+            { name: "Ses.bip", desc: "Basit bir bip sesi çıkarır.", code: 'Ses.bip()', tags: ["ses"] },
+            { name: "Ses.bipFrekans", desc: "Belirli frekansda bip sesi çıkarır.", code: 'Ses.bipFrekans(440, 500) // 440 Hz, 500 ms', tags: ["ses"] },
+            { name: "Ses.melodi", desc: "Melodi çalar.", code: 'Ses.melodi([440, 494, 523, 587], 300)', tags: ["ses"] },
+            { name: "Ses.davul", desc: "Davul ritmi çalar.", code: 'Ses.davul("tek-tek-çift", 200)', tags: ["ses"] },
+            { name: "Ses.konuş", desc: "Metni sesli olarak söyler.", code: 'Ses.konuş("Merhaba Dünya!")', tags: ["ses"] },
+            { name: "Ses.wavÇal", desc: "WAV dosyası oynatır.", code: 'Ses.wavÇal("ses.wav")', tags: ["ses"] },
+          ],
+          "Ses Kontrolü": [
+            { name: "Ses.dur", desc: "Oynatmayı durdurur.", code: 'Ses.dur()', tags: ["ses"] },
+            { name: "Ses.seviye", desc: "Ses seviyesini ayarlar.", code: 'Ses.seviye(80) // %80', tags: ["ses"] },
+            { name: "Ses.kaldır", desc: "Sesi kaldırır.", code: 'Ses.kaldır()', tags: ["ses"] },
+          ],
+        }
+      },
+      "Müzik": {
+        "icon": "&#127925;",
+        "items": {
+          "Notalar": [
+            { name: "Notalar", desc: "Müzik notaları ve frekansları.", code: 'değişken notalar := {\n  "Do": 261.63,\n  "Re": 293.66,\n  "Mi": 329.63,\n  "Fa": 349.23,\n  "Sol": 392.00,\n  "La": 440.00,\n  "Si": 493.88\n}', tags: ["muzik"] },
+          ],
+          "Melodiler": [
+            { name: "Müzik.melodi", desc: "Melodi çalar.", code: 'Müzik.melodi(["Do", "Re", "Mi", "Fa", "Sol", "La", "Si", "Do"], 300)', tags: ["muzik"] },
+            { name: "Müzik.şarkı", desc: "Şarkı çalar.", code: 'Müzik.şarkı([\n  { not: "Do", süre: 300 },\n  { not: "Re", süre: 300 },\n  { not: "Mi", süre: 300 }\n])', tags: ["muzik"] },
+          ],
+          "Akorlar": [
+            { name: "Müzik.akor", desc: "Akor çalar.", code: 'Müzik.akor(["Do", "Mi", "Sol"]) // Do Mayor akoru', tags: ["muzik"] },
+            { name: "Müzik.akorKalınlığı", desc: "Akorun kalınlığını ayarlar.", code: 'Müzik.akorKalınlığı(500)', tags: ["muzik"] },
+          ],
+          "Gamlar": [
+            { name: "Müzik.gam", desc: "Gam çalar.", code: 'Müzik.gam("Do", "Majör") // Do Majör gamı', tags: ["muzik"] },
+            { name: "Müzik.gamListesi", desc: "Mevcut gamları listeler.", code: 'yazdır(Müzik.gamListesi())', tags: ["muzik"] },
+          ],
+          "Ritimler": [
+            { name: "Müzik.davul", desc: "Davul ritmi çalar.", code: 'Müzik.davul("tek-tek-çift", 200)', tags: ["muzik"] },
+            { name: "Müzik.metronom", desc: "Metronom sesi çalar.", code: 'Müzik.metronom(120, 10) // 120 BPM, 10 saniye', tags: ["muzik"] },
+          ],
+          "Enstrümanlar": [
+            { name: "Müzik.piyano", desc: "Piyano sesi ile çalar.", code: 'Müzik.piyano("Do", 300)', tags: ["muzik"] },
+            { name: "Müzik.gitar", desc: "Gitar sesi ile çalar.", code: 'Müzik.gitar("Mi", 300)', tags: ["muzik"] },
+            { name: "Müzik.kemançı", desc: "Kemançı sesi ile çalar.", code: 'Müzik.kemançı("La", 300)', tags: ["muzik"] },
+          ],
+        }
+      },
+      "YapayZeka": {
+        "icon": "&#129302;",
+        "items": {
+          "Sohbet": [
+            { name: "YZ.sohbet", desc: "Yapay zeka ile sohbet başlatır.", code: 'değişken yanıt := YZ.sohbet("Merhaba, nasılsın?")\nyazdır(yanıt)', tags: ["yz"] },
+            { name: "YZ.sohbetBaşlat", desc: "Sohbet oturumu başlatır.", code: 'YZ.sohbetBaşlat("Sen bir asistansın.")', tags: ["yz"] },
+            { name: "YZ.sohbetDevam", desc: "Sohbette mesaj gönderir.", code: 'değişken yanıt := YZ.sohbetDevam("Bana bir fikir ver")\nyazdır(yanıt)', tags: ["yz"] },
+          ],
+          "Streaming": [
+            { name: "YZ.akışlıSohbet", desc: "Akışlı sohbet başlatır.", code: 'YZ.akışlıSohbet("Hikaye anlat")\n  yazdır(mesaj)\nson', tags: ["yz"] },
+            { name: "YZ.akışlıMetin", desc: "Akışlı metin üretir.", code: 'YZ.akışlıMetin("Uzun bir makale yaz")\n  yazdır(metin)\nson', tags: ["yz"] },
+          ],
+          "Görsel": [
+            { name: "YZ.görselÜret", desc: "Görsel üretir.", code: 'YZ.görselÜret("Gün batımında dağ manzarası")', tags: ["yz"] },
+            { name: "YZ.görselAnaliz", desc: "Görseli analiz eder.", code: 'değişken analiz := YZ.görselAnaliz("gorsel.jpg")\nyazdır(analiz)', tags: ["yz"] },
+          ],
+          "JSON": [
+            { name: "YZ.JSONsohbet", desc: "JSON formatında yanıt alır.", code: 'değişken veri := YZ.JSONsohbet("Bana 5 tane ülke adı ve nüfusu ver")\nyazdır(veri)', tags: ["yz"] },
+            { name: "YZ.JSONüret", desc: "JSON formatında veri üretir.", code: 'değişken json := YZ.JSONüret("Bir kullanıcı profili oluştur")\nyazdır(json)', tags: ["yz"] },
+          ],
+          "Tool Calling": [
+            { name: "YZ.araçlar", desc: "Araçlar ile etkileşime geçir.", code: 'YZ.araçlar([\n  { "adı": "havaDurumu", "açıklama": "Hava durumunu öğren" }\n])\n  yazdır(sonuç)\nson', tags: ["yz"] },
+          ],
+          "Embedding": [
+            { name: "YZ.embed", desc: "Metni vektörlere dönüştürür.", code: 'değişken vektörler := YZ.embed("Bu bir test cümlesidir")\nyazdır(vektörler)', tags: ["yz"] },
+            { name: "YZ.benzerlik", desc: "İki metin arasındaki benzerlik.", code: 'değişken benzerlik := YZ.benzerlik("Kedi", "Köpek")\nyazdır(benzerlik)', tags: ["yz"] },
+          ],
+          "Model Seçimi": [
+            { name: "YZ.modelSeç", desc: "Model seçimi yapar.", code: 'YZ.modelSeç("gpt-4")', tags: ["yz"] },
+            { name: "YZ.modelListesi", desc: "Mevcut modelleri listeler.", code: 'yazdır(YZ.modelListesi())', tags: ["yz"] },
+          ],
+        }
+      },
+      "Çizim": {
+        "icon": "&#9999;",
+        "items": {
+          "Kaplumbağa Çizimi": [
+            { name: "Çizim.başla", desc: "Çizim işlemini başlatır.", code: 'Çizim.başla()', tags: ["cizim"] },
+            { name: "Çizim.bitir", desc: "Çizim işlemini bitirir.", code: 'Çizim.bitir()', tags: ["cizim"] },
+            { name: "ileriGit", desc: "Kaplumbağa ileri gider.", code: 'ileriGit(100)', tags: ["cizim"] },
+            { name: "dön", desc: "Kaplumbağa döner.", code: 'dön(90) // 90 derece sağa döner', tags: ["cizim"] },
+            { name: "solDön", desc: "Kaplumbağa sola döner.", code: 'solDön(90)', tags: ["cizim"] },
+            { name: "kalemRengi", desc: "Kalem rengini değiştirir.", code: 'kalemRengi("kırmızı")', tags: ["cizim"] },
+            { name: "kalemKalınlığı", desc: "Kalem kalınlığını değiştirir.", code: 'kalemKalınlığı(3)', tags: ["cizim"] },
+            { name: "kalemKaldır", desc: "Kaldırır, çizgi çizmez.", code: 'kalemKaldır()', tags: ["cizim"] },
+            { name: "kalemAşağı", desc: "Aşağı iner, çizgi çizer.", code: 'kalemAşağı()', tags: ["cizim"] },
+            { name: "başlangıçNoktası", desc: "Başlangıç noktasını ayarlar.", code: 'başlangıçNoktası(200, 200)', tags: ["cizim"] },
+          ],
+          "Şekiller": [
+            { name: "kare", desc: "Kare çizer.", code: 'kare(100)', tags: ["cizim"] },
+            { name: "dikdörtgen", desc: "Dikdörtgen çizer.", code: 'dikdörtgen(100, 50)', tags: ["cizim"] },
+            { name: "daire", desc: "Daire çizer.", code: 'daire(50)', tags: ["cizim"] },
+            { name: "üçgen", desc: "Üçgen çizer.", code: 'üçgen(100)', tags: ["cizim"] },
+            { name: "yıldız", desc: "Yıldız çizer.", code: 'yıldız(50, 5)', tags: ["cizim"] },
+          ],
+          "Gerçek Zamanlı Çizim": [
+            { name: "Çizim.tuval", desc: "Tuval oluşturur.", code: 'Çizim.tuval(800, 600)', tags: ["cizim"] },
+            { name: "Çizim.temizle", desc: "Tuvali temizler.", code: 'Çizim.temizle()', tags: ["cizim"] },
+            { name: "Çizim.doldur", desc: "Şekli doldurur.", code: 'Çizim.doldur(doğru)', tags: ["cizim"] },
+            { name: "Çizim.renkAta", desc: "Çizim rengini ayarlar.", code: 'Çizim.renkAta("#e53e3e")', tags: ["cizim"] },
+          ],
+        }
+      },
+    };
+
+    // Build sidebar and main
+    const sidebar = document.getElementById('sidebar');
+    const main = document.getElementById('main');
+    let html = '';
+    let mainHtml = '';
+    let first = true;
+
+    for (const [cat, data] of Object.entries(DATA)) {
+      const catId = cat.replace(/[^a-zA-Z0-9]/g, '');
+      const items = Object.values(data.items).flat();
+      const catSlug = cat.replace(/[^a-zA-Z0-9]/g, '');
+
+      sidebar.innerHTML += `<div class="sidebar-cat">${data.icon} ${cat}</div>`;
+      for (const [subName, subItems] of Object.entries(data.items)) {
+        const subId = catSlug + '-' + subName.replace(/[^a-zA-Z0-9]/g, '');
+        sidebar.innerHTML += `<a href="#${subId}" class="sidebar-link">${subName} <span class="badge">${subItems.length}</span></a>`;
+      }
+
+      mainHtml += `<section class="section" id="${catSlug}">`;
+      mainHtml += `<div class="section-title"><span class="icon">${data.icon}</span> ${cat}</div>`;
+
+      for (const [subName, subItems] of Object.entries(data.items)) {
+        const subId = catSlug + '-' + subName.replace(/[^a-zA-Z0-9]/g, '');
+        mainHtml += `<div id="${subId}" style="margin-bottom:24px">`;
+        mainHtml += `<h3 style="font-size:15px;color:var(--tx2);margin-bottom:12px;padding-left:4px">${subName}</h3>`;
+
+        for (const item of subItems) {
+          const tagHtml = item.tags.map(t => {
+            let cls = 'tag-red';
+            if (['web','sis'].includes(t)) cls = 'tag-cy';
+            if (['cizim','muzik'].includes(t)) cls = 'tag-gn';
+            return `<span class="tag ${cls}">${t}</span>`;
+          }).join('');
+
+          const codeHtml = item.code.split('\n').map(l => {
+            l = l.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+            l = l.replace(/\b(degisken|sabit|fonksiyon|don|eger|degilse|son|icin|dongu|kez|SonsuzDogru|kiril|devam|dene|yakala|neden|ice_aktar|disa_aktar)\b/g, '<span class="kw">$1</span>');
+            l = l.replace(/(\/\/.*)$/g, '<span class="cm">$1</span>');
+            l = l.replace(/"([^"]*)"/g, '<span class="str">"$1"</span>');
+            l = l.replace(/\b(yazdir|iste|tur|tamSayiya|ondalikliya|metne|dogru|uzunluk|buyukHarf|kucukHarf|degistir|bol|birlestir|iceriyorMu|baslangic|bitis|kira|tekrarEt|harflerBuyukMu|harflerKucukMu|rakamMi|sayiyaDonustur|MutlakDeger|Ust|Kok|Yuvarla|YuvarlaAsagi|YuvarlaYukari|min|max|sinir|BasamakToplam|BasamakUzunluk|BasamakDigerleri|BasamakTerseDon|BasamakCarpim|BasamakIlk|BasamakSon|BasamakOrta|BasamakMukemmelMi|BasamakAsilMi|BasamakArmstrongMu|BasamakPalindromMu|BasamakArmstrongListesi|BasamakAsalCarpanlar|BasamakRakamlar|BasamakBasamakDegerleri|calistir|baslat|bekle|platform|surum|Rastgele|RastgeleSec|RastgeleTamSayi|RastgeleHarf|RastgeleMetin|RastgeleRenk|evetHayir|sayiIste|sifreIste|secimIste|renkIste|dosyaIste|klasorIste)\b/g, '<span class="fn">$1</span>');
+            return l;
+          }).join('\n');
+
+          mainHtml += `<div class="card" onclick="this.classList.toggle('open')">`;
+          mainHtml += `<div class="card-header"><h3>${item.name}</h3><div class="tags">${tagHtml}</div></div>`;
+          mainHtml += `<div class="card-body"><div class="card-desc">${item.desc}</div><div class="card-code">${codeHtml}</div></div>`;
+          mainHtml += `</div>`;
+        }
+        mainHtml += `</div>`;
+      }
+      mainHtml += `</section>`;
+    }
+    main.innerHTML = mainHtml;
+
+    // Search
+    function filterCards(q) {
+      q = q.toLowerCase();
+      document.querySelectorAll('.card').forEach(c => {
+        const text = c.textContent.toLowerCase();
+        c.style.display = text.includes(q) ? '' : 'none';
+      });
+    }
+
+    // Back to top
+    window.addEventListener('scroll', () => {
+      document.getElementById('backTop').classList.toggle('show', window.scrollY > 400);
+    });
+
+    // "e" tuşu ile geliştirici sayfasına geçiş
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'e' && !e.ctrlKey && !e.altKey && !e.metaKey) {
+        const hedef = document.activeElement;
+        if (hedef.tagName !== 'INPUT' && hedef.tagName !== 'TEXTAREA' && !hedef.isContentEditable) {
+          e.preventDefault();
+          window.location.href = 'gelistirici.html';
+        }
+      }
+    });
+  </script>
+</body>
+</html>

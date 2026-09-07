@@ -1,0 +1,1069 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>TÜRKOD - Türkçe Programlama Dili</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #0a0a0f;
+      --bg2: #111118;
+      --bg3: #18181f;
+      --bg4: #1e1e28;
+      --tx: #e8e8f0;
+      --tx2: #8888a0;
+      --tx3: #555568;
+      --red: #e53e3e;
+      --red-dim: rgba(229,62,62,0.12);
+      --red-glow: rgba(229,62,62,0.25);
+      --red-bright: #ff4444;
+      --bd: #222230;
+      --bd2: #2a2a3a;
+      --gn: #4ade80;
+      --cy: #22d3ee;
+      --or: #fb923c;
+      --pk: #f472b6;
+      --yl: #facc15;
+    }
+    * { margin:0; padding:0; box-sizing:border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: 'Inter', system-ui, -apple-system, sans-serif;
+      background: var(--bg);
+      color: var(--tx);
+      line-height: 1.6;
+      overflow-x: hidden;
+    }
+
+    /* ===== HERO ===== */
+    .hero {
+      position: relative;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 40px 24px;
+      overflow: hidden;
+    }
+    .hero::before {
+      content: '';
+      position: absolute;
+      top: -50%;
+      left: -50%;
+      width: 200%;
+      height: 200%;
+      background: radial-gradient(ellipse at 50% 30%, rgba(229,62,62,0.08) 0%, transparent 60%),
+                  radial-gradient(ellipse at 20% 80%, rgba(229,62,62,0.04) 0%, transparent 50%);
+      animation: heroGlow 8s ease-in-out infinite alternate;
+    }
+    @keyframes heroGlow {
+      0% { transform: translate(0, 0) scale(1); }
+      100% { transform: translate(-2%, -1%) scale(1.05); }
+    }
+
+    .hero-content { position: relative; z-index: 2; max-width: 800px; }
+
+    /* Logo */
+    .logo-wrap {
+      display: inline-flex;
+      align-items: center;
+      gap: 16px;
+      margin-bottom: 32px;
+    }
+    .logo-icon {
+      width: 72px;
+      height: 72px;
+      border-radius: 18px;
+      background: linear-gradient(135deg, var(--red) 0%, #b91c1c 100%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 36px;
+      font-weight: 900;
+      color: #fff;
+      box-shadow: 0 8px 32px rgba(229,62,62,0.35), 0 0 0 1px rgba(229,62,62,0.2);
+      position: relative;
+    }
+    .logo-icon::after {
+      content: '';
+      position: absolute;
+      inset: -2px;
+      border-radius: 20px;
+      background: linear-gradient(135deg, var(--red), transparent 60%);
+      z-index: -1;
+      opacity: 0.4;
+    }
+    .logo-text {
+      font-size: 42px;
+      font-weight: 800;
+      letter-spacing: -1px;
+      background: linear-gradient(135deg, #fff 30%, var(--red) 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .hero-sub {
+      font-size: 18px;
+      color: var(--tx2);
+      margin-bottom: 48px;
+      line-height: 1.7;
+    }
+    .hero-sub strong { color: var(--red); font-weight: 600; }
+
+    /* Cards */
+    .cards {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 20px;
+      max-width: 800px;
+      width: 100%;
+    }
+    .card {
+      position: relative;
+      background: var(--bg2);
+      border: 1px solid var(--bd);
+      border-radius: 16px;
+      padding: 32px 28px;
+      text-decoration: none;
+      color: var(--tx);
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      overflow: hidden;
+    }
+    .card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 3px;
+      background: linear-gradient(90deg, var(--red), transparent);
+      opacity: 0;
+      transition: opacity 0.3s;
+    }
+    .card:hover {
+      border-color: var(--red);
+      transform: translateY(-4px);
+      box-shadow: 0 12px 40px rgba(229,62,62,0.15), 0 0 0 1px rgba(229,62,62,0.1);
+    }
+    .card:hover::before { opacity: 1; }
+    .card-icon {
+      width: 48px;
+      height: 48px;
+      border-radius: 12px;
+      background: var(--red-dim);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 22px;
+      margin-bottom: 16px;
+    }
+    .card-title {
+      font-size: 18px;
+      font-weight: 700;
+      margin-bottom: 6px;
+    }
+    .card-desc {
+      font-size: 13px;
+      color: var(--tx2);
+      line-height: 1.5;
+    }
+    .card-arrow {
+      position: absolute;
+      bottom: 20px;
+      right: 20px;
+      font-size: 18px;
+      color: var(--tx3);
+      transition: all 0.3s;
+    }
+    .card:hover .card-arrow { color: var(--red); transform: translateX(4px); }
+
+    /* Scroll hint */
+    .scroll-hint {
+      position: absolute;
+      bottom: 32px;
+      left: 50%;
+      transform: translateX(-50%);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 8px;
+      color: var(--tx3);
+      font-size: 12px;
+      animation: bounce 2s infinite;
+    }
+    @keyframes bounce {
+      0%, 100% { transform: translateX(-50%) translateY(0); }
+      50% { transform: translateX(-50%) translateY(8px); }
+    }
+
+    /* ===== SECTIONS ===== */
+    .section {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 80px 32px;
+    }
+    .section-header {
+      text-align: center;
+      margin-bottom: 56px;
+    }
+    .section-badge {
+      display: inline-block;
+      padding: 6px 16px;
+      background: var(--red-dim);
+      color: var(--red);
+      border-radius: 20px;
+      font-size: 12px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 1.5px;
+      margin-bottom: 16px;
+    }
+    .section-title {
+      font-size: 36px;
+      font-weight: 800;
+      color: #fff;
+      margin-bottom: 12px;
+      letter-spacing: -0.5px;
+    }
+    .section-desc {
+      font-size: 16px;
+      color: var(--tx2);
+      max-width: 600px;
+      margin: 0 auto;
+    }
+
+    /* ===== NEDIR SECTION ===== */
+    .nedir-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 32px;
+      align-items: start;
+    }
+    .nedir-text h3 {
+      font-size: 22px;
+      font-weight: 700;
+      color: #fff;
+      margin-bottom: 16px;
+    }
+    .nedir-text p {
+      font-size: 15px;
+      color: var(--tx2);
+      line-height: 1.8;
+      margin-bottom: 16px;
+    }
+    .nedir-features {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+    .nedir-feat {
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+      padding: 14px 16px;
+      background: var(--bg3);
+      border: 1px solid var(--bd);
+      border-radius: 12px;
+      transition: all 0.2s;
+    }
+    .nedir-feat:hover {
+      border-color: var(--red);
+      background: var(--bg4);
+    }
+    .nedir-feat-icon {
+      width: 36px;
+      height: 36px;
+      border-radius: 8px;
+      background: var(--red-dim);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 16px;
+      flex-shrink: 0;
+    }
+    .nedir-feat-text h4 {
+      font-size: 14px;
+      font-weight: 600;
+      color: #fff;
+      margin-bottom: 2px;
+    }
+    .nedir-feat-text p {
+      font-size: 12.5px;
+      color: var(--tx2);
+      margin: 0;
+      line-height: 1.5;
+    }
+
+    /* ===== KULLANIM YERLERI ===== */
+    .kullanim-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 16px;
+    }
+    .kullanim-card {
+      background: var(--bg2);
+      border: 1px solid var(--bd);
+      border-radius: 14px;
+      padding: 24px;
+      transition: all 0.25s;
+      position: relative;
+      overflow: hidden;
+    }
+    .kullanim-card::after {
+      content: '';
+      position: absolute;
+      bottom: 0; left: 0; right: 0;
+      height: 2px;
+      background: var(--red);
+      transform: scaleX(0);
+      transition: transform 0.3s;
+    }
+    .kullanim-card:hover {
+      border-color: var(--red);
+      transform: translateY(-3px);
+      box-shadow: 0 8px 24px rgba(229,62,62,0.1);
+    }
+    .kullanim-card:hover::after { transform: scaleX(1); }
+    .kullanim-icon {
+      font-size: 28px;
+      margin-bottom: 12px;
+    }
+    .kullanim-card h4 {
+      font-size: 15px;
+      font-weight: 600;
+      color: #fff;
+      margin-bottom: 6px;
+    }
+    .kullanim-card p {
+      font-size: 12.5px;
+      color: var(--tx2);
+      line-height: 1.5;
+    }
+
+    /* ===== OZELLIKLER TABLE ===== */
+    .ozellik-table-wrap {
+      background: var(--bg2);
+      border: 1px solid var(--bd);
+      border-radius: 16px;
+      overflow: hidden;
+    }
+    .ozellik-table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+    .ozellik-table thead th {
+      background: var(--bg3);
+      padding: 14px 20px;
+      text-align: left;
+      font-size: 12px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      color: var(--tx2);
+      border-bottom: 1px solid var(--bd);
+    }
+    .ozellik-table tbody tr {
+      border-bottom: 1px solid var(--bd);
+      transition: background 0.15s;
+    }
+    .ozellik-table tbody tr:last-child { border-bottom: none; }
+    .ozellik-table tbody tr:hover { background: var(--bg3); }
+    .ozellik-table td {
+      padding: 14px 20px;
+      font-size: 14px;
+      vertical-align: top;
+    }
+    .ozellik-table td:first-child {
+      font-weight: 600;
+      color: #fff;
+      white-space: nowrap;
+    }
+    .ozellik-table td:nth-child(2) { color: var(--tx2); }
+    .ozellik-table td:last-child {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 12.5px;
+      color: var(--red);
+    }
+    .tag {
+      display: inline-block;
+      padding: 2px 8px;
+      border-radius: 6px;
+      font-size: 11px;
+      font-weight: 600;
+    }
+    .tag-red { background: var(--red-dim); color: var(--red); }
+    .tag-gn { background: rgba(74,222,128,0.12); color: var(--gn); }
+    .tag-cy { background: rgba(34,211,238,0.12); color: var(--cy); }
+
+    /* ===== KARSILASTIRMA ===== */
+    .karsilastirma-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 20px;
+    }
+    .karsilastirma-card {
+      background: var(--bg2);
+      border: 1px solid var(--bd);
+      border-radius: 14px;
+      padding: 28px;
+      position: relative;
+    }
+    .karsilastirma-card.highlight {
+      border-color: var(--red);
+      box-shadow: 0 0 30px rgba(229,62,62,0.1);
+    }
+    .karsilastirma-card.highlight::before {
+      content: 'TÜRKOD';
+      position: absolute;
+      top: -12px;
+      left: 24px;
+      background: var(--red);
+      color: #fff;
+      padding: 4px 14px;
+      border-radius: 8px;
+      font-size: 12px;
+      font-weight: 700;
+    }
+    .karsilastirma-card h4 {
+      font-size: 16px;
+      font-weight: 700;
+      color: #fff;
+      margin-bottom: 16px;
+    }
+    .karsilastirma-code {
+      background: var(--bg);
+      border: 1px solid var(--bd);
+      border-radius: 10px;
+      padding: 16px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 13px;
+      line-height: 1.7;
+      color: var(--tx);
+      white-space: pre-wrap;
+      overflow-x: auto;
+    }
+    .karsilastirma-code .kw { color: var(--pk); }
+    .karsilastirma-code .fn { color: var(--cy); }
+    .karsilastirma-code .str { color: var(--gn); }
+    .karsilastirma-code .cm { color: var(--tx3); }
+
+    /* ===== MODUL ONIZLEME ===== */
+    .modul-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 14px;
+    }
+    .modul-item {
+      background: var(--bg2);
+      border: 1px solid var(--bd);
+      border-radius: 12px;
+      padding: 20px;
+      text-align: center;
+      transition: all 0.25s;
+    }
+    .modul-item:hover {
+      border-color: var(--red);
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(229,62,62,0.1);
+    }
+    .modul-item .mi { font-size: 28px; margin-bottom: 10px; }
+    .modul-item h4 {
+      font-size: 13px;
+      font-weight: 600;
+      color: #fff;
+      margin-bottom: 4px;
+    }
+    .modul-item p {
+      font-size: 11px;
+      color: var(--tx3);
+    }
+
+    /* ===== FOOTER ===== */
+    .footer {
+      border-top: 1px solid var(--bd);
+      padding: 40px 32px;
+      text-align: center;
+    }
+    .footer p {
+      font-size: 13px;
+      color: var(--tx3);
+    }
+    .footer a {
+      color: var(--red);
+      text-decoration: none;
+    }
+
+    /* ===== DIVIDER ===== */
+    .divider {
+      width: 100%;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, var(--bd), transparent);
+      margin: 0 auto;
+    }
+
+    /* ===== RESPONSIVE ===== */
+    @media (max-width: 900px) {
+      .cards { grid-template-columns: 1fr; max-width: 400px; }
+      .nedir-grid { grid-template-columns: 1fr; }
+      .kullanim-grid { grid-template-columns: 1fr 1fr; }
+      .karsilastirma-grid { grid-template-columns: 1fr; }
+      .modul-grid { grid-template-columns: repeat(2, 1fr); }
+      .logo-text { font-size: 32px; }
+      .logo-icon { width: 56px; height: 56px; font-size: 28px; }
+    }
+    @media (max-width: 600px) {
+      .kullanim-grid { grid-template-columns: 1fr; }
+      .modul-grid { grid-template-columns: 1fr 1fr; }
+      .section { padding: 48px 16px; }
+      .section-title { font-size: 26px; }
+      .ozellik-table { font-size: 12px; }
+      .ozellik-table td { padding: 10px 12px; }
+    }
+
+    /* ===== DYNAMIC SCROLLING DOWNLOAD BUTTON ===== */
+    .download-wrapper {
+      margin-top: 36px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+    }
+    .download-btn-placeholder {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 160px;
+      height: 54px;
+    }
+    .hero-download-btn {
+      position: fixed;
+      top: 0;
+      left: 0;
+      z-index: 9999;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      padding: 16px 36px;
+      background: var(--red);
+      color: #fff;
+      border-radius: 12px;
+      font-size: 16px;
+      font-weight: 700;
+      text-decoration: none;
+      box-shadow: 0 6px 24px rgba(229,62,62,0.4);
+      transform-origin: top left;
+      will-change: transform;
+      transition: box-shadow 0.2s ease, background 0.2s ease;
+      white-space: nowrap;
+    }
+    .hero-download-btn:hover {
+      box-shadow: 0 10px 32px rgba(229,62,62,0.6);
+      background: var(--red-bright);
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ===== HERO ===== -->
+  <section class="hero">
+    <div class="hero-content">
+      <!-- Türk Bayrağı -->
+      <div style="margin-bottom: 40px;">
+        <img src="Türk.png" alt="Türk Bayrağı" style="width: 320px; height: auto; border-radius: 15px; filter: drop-shadow(0 10px 30px rgba(229,62,62,0.5));">
+      </div>
+      <!-- Logolar -->
+      <div style="display: flex; align-items: center; justify-content: center; gap: 50px; margin-bottom: 40px;">
+        <img src="metogram.png" alt="MetogramStudios" style="height: 140px; width: auto; border-radius: 15px; filter: drop-shadow(0 6px 24px rgba(255,255,255,0.2));">
+        <img src="turkod.png" alt="TÜRKOD" style="height: 160px; width: auto; border-radius: 15px; filter: drop-shadow(0 8px 30px rgba(229,62,62,0.5));">
+      </div>
+      <!-- Çizgi -->
+      <div style="width: 500px; height: 2px; background: linear-gradient(90deg, transparent, var(--red), transparent); margin: 0 auto 40px;"></div>
+      <!-- TÜRKOD Yazısı -->
+      <div class="logo-wrap">
+        <img src="turkod.png" alt="TÜRKOD" style="height: 110px; width: auto; border-radius: 18px; filter: drop-shadow(0 6px 20px rgba(229,62,62,0.5));">
+        <span class="logo-text">TÜRKOD</span>
+      </div>
+      <p class="hero-sub">
+        Türkçe ile programlama yapmanın en <strong>güçlü</strong> ve <strong>anlaşılır</strong> yolu.<br>
+        Masaüstü uygulamalarından yapay zekaya, çizimden müziğe kadar her şey Türkçe.
+      </p>
+      <div class="cards">
+        <a href="referans.html" class="card">
+          <div class="card-icon">&#128214;</div>
+          <div class="card-title">Referans</div>
+          <div class="card-desc">TÜRKOD'un tüm komutlarını, fonksiyonlarını ve modüllerini detaylı şekilde inceleyin.</div>
+          <span class="card-arrow">&#8594;</span>
+        </a>
+        <a href="moduller.html" class="card">
+          <div class="card-icon">&#128230;</div>
+          <div class="card-title">Modüller</div>
+          <div class="card-desc">TürkUI, Dosyaİşlemleri, Matematik, YapayZeka ve daha fazlası.</div>
+          <span class="card-arrow">&#8594;</span>
+        </a>
+        <a href="deneme.html" class="card">
+          <div class="card-icon" style="background:rgba(74,222,128,0.12);">&#9654;</div>
+          <div class="card-title">Canlı Deneme</div>
+          <div class="card-desc">TÜRKOD kodlarını tarayıcıda doğrudan yazın ve çalıştırın. Kurulum gerekmez.</div>
+          <span class="card-arrow">&#8594;</span>
+        </a>
+        <a href="gelistirici.html" class="card">
+          <div class="card-icon" style="background:rgba(244,114,182,0.12);">&#128188;</div>
+          <div class="card-title">Geliştirici</div>
+          <div class="card-desc">MetogramStudios ve Metogram7 hakkında bilgi alın, projeleri keşfedin.</div>
+          <span class="card-arrow">&#8594;</span>
+        </a>
+      </div>
+      <div class="download-wrapper">
+        <div id="download-btn-placeholder" class="download-btn-placeholder">
+          <a href="https://github.com/aelif7826-ai/T-rkod/releases/download/T%C3%BCrkod/Turkod.Studyosu.Installer.3.exe" id="scroll-download-btn" class="hero-download-btn">&#10515; Yükle</a>
+        </div>
+        <p style="margin-top:12px;font-size:12px;color:var(--tx3);">Windows 10/11 • v1.3.0 • ~130 MB</p>
+      </div>
+    </div>
+  </section>
+
+  <div class="divider"></div>
+
+  <!-- ===== TÜRKOD NEDİR ===== -->
+  <section class="section" id="nedir">
+    <div class="section-header">
+      <div class="section-badge">Türkce Programlama</div>
+      <h2 class="section-title">TÜRKOD Nedir?</h2>
+      <p class="section-desc">Türkce anahtar kelimeler ile yazılan, tamamen Türkce arayüzü ve Türkce hata mesajları sunan programlama dilidir.</p>
+    </div>
+    <div class="nedir-grid">
+      <div class="nedir-text">
+        <h3>Türkçe ile Düşün, Türkce ile Kodlayın</h3>
+        <p>
+          TÜRKOD, programlamayı herkes için erişilebilir kılmayı hedefleyen özel bir programlama dilidir.
+          İngilizce bilmeden, Türkce anahtar kelimeler ile kod yazabilir, hata mesajlarını anlayabilirsiniz.
+        </p>
+        <p>
+          Güncel Teknolojiler (Node.js, Electron, PowerShell) üzerine inşa edilmiştir.
+          Masaüstü uygulamaları, dosya işlemleri, web istekleri, yapay zeka, çizim ve müzik gibi
+          pek çok alanda kullanılabilir.
+        </p>
+      </div>
+      <div class="nedir-features">
+        <div class="nedir-feat">
+          <div class="nedir-feat-icon">&#127481;&#127479;</div>
+          <div class="nedir-feat-text">
+            <h4>Tam Türkçe Dil Desteği</h4>
+            <p>Tüm anahtar kelimeler, hata mesajları ve dokümantasyon Türkcedir.</p>
+          </div>
+        </div>
+        <div class="nedir-feat">
+          <div class="nedir-feat-icon">&#9889;</div>
+          <div class="nedir-feat-text">
+            <h4>Hızlı ve Hafif</h4>
+            <p>Node.js tabanlı altyapı ile hızlı çalışır, az kaynak tüketir.</p>
+          </div>
+        </div>
+        <div class="nedir-feat">
+          <div class="nedir-feat-icon">&#128736;</div>
+          <div class="nedir-feat-text">
+            <h4>Dahili Modüller</h4>
+            <p>Dosya işlemleri, web, matematik, ses, müzik ve daha fazlası hazır.</p>
+          </div>
+        </div>
+        <div class="nedir-feat">
+          <div class="nedir-feat-icon">&#129302;</div>
+          <div class="nedir-feat-text">
+            <h4>Yapay Zeka Entegrasyonu</h4>
+            <p>OpenAI, Ollama gibi modellerle doğrudan Türkçe iletişim kurun.</p>
+          </div>
+        </div>
+        <div class="nedir-feat">
+          <div class="nedir-feat-icon">&#127912;</div>
+          <div class="nedir-feat-text">
+            <h4>Görsel Arayüz (TürkUI)</h4>
+            <p>Masaüstü uygulamaları için Türkçe UI kütüphanesi.</p>
+          </div>
+        </div>
+        <div class="nedir-feat">
+          <div class="nedir-feat-icon">&#128196;</div>
+          <div class="nedir-feat-text">
+            <h4>EXE Oluşturma</h4>
+            <p>Kodlarınızı çalıştırılabilir Windows uygulamasına dönüştürün.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="divider"></div>
+
+  <!-- ===== KULLANIM YERLERI ===== -->
+  <section class="section" id="kullanim">
+    <div class="section-header">
+      <div class="section-badge">Kullanım Alanları</div>
+      <h2 class="section-title">Nerede Kullanılır?</h2>
+      <p class="section-desc">TÜRKOD ile farklı alanlarda projeler geliştirebilirsiniz.</p>
+    </div>
+    <div class="kullanim-grid">
+      <div class="kullanim-card">
+        <div class="kullanim-icon">&#128187;</div>
+        <h4>Masaüstü Uygulamaları</h4>
+        <p>TürkUI ile butonlu, görüntülü, form alanlı interaktif uygulamalar oluşturun.</p>
+      </div>
+      <div class="kullanim-card">
+        <div class="kullanim-icon">&#128230;</div>
+        <h4>Dosya ve Klasör İşlemleri</h4>
+        <p>Dosyaları okuyun, yazın, kopyalayın, silin. Klasör oluşturun ve yönetin.</p>
+      </div>
+      <div class="kullanim-card">
+        <div class="kullanim-icon">&#127760;</div>
+        <h4>Web Verisi Çekme</h4>
+        <p>HTTP istekleri, JSON API veri çekme, web sayfası okuma.</p>
+      </div>
+      <div class="kullanim-card">
+        <div class="kullanim-icon">&#129302;</div>
+        <h4>Yapay Zeka Uygulamaları</h4>
+        <p>OpenAI, Ollama modelleriyle Türkçe sohbet, özetleme, çevirme.</p>
+      </div>
+      <div class="kullanim-card">
+        <div class="kullanim-icon">&#127912;</div>
+        <h4>2D Çizim ve Grafik</h4>
+        <p>Kaplumbağa ile animasyonlu çizim, grafik üretimi, interaktif sanat.</p>
+      </div>
+      <div class="kullanim-card">
+        <div class="kullanim-icon">&#127925;</div>
+        <h4>Müzik ve Ses Üretimi</h4>
+        <p>Notalar, melodiler, akorlar, davul ritimleri ve ses efektleri üretin.</p>
+      </div>
+      <div class="kullanim-card">
+        <div class="kullanim-icon">&#128202;</div>
+        <h4>Veri Analizi ve Matematik</h4>
+        <p>İstatistik, geometri, trigonometri, sayı teorisi hesaplamaları.</p>
+      </div>
+      <div class="kullanim-card">
+        <div class="kullanim-icon">&#128190;</div>
+        <h4>Sistem Entegrasyonu</h4>
+        <p>İşletim sistemi bilgileri, program kontrolü, dosya yönetimi.</p>
+      </div>
+      <div class="kullanim-card">
+        <div class="kullanim-icon">&#128218;</div>
+        <h4>Eğitim ve Öğrenme</h4>
+        <p>Programlamaya Türkçe başlamak isteyenler için ideal bir başlangıç dili.</p>
+      </div>
+    </div>
+  </section>
+
+  <div class="divider"></div>
+
+  <!-- ===== ÖZELLİKLER TABLOSU ===== -->
+  <section class="section" id="ozellikler">
+    <div class="section-header">
+      <div class="section-badge">Dil Özellikleri</div>
+      <h2 class="section-title">TÜRKOD Özellikleri</h2>
+      <p class="section-desc">Dilin sunduğu temel özellikler ve yapılandırma.</p>
+    </div>
+    <div class="ozellik-table-wrap">
+      <table class="ozellik-table">
+        <thead>
+          <tr>
+            <th>Özellik</th>
+            <th>Açıklama</th>
+            <th>Örnek</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Değişken Tanımlama</td>
+            <td><span class="tag tag-red">Türkçe</span> değişken anahtar kelimesi ile başlar</td>
+            <td>değişken ad := "Ali"</td>
+          </tr>
+          <tr>
+            <td>Fonksiyonlar</td>
+            <td>Parametreli, varsayılan değerli, recursive fonksiyonlar</td>
+            <td>fonksiyon topla(a, b)</td>
+          </tr>
+          <tr>
+            <td>Koşullar</td>
+            <td>eger/değilse/değilse eger ile çok dallanma desteği</td>
+            <td>eger koşul ise ... son</td>
+          </tr>
+          <tr>
+            <td>Döngüler</td>
+            <td>döngü N kez, SonsuzDogru, için döngüsü desteği</td>
+            <td>için i içinde aralık(1, 10)</td>
+          </tr>
+          <tr>
+            <td>Veri Yapıları</td>
+            <td>Liste, Sözlük, Küme, Aralık desteği</td>
+            <td>değişken l := [1, 2, 3]</td>
+          </tr>
+          <tr>
+            <td>Tip Sistemi</td>
+            <td>Dinamik tip, otomatik dönüşüm, t() sorgulama</td>
+            <td>yazdır(tür(10))</td>
+          </tr>
+          <tr>
+            <td>Metin İşlemleri</td>
+            <td>Uzunluk, bölme, değiştirme, büyük/küçük harf</td>
+            <td>metin.böl(",")</td>
+          </tr>
+          <tr>
+            <td>Kapsam (Scope)</td>
+            <td>Lexical scope, closure, shadowing desteği</td>
+            <td>fonksiyon dış() ... son</td>
+          </tr>
+          <tr>
+            <td>Modül Sistemi</td>
+            <td>içe_aktar/dışa_aktar ile modül yönetimi</td>
+            <td>içe_aktar Matematik</td>
+          </tr>
+          <tr>
+            <td>Hata Yakalama</td>
+            <td>dene/yakala ile Türkçe hata mesajları</td>
+            <td>dene ... yakala hata ... son</td>
+          </tr>
+          <tr>
+            <td>Lambda Fonksiyonları</td>
+            <td>Anonim fonksiyonlar ve closure desteği</td>
+            <td>(x) => x * 2</td>
+          </tr>
+          <tr>
+            <td>Rastgele Seçim</td>
+            <td>Liste veya değerlerden rastgele seçim</td>
+            <td>RastgeleSeç(1, 2, 3)</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <div class="divider"></div>
+
+  <!-- ===== DİĞER DİLLERLE KARŞILAŞTIRMA ===== -->
+  <section class="section" id="karsilastirma">
+    <div class="section-header">
+      <div class="section-badge">Karşılaştırma</div>
+      <h2 class="section-title">Neden TÜRKOD?</h2>
+      <p class="section-desc">Diğer dillere karşı TÜRKOD'un farkları.</p>
+    </div>
+    <div class="karsilastirma-grid">
+      <div class="karsilastirma-card highlight">
+        <h4 style="margin-top:8px">TÜRKOD ile</h4>
+        <div class="karsilastirma-code"><span class="cm"> Türkçe Anahtar Kelimeler</span>
+<span class="kw">değişken</span> isim := <span class="str">"Merhaba"</span>
+<span class="kw">değişken</span> yaş := <span class="fn">iste</span>(<span class="str">"Yaşınız: "</span>)
+
+<span class="kw">eger</span> yaş >= 18 <span class="kw">ise</span>
+  <span class="fn">yazdır</span>(<span class="str">"Reşitsiniz"</span>)
+<span class="kw">değilse</span>
+  <span class="fn">yazdır</span>(<span class="str">"Reşit değilsiniz"</span>)
+<span class="kw">son</span></div>
+      </div>
+      <div class="karsilastirma-card">
+        <h4>Python ile</h4>
+        <div class="karsilastirma-code"><span class="cm"> # İngilizce Anahtar Kelimeler</span>
+<span class="kw">name</span> = <span class="fn">input</span>(<span class="str">"Your name: "</span>)
+<span class="kw">age</span> = <span class="fn">int</span>(<span class="fn">input</span>(<span class="str">"Your age: "</span>))
+
+<span class="kw">if</span> age >= 18:
+    <span class="fn">print</span>(<span class="str">"You are adult"</span>)
+<span class="kw">else</span>:
+    <span class="fn">print</span>(<span class="str">"You are minor"</span>)</div>
+      </div>
+      <div class="karsilastirma-card">
+        <h4>JavaScript ile</h4>
+        <div class="karsilastirma-code"><span class="cm"> // İngilizce Anahtar Kelimeler</span>
+<span class="kw">let</span> name = <span class="fn">prompt</span>(<span class="str">"Your name: "</span>);
+<span class="kw">let</span> age = <span class="fn">parseInt</span>(<span class="fn">prompt</span>(<span class="str">"Age: "</span>));
+
+<span class="kw">if</span> (age >= 18) {
+    <span class="fn">console</span>.<span class="fn">log</span>(<span class="str">"You are adult"</span>);
+} <span class="kw">else</span> {
+    <span class="fn">console</span>.<span class="fn">log</span>(<span class="str">"You are minor"</span>);
+}</div>
+      </div>
+      <div class="karsilastirma-card">
+        <h4>C# ile</h4>
+        <div class="karsilastirma-code"><span class="cm"> // İngilizce + Karmaşık Söz Dizimi</span>
+<span class="kw">string</span> name = Console.<span class="fn">ReadLine</span>();
+<span class="kw">int</span> age = <span class="fn">int</span>.<span class="fn">Parse</span>(Console.<span class="fn">ReadLine</span>());
+
+<span class="kw">if</span> (age >= 18)
+{
+    Console.<span class="fn">WriteLine</span>(<span class="str">"Adult"</span>);
+}
+<span class="kw">else</span>
+{
+    Console.<span class="fn">WriteLine</span>(<span class="str">"Minor"</span>);
+}</div>
+      </div>
+    </div>
+  </section>
+
+  <div class="divider"></div>
+
+  <!-- ===== MODUL ÖNİZLEME ===== -->
+  <section class="section" id="moduller">
+    <div class="section-header">
+      <div class="section-badge">Dahili Modüller</div>
+      <h2 class="section-title">Hazır Modüller</h2>
+      <p class="section-desc">TÜRKOD ile birlikte gelen güçlü modüller.</p>
+    </div>
+    <div class="modul-grid">
+      <div class="modul-item">
+        <div class="mi">&#127912;</div>
+        <h4>TürkUI</h4>
+        <p>Masaüstü arayüzü</p>
+      </div>
+      <div class="modul-item">
+        <div class="mi">&#128193;</div>
+        <h4>Dosyaİşlemleri</h4>
+        <p>Dosya/klasör yönetimi</p>
+      </div>
+      <div class="modul-item">
+        <div class="mi">&#129518;</div>
+        <h4>Matematik</h4>
+        <p>Hesaplama fonksiyonları</p>
+      </div>
+      <div class="modul-item">
+        <div class="mi">&#127760;</div>
+        <h4>Web</h4>
+        <p>HTTP istekleri</p>
+      </div>
+      <div class="modul-item">
+        <div class="mi">&#128421;</div>
+        <h4>Sistem</h4>
+        <p>OS bilgileri</p>
+      </div>
+      <div class="modul-item">
+        <div class="mi">&#129302;</div>
+        <h4>YapayZeka</h4>
+        <p>AI entegrasyonu</p>
+      </div>
+      <div class="modul-item">
+        <div class="mi">&#9999;</div>
+        <h4>Çizim</h4>
+        <p>2D grafik</p>
+      </div>
+      <div class="modul-item">
+        <div class="mi">&#127925;</div>
+        <h4>Müzik</h4>
+        <p>Müzik üretimi</p>
+      </div>
+      <div class="modul-item">
+        <div class="mi">&#128266;</div>
+        <h4>Ses</h4>
+        <p>Ses çıkışı</p>
+      </div>
+      <div class="modul-item">
+        <div class="mi">&#9000;</div>
+        <h4>Klavye</h4>
+        <p>Tuş durumu</p>
+      </div>
+      <div class="modul-item">
+        <div class="mi">&#129518;</div>
+        <h4>JSON</h4>
+        <p>Veri işleme</p>
+      </div>
+      <div class="modul-item">
+        <div class="mi">&#128200;</div>
+        <h4>Zaman</h4>
+        <p>Tarih/saat</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== METOGRAM STUDIOS ===== -->
+  <section style="padding: 80px 32px; text-align: center; border-top: 1px solid var(--bd);">
+    <img src="metogram.png" alt="MetogramStudios" style="height: 140px; width: auto; border-radius: 15px; margin-bottom: 24px; filter: drop-shadow(0 8px 28px rgba(255,255,255,0.2));">
+    <p style="font-size: 18px; color: var(--tx2); font-weight: 600;">MetogramStudios Tarafından</p>
+  </section>
+
+  <!-- ===== FOOTER ===== -->
+  <footer class="footer">
+    <p>TÜRKOD &copy; 2026 &mdash; Türkçe Programlama Dili</p>
+  </footer>
+
+  <script>
+    (function () {
+      const btn = document.getElementById('scroll-download-btn');
+      const placeholder = document.getElementById('download-btn-placeholder');
+      if (!btn || !placeholder) return;
+
+      let startX = 0, startY = 0, btnWidth = 0, btnHeight = 0;
+      let targetX = 0, targetY = 20;
+      let scrollStart = 0, scrollEnd = 0;
+
+      function measurePositions() {
+        const currentScrollY = window.scrollY || window.pageYOffset;
+        
+        // Temporarily reset transform to measure natural initial position
+        btn.style.transform = 'none';
+        
+        const rect = placeholder.getBoundingClientRect();
+        btnWidth = btn.offsetWidth || rect.width || 160;
+        btnHeight = btn.offsetHeight || rect.height || 54;
+        
+        startX = rect.left;
+        startY = rect.top + currentScrollY;
+
+        const isMobile = window.innerWidth <= 600;
+        const paddingRight = isMobile ? 16 : 24;
+        targetY = isMobile ? 14 : 20;
+        targetX = window.innerWidth - btnWidth - paddingRight;
+
+        const vh = window.innerHeight || 800;
+        // Animation completes when button reaches top-right target position
+        scrollEnd = Math.max(100, startY - targetY);
+        // Animation starts when button enters upper region of viewport (55% from top)
+        scrollStart = Math.max(0, startY - (vh * 0.55));
+
+        updatePosition();
+      }
+
+      function updatePosition() {
+        const scrollY = window.scrollY || window.pageYOffset;
+
+        let progress = 0;
+        if (scrollY <= scrollStart) {
+          progress = 0;
+        } else if (scrollY >= scrollEnd) {
+          progress = 1;
+        } else {
+          progress = (scrollY - scrollStart) / (scrollEnd - scrollStart);
+        }
+
+        // Smooth cubic ease out
+        const easedProgress = 1 - Math.pow(1 - progress, 2);
+
+        const curX = startX + easedProgress * (targetX - startX);
+        const naturalY = startY - scrollY;
+        const curY = naturalY + easedProgress * (targetY - naturalY);
+
+        const scale = 1 - easedProgress * 0.12;
+
+        btn.style.transform = `translate3d(${curX}px, ${curY}px, 0) scale(${scale})`;
+      }
+
+      window.addEventListener('scroll', updatePosition, { passive: true });
+      window.addEventListener('resize', measurePositions);
+      window.addEventListener('load', measurePositions);
+
+      measurePositions();
+      setTimeout(measurePositions, 100);
+      setTimeout(measurePositions, 500);
+      setTimeout(measurePositions, 1000);
+    })();
+
+    // "e" tuşu ile geliştirici sayfasına geçiş
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'e' && !e.ctrlKey && !e.altKey && !e.metaKey) {
+        const hedef = document.activeElement;
+        if (hedef.tagName !== 'INPUT' && hedef.tagName !== 'TEXTAREA' && !hedef.isContentEditable) {
+          e.preventDefault();
+          window.location.href = 'gelistirici.html';
+        }
+      }
+    });
+  </script>
+</body>
+</html>

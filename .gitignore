@@ -1,0 +1,44 @@
+# TurkodStudio
+node_modules/
+*.log
+.DS_Store
+Thumbs.db
+
+# Build outputs
+dist/
+out/
+
+# Source code (not for website)
+src/
+
+# Config files
+forge.config.js
+tsconfig.json
+package.json
+package-lock.json
+
+# Test files
+test*.js
+test*.tr
+
+# Electron app files
+sea-prep.blob
+showcase.tr
+sohbet.tr
+turk_marsi.tr
+turkui_showcase.tr
+Pencere
+write-console-runner.ps1
+
+# Documentation (not for website)
+*.md
+!README.md
+AGENTS.md
+PRIVACY_POLICY.md
+Cizim_modulu_API_tasarimi.md
+
+# Editor/tool config
+.codegraph/
+.freebuff/
+omo/
+.opencode.json

@@ -1,0 +1,1412 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>TÜRKOD Canlı Deneme</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #0a0a0f; --bg2: #111118; --bg3: #18181f; --bg4: #1e1e28;
+      --tx: #e8e8f0; --tx2: #8888a0; --tx3: #555568;
+      --red: #e53e3e; --red-dim: rgba(229,62,62,0.12);
+      --bd: #222230; --gn: #4ade80; --cy: #22d3ee; --pk: #f472b6; --yl: #facc15; --or: #fb923c;
+    }
+    * { margin:0; padding:0; box-sizing:border-box; }
+    html, body { height:100%; overflow:hidden; }
+    body { font-family:'Inter',system-ui,sans-serif; background:var(--bg); color:var(--tx); }
+
+    .header {
+      height:56px; background:rgba(10,10,15,0.95); border-bottom:1px solid var(--bd);
+      display:flex; align-items:center; justify-content:space-between; padding:0 24px;
+    }
+    .header-left { display:flex; align-items:center; gap:16px; }
+    .header-logo { display:flex; align-items:center; gap:8px; text-decoration:none; color:var(--tx); }
+    .header-logo img { height:28px; border-radius:6px; }
+    .header-logo span { font-size:15px; font-weight:700; color:#fff; }
+    .header-links { display:flex; gap:8px; }
+    .header-link {
+      padding:7px 12px; background:var(--bg3); border:1px solid var(--bd); border-radius:8px;
+      color:var(--tx2); font-size:12px; text-decoration:none; font-weight:500; transition:all 0.2s;
+    }
+    .header-link:hover { border-color:var(--red); color:var(--red); }
+
+    .layout { display:flex; height:calc(100vh - 56px); }
+
+    .editor-panel { flex:1; display:flex; flex-direction:column; border-right:1px solid var(--bd); min-width:0; }
+    .editor-toolbar {
+      display:flex; align-items:center; justify-content:space-between; padding:10px 16px;
+      background:var(--bg2); border-bottom:1px solid var(--bd);
+    }
+    .editor-toolbar-left { display:flex; align-items:center; gap:8px; }
+    .btn {
+      padding:8px 16px; border:none; border-radius:8px; font-size:13px; font-weight:600;
+      cursor:pointer; transition:all 0.2s; font-family:inherit;
+    }
+    .btn-run { background:var(--gn); color:#000; }
+    .btn-run:hover { background:#22c55e; }
+    .btn-run:active { transform:scale(0.97); }
+    .btn-clear { background:var(--bg4); color:var(--tx2); border:1px solid var(--bd); }
+    .btn-clear:hover { border-color:var(--tx3); color:var(--tx); }
+    .btn-example { background:var(--bg4); color:var(--cy); border:1px solid var(--bd); }
+    .btn-example:hover { border-color:var(--cy); }
+
+    .editor-wrap { flex:1; position:relative; overflow:hidden; display:flex; }
+
+    /* LINE NUMBERS */
+    .line-numbers {
+      width:48px; background:var(--bg2); border-right:1px solid var(--bd);
+      padding:16px 0; text-align:right; font-family:'JetBrains Mono',monospace;
+      font-size:14px; line-height:1.7; color:var(--tx3); user-select:none;
+      overflow:hidden; flex-shrink:0;
+    }
+    .line-numbers .ln {
+      padding-right:12px; height:23.8px; display:flex; align-items:center; justify-content:flex-end;
+      transition:color 0.1s;
+    }
+    .line-numbers .ln.active { color:var(--tx); font-weight:600; }
+
+    /* BRACKET MATCH */
+    .bracket-match {
+      background:rgba(250,204,21,0.25); border-radius:2px;
+      outline:1px solid rgba(250,204,21,0.5);
+    }
+
+    /* FIND & REPLACE PANEL */
+    .find-panel {
+      position:absolute; top:0; right:0; z-index:40;
+      background:var(--bg3); border:1px solid var(--bd); border-radius:0 0 0 12px;
+      padding:12px 16px; display:none; min-width:340px;
+      box-shadow:0 8px 32px rgba(0,0,0,0.4);
+    }
+    .find-panel.show { display:block; }
+    .find-row { display:flex; gap:6px; align-items:center; margin-bottom:6px; }
+    .find-row:last-child { margin-bottom:0; }
+    .find-row input {
+      flex:1; padding:7px 10px; background:var(--bg); border:1px solid var(--bd);
+      border-radius:6px; color:var(--tx); font-family:'JetBrains Mono',monospace;
+      font-size:12px; outline:none;
+    }
+    .find-row input:focus { border-color:var(--cy); }
+    .find-btn {
+      padding:6px 10px; background:var(--bg4); border:1px solid var(--bd);
+      border-radius:6px; color:var(--tx2); font-size:12px; cursor:pointer;
+      font-family:inherit; transition:all 0.15s; white-space:nowrap;
+    }
+    .find-btn:hover { border-color:var(--cy); color:var(--cy); }
+    .find-btn.active { background:var(--cy); color:#000; border-color:var(--cy); }
+    .find-close {
+      padding:4px 8px; background:none; border:none; color:var(--tx3);
+      cursor:pointer; font-size:16px; line-height:1;
+    }
+    .find-close:hover { color:var(--tx); }
+    .find-info { font-size:11px; color:var(--tx3); min-width:60px; text-align:center; }
+
+    /* SYNTAX HIGHLIGHTING */
+    .editor-highlight {
+      position:absolute; top:0; left:0; right:0; bottom:0;
+      padding:16px; font-family:'JetBrains Mono',monospace; font-size:14px; line-height:1.7;
+      white-space:pre-wrap; word-wrap:break-word; overflow-y:auto;
+      pointer-events:none; color:var(--tx); tab-size:4; -moz-tab-size:4;
+    }
+    #editor {
+      position:absolute; top:0; left:0; width:100%; height:100%;
+      padding:16px; font-family:'JetBrains Mono',monospace; font-size:14px; line-height:1.7;
+      background:transparent; color:transparent; caret-color:var(--tx);
+      border:none; outline:none; resize:none; overflow-y:auto;
+      white-space:pre-wrap; word-wrap:break-word; tab-size:4; -moz-tab-size:4;
+      -webkit-text-fill-color:transparent;
+    }
+    #editor::placeholder { -webkit-text-fill-color:var(--tx3); }
+    .editor-highlight::-webkit-scrollbar, #editor::-webkit-scrollbar { width:6px; }
+    .editor-highlight::-webkit-scrollbar-thumb, #editor::-webkit-scrollbar-thumb { background:var(--bd); border-radius:3px; }
+
+    /* Syntax colors */
+    .syn-kw { color:var(--pk); font-weight:600; }
+    .syn-fn { color:var(--cy); }
+    .syn-str { color:var(--gn); }
+    .syn-num { color:var(--or); }
+    .syn-cm { color:var(--tx3); font-style:italic; }
+    .syn-op { color:var(--yl); }
+    .syn-bool { color:var(--or); font-weight:600; }
+
+    /* AUTOCOMPLETE */
+    .autocomplete {
+      position:absolute; z-index:50; background:var(--bg3); border:1px solid var(--bd);
+      border-radius:10px; max-height:200px; overflow-y:auto; display:none;
+      box-shadow:0 8px 32px rgba(0,0,0,0.5); min-width:220px;
+    }
+    .autocomplete.show { display:block; }
+    .ac-item {
+      padding:8px 14px; cursor:pointer; font-size:13px; display:flex; align-items:center;
+      gap:10px; transition:background 0.1s; border-bottom:1px solid var(--bd);
+    }
+    .ac-item:last-child { border-bottom:none; }
+    .ac-item:hover, .ac-item.active { background:var(--bg4); }
+    .ac-item-name { font-family:'JetBrains Mono',monospace; font-weight:600; color:var(--cy); }
+    .ac-item-type { font-size:11px; color:var(--tx3); margin-left:auto; }
+
+    .output-panel { width:40%; display:flex; flex-direction:column; min-width:300px; }
+    .output-toolbar {
+      display:flex; align-items:center; justify-content:space-between; padding:10px 16px;
+      background:var(--bg2); border-bottom:1px solid var(--bd);
+    }
+    .output-toolbar span { font-size:13px; font-weight:600; color:var(--tx2); }
+    .status { display:inline-flex; align-items:center; gap:6px; font-size:12px; color:var(--tx3); }
+    .status-dot { width:8px; height:8px; border-radius:50%; background:var(--tx3); }
+    .status-dot.ok { background:var(--gn); }
+    .status-dot.err { background:var(--red); }
+    #output {
+      flex:1; overflow-y:auto; padding:16px; font-family:'JetBrains Mono',monospace;
+      font-size:13px; line-height:1.7; background:var(--bg);
+    }
+    #output::-webkit-scrollbar { width:6px; }
+    #output::-webkit-scrollbar-thumb { background:var(--bd); border-radius:3px; }
+    .out-line { margin-bottom:2px; }
+    .out-line.error { color:var(--red); }
+    .out-line.info { color:var(--tx3); font-style:italic; }
+    .out-line.success { color:var(--gn); }
+    .out-line.input-line { color:var(--cy); }
+    .input-prompt {
+      display:flex; align-items:center; gap:8px; margin-top:4px;
+    }
+    .input-prompt input {
+      flex:1; padding:8px 12px; background:var(--bg3); border:1px solid var(--bd);
+      border-radius:8px; color:var(--tx); font-family:'JetBrains Mono',monospace;
+      font-size:13px; outline:none;
+    }
+    .input-prompt input:focus { border-color:var(--cy); }
+    .input-prompt button {
+      padding:8px 14px; background:var(--cy); color:#000; border:none;
+      border-radius:8px; font-weight:600; cursor:pointer; font-size:12px;
+    }
+
+    @media (max-width:768px) {
+      .layout { flex-direction:column; }
+      .editor-panel { border-right:none; border-bottom:1px solid var(--bd); }
+      .output-panel { width:100%; min-width:0; height:40%; }
+    }
+  </style>
+</head>
+<body>
+  <header class="header">
+    <div class="header-left">
+      <a href="index.html" class="header-logo"><img src="turkod.png" alt="TÜRKOD"><span>TÜRKOD</span></a>
+      <span style="font-size:13px;color:var(--tx3);">Canlı Deneme</span>
+    </div>
+    <div class="header-links">
+      <a href="index.html" class="header-link">Ana Sayfa</a>
+      <a href="referans.html" class="header-link">Referans</a>
+      <a href="moduller.html" class="header-link">Modüller</a>
+      <a href="gelistirici.html" class="header-link">Geliştirici</a>
+    </div>
+  </header>
+
+  <div class="layout">
+    <div class="editor-panel">
+      <div class="editor-toolbar">
+        <div class="editor-toolbar-left">
+          <button class="btn btn-run" onclick="calistir()">&#9654; Çalıştır</button>
+          <button class="btn btn-example" onclick="ornekYukle()">Örnek Kod</button>
+          <button class="btn btn-clear" onclick="temizle()">Temizle</button>
+          <button class="btn btn-clear" onclick="toggleFind()" title="Bul ve Değiştir (Ctrl+H)">🔍 Bul</button>
+        </div>
+        <span style="font-size:12px;color:var(--tx3);">F5 ile çalıştır</span>
+      </div>
+      <div class="editor-wrap">
+        <div class="line-numbers" id="lineNumbers"><div class="ln active">1</div></div>
+        <div style="flex:1;position:relative;overflow:hidden;">
+          <div class="editor-highlight" id="highlight"></div>
+          <textarea id="editor" spellcheck="false" placeholder="TÜRKOD kodunuzu buraya yazın..."></textarea>
+          <div class="autocomplete" id="autocomplete"></div>
+          <div class="find-panel" id="findPanel">
+            <div class="find-row">
+              <input type="text" id="findInput" placeholder="Bul..." autocomplete="off">
+              <span class="find-info" id="findInfo"></span>
+              <button class="find-btn" onclick="findPrev()" title="Önceki">▲</button>
+              <button class="find-btn" onclick="findNext()" title="Sonraki">▼</button>
+              <button class="find-close" onclick="toggleFind()">×</button>
+            </div>
+            <div class="find-row">
+              <input type="text" id="replaceInput" placeholder="Değiştir..." autocomplete="off">
+              <button class="find-btn" onclick="replaceOne()">Değiştir</button>
+              <button class="find-btn" onclick="replaceAll()">Tümünü</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="output-panel">
+      <div class="output-toolbar">
+        <span>Çıktı</span>
+        <div class="status"><div class="status-dot" id="statusDot"></div><span id="statusText">Hazır</span></div>
+      </div>
+      <div id="output"></div>
+    </div>
+  </div>
+  <script>
+    // ===== TÜRKOD YORUMLAYICI =====
+    class TurkodYorumlayici {
+      constructor() {
+        this.degiskenler = {};
+        this.fonksiyonlar = {};
+        this.cikti = [];
+        this.hata = null;
+      }
+
+      run(kaynak) {
+        this.degiskenler = {};
+        this.fonksiyonlar = {};
+        this.cikti = [];
+        this.hata = null;
+        try {
+          const satirlar = kaynak.split('\n')
+            .map(s => s.replace(/\/\/.*$/, '').trimEnd())
+            .filter(s => s.trim().length > 0);
+          this.satirlar = satirlar;
+          this.calistir(0, satirlar.length);
+        } catch (e) {
+          if (typeof e === 'object' && e && e.hata) { this.hata = e.hata; }
+          else if (typeof e === 'string') { this.hata = e; }
+          else { this.hata = 'Beklenmeyen hata: ' + String(e && e.message ? e.message : e); }
+        }
+        return { cikti: this.cikti, hata: this.hata };
+      }
+
+      blokBaslangiciMi(s) {
+        return s.startsWith('fonksiyon ') || s.startsWith('eger ') || s.startsWith('eğer ') ||
+               s.startsWith('döngü ') || s.startsWith('dongu ') || s.startsWith('için ') ||
+               s.startsWith('icin ') || s.startsWith('her ') || s === 'SonsuzDoğru' ||
+               s === 'SonsuzDogru' || s.startsWith('dene');
+      }
+
+      calistir(baslangic, bitis) {
+        let i = baslangic;
+        while (i < bitis) {
+          const satir = this.satirlar[i];
+          const t = satir.trim();
+          if (t === '' || t.startsWith('//')) { i++; continue; }
+          if (t === 'son' || t === 'değilse' || t === 'degilse') return i;
+
+          if (t.startsWith('fonksiyon ')) { i = this.fonksiyonTanimla(i); continue; }
+          if (t.startsWith('eger ') || t.startsWith('eğer ')) { i = this.egerCalistir(i, bitis); continue; }
+          if (t.startsWith('döngü ') || t.startsWith('dongu ')) { i = this.donguCalistir(i, bitis); continue; }
+          if (t.startsWith('için ') || t.startsWith('icin ')) { i = this.icinDongu(i, bitis); continue; }
+          if (t.startsWith('her ')) { i = this.herDongu(i, bitis); continue; }
+          if (t === 'SonsuzDoğru' || t === 'SonsuzDogru') { i = this.sonsuzDongu(i, bitis); continue; }
+          if (t.startsWith('dene')) { i = this.deneYakala(i, bitis); continue; }
+          if (t.startsWith('dön ') || t.startsWith('don ')) {
+            const deger = this.ifadeCoz(t.replace(/^d[öo]n\s+/, ''));
+            throw { don: true, deger };
+          }
+          if (t === 'kırıl' || t === 'kiril') throw { kiril: true };
+          if (t === 'devam') throw { devam: true };
+          if (t.startsWith('yazdır(') || t.startsWith('yazdir(')) { this.yazdirCalistir(t); i++; continue; }
+          if (t.includes(':=') || (t.includes('=') && !t.includes('==') && !t.includes('>=') && !t.includes('<='))) { this.atamaYap(t); i++; continue; }
+          if (t.match(/^[a-zA-ZçğıöşüÇĞİÖÜ0-9_.]+\s*\(/)) { this.fonksiyonCagir(t); i++; continue; }
+          i++;
+        }
+        return i;
+      }
+
+      atamaYap(satir) {
+        const eslesme = satir.match(/^(?:değişken\s+|degisken\s+|sabit\s+)?([a-zA-ZçğıöşüÇĞİÖÜ0-9_]+)\s*(?::=|=)\s*(.+)$/);
+        if (eslesme) {
+          this.degiskenler[eslesme[1].trim()] = this.ifadeCoz(eslesme[2].trim());
+        }
+      }
+
+      ifadeCoz(f) {
+        if (f === undefined || f === null) return null;
+        f = String(f).trim();
+        if (f === '' || f === 'boş' || f === 'bos') return null;
+        if (/^-?\d+(\.\d+)?$/.test(f)) return parseFloat(f);
+        if (f === 'doğru' || f === 'dogru') return true;
+        if (f === 'yanlış' || f === 'yanlis') return false;
+        if ((f.startsWith('"') && f.endsWith('"')) || (f.startsWith("'") && f.endsWith("'"))) return f.slice(1, -1);
+        if (f.startsWith('[') && f.endsWith(']')) {
+          const icerik = f.slice(1, -1).trim();
+          if (icerik === '') return [];
+          return this.listeParcala(icerik).map(e => this.ifadeCoz(e));
+        }
+        if (f.startsWith('{') && f.endsWith('}')) {
+          const icerik = f.slice(1, -1).trim();
+          if (icerik === '') return {};
+          const sozluk = {};
+          for (const cift of this.listeParcala(icerik)) {
+            const bolumler = cift.split(':');
+            if (bolumler.length >= 2) {
+              const anahtar = bolumler[0].trim().replace(/['"]/g, '');
+              const degerStr = bolumler.slice(1).join(':').trim();
+              sozluk[anahtar] = this.ifadeCoz(degerStr);
+            }
+          }
+          return sozluk;
+        }
+        if (f === 'Rastgele()') return Math.random();
+        if (f.startsWith('RastgeleSeç(') || f.startsWith('RastgeleSec(')) {
+          const args = this.argumanlariAl(f);
+          return args[Math.floor(Math.random() * args.length)];
+        }
+        if (f.startsWith('RastgeleTamSayı(') || f.startsWith('RastgeleTamSayi(')) {
+          const args = this.argumanlariAl(f);
+          return Math.floor(Math.random() * (this.ifadeCoz(args[1]) - this.ifadeCoz(args[0]) + 1)) + this.ifadeCoz(args[0]);
+        }
+        if (f.startsWith('Matematik.')) return this.matematikCalistir(f);
+        if (f.startsWith('Basamak')) return this.basamakCalistir(f);
+        if (f.startsWith('tür(') || f.startsWith('tur(')) {
+          const arg = f.match(/t[üu]r\((.+)\)/);
+          if (arg) {
+            const d = this.ifadeCoz(arg[1]);
+            if (typeof d === 'number') return Number.isInteger(d) ? 'tamSayı' : 'ondalıklı';
+            if (typeof d === 'string') return 'metin';
+            if (typeof d === 'boolean') return 'mantıksal';
+            if (Array.isArray(d)) return 'liste';
+            return 'sözlük';
+          }
+        }
+        const diziEsl = f.match(/^(.+)\[(.+)\]$/);
+        if (diziEsl) {
+          const dizi = this.ifadeCoz(diziEsl[1]);
+          const indeks = this.ifadeCoz(diziEsl[2]);
+          if (Array.isArray(dizi) || (typeof dizi === 'object' && dizi !== null)) return dizi[indeks];
+        }
+        if (f.endsWith('.uzunluk()')) { const d = this.ifadeCoz(f.slice(0, -10)); return (typeof d === 'string' || Array.isArray(d)) ? d.length : 0; }
+        if (f.endsWith('.büyükHarf()') || f.endsWith('.buyukHarf()')) return String(this.ifadeCoz(f.replace(/\.(büyükHarf|buyukHarf)\(\)/, ''))).toUpperCase();
+        if (f.endsWith('.küçükHarf()') || f.endsWith('.kucukHarf()')) return String(this.ifadeCoz(f.replace(/\.(küçükHarf|kucukHarf)\(\)/, ''))).toLowerCase();
+        if (f.endsWith('.temizle()')) return String(this.ifadeCoz(f.slice(0, -9))).trim();
+        if (f.endsWith('.böl()') || f.endsWith('.bol()')) return String(this.ifadeCoz(f.replace(/\.(böl|bol)\(\)/, ''))).split(' ');
+        
+        const fonkEsl = f.match(/^([a-zA-ZçğıöşüÇĞİÖÜ0-9_]+)\((.*)\)$/);
+        if (fonkEsl) {
+          const [, ad, argStr] = fonkEsl;
+          if (this.fonksiyonlar[ad]) return this.fonksiyonuCalistir(ad, argStr);
+          return this.dahiliFonksiyon(ad, argStr);
+        }
+        if (this.fonksiyonlar[f]) return this.fonksiyonuCalistir(f, '');
+        if (Object.prototype.hasOwnProperty.call(this.degiskenler, f)) return this.degiskenler[f];
+        
+        return this.ifadeCozGelismis(f);
+      }
+
+      ifadeCozGelismis(f) {
+        if (f.startsWith('(') && f.endsWith(')')) return this.ifadeCoz(f.slice(1, -1));
+        if (f.includes(' ve ')) { const [l, r] = f.split(' ve '); return this.ifadeCoz(l) && this.ifadeCoz(r); }
+        if (f.includes(' veya ')) { const [l, r] = f.split(' veya '); return this.ifadeCoz(l) || this.ifadeCoz(r); }
+        if (f.startsWith('değil ') || f.startsWith('degil ')) return !this.ifadeCoz(f.slice(6));
+        
+        for (const op of [' >= ', ' <= ', ' == ', ' != ', ' > ', ' < ']) {
+          if (f.includes(op)) {
+            const idx = f.indexOf(op);
+            const sol = this.ifadeCoz(f.substring(0, idx));
+            const sag = this.ifadeCoz(f.substring(idx + op.length));
+            switch (op.trim()) {
+              case '>=': return sol >= sag;
+              case '<=': return sol <= sag;
+              case '==': return sol === sag;
+              case '!=': return sol !== sag;
+              case '>': return sol > sag;
+              case '<': return sol < sag;
+            }
+          }
+        }
+        
+        if (f.includes(' + ')) {
+          const parcalar = [];
+          let derinlik = 0, birikim = '', tirnak = null;
+          for (let i = 0; i < f.length; i++) {
+            const ch = f[i];
+            if (tirnak) { birikim += ch; if (ch === tirnak) tirnak = null; continue; }
+            if (ch === '"' || ch === "'") { tirnak = ch; birikim += ch; continue; }
+            if (ch === '(' || ch === '[') { derinlik++; birikim += ch; continue; }
+            if (ch === ')' || ch === ']') { derinlik--; birikim += ch; continue; }
+            if (ch === '+' && derinlik === 0 && f[i-1] === ' ' && f[i+1] === ' ') {
+              parcalar.push(birikim); birikim = '';
+            } else { birikim += ch; }
+          }
+          if (birikim.trim()) parcalar.push(birikim);
+          if (parcalar.length > 1) {
+            const sonuclar = parcalar.map(p => this.ifadeCoz(p.trim()));
+            if (sonuclar.every(s => typeof s === 'number')) return sonuclar.reduce((a, b) => a + b, 0);
+            return sonuclar.map(s => (s === null ? '' : String(s))).join('');
+          }
+        }
+        
+        if (f.includes(' - ')) {
+          const [sol, sag] = f.split(' - ');
+          if (sol.trim() && sag.trim()) return this.ifadeCoz(sol) - this.ifadeCoz(sag);
+        }
+        if (f.includes(' * ')) { const [l, r] = f.split(' * '); return this.ifadeCoz(l) * this.ifadeCoz(r); }
+        if (f.includes(' / ')) { const [l, r] = f.split(' / '); const b = this.ifadeCoz(r); if (b === 0) throw 'Sıfıra bölme hatası'; return this.ifadeCoz(l) / b; }
+        if (f.includes(' % ')) { const [l, r] = f.split(' % '); return this.ifadeCoz(l) % this.ifadeCoz(r); }
+        if (f.includes(' ** ')) { const [l, r] = f.split(' ** '); return Math.pow(this.ifadeCoz(l), this.ifadeCoz(r)); }
+        return f;
+      }
+
+      matematikCalistir(f) {
+        const eslesme = f.match(/Matematik\.(\w+)\((.+)\)/);
+        if (!eslesme) return 0;
+        const [, fn, argStr] = eslesme;
+        const a = this.listeParcala(argStr).map(x => this.ifadeCoz(x.trim()));
+        const M = {
+          mutlak: () => Math.abs(a[0]), yuvarla: () => Math.round(a[0]),
+          yukarıYuvarla: () => Math.ceil(a[0]), aşağıYuvarla: () => Math.floor(a[0]),
+          üs: () => Math.pow(a[0], a[1]||2), karekök: () => Math.sqrt(a[0]),
+          toplam: () => Array.isArray(a[0]) ? a[0].reduce((s,v)=>s+v,0) : a.reduce((s,v)=>s+v,0),
+          ortalama: () => { const l=Array.isArray(a[0])?a[0]:a; return l.reduce((s,v)=>s+v,0)/l.length; },
+          medyan: () => { const l=[...(Array.isArray(a[0])?a[0]:a)].sort((x,y)=>x-y); const o=Math.floor(l.length/2); return l.length%2?l[o]:(l[o-1]+l[o])/2; },
+          min: () => Math.min(...(Array.isArray(a[0])?a[0]:a)), max: () => Math.max(...(Array.isArray(a[0])?a[0]:a)),
+          asalMı: () => this.asalMi(a[0]),
+          ebob: () => this.ebob(a[0],a[1]), ekok: () => (a[0]*a[1])/this.ebob(a[0],a[1]),
+          faktöriyel: () => this.faktoriyel(a[0]), fibonacci: () => this.fibonacci(a[0]),
+          kalan: () => a[0]%a[1], yüzde: () => a[0]*a[1]/100,
+          yüzdeArtır: () => a[0]*(1+a[1]/100), yüzdeAzalt: () => a[0]*(1-a[1]/100),
+          pi: () => Math.PI, e: () => Math.E,
+        };
+        return (M[fn] || (() => 0))();
+      }
+
+      basamakCalistir(f) {
+        const eslesme = f.match(/Basamak(\w+)\((.+)\)/);
+        if (!eslesme) return 0;
+        const [, fn, argStr] = eslesme;
+        const n = Number(this.ifadeCoz(argStr.trim()));
+        const r = String(Math.abs(n)).split('').map(Number);
+        const B = {
+          Toplam: () => r.reduce((a,b)=>a+b,0), Uzunluk: () => r.length,
+          Carpim: () => r.reduce((a,b)=>a*b,1), Ters: () => Number(r.reverse().join('')),
+          Ilk: () => r[0], Son: () => r[r.length-1],
+          AsalMİ: () => this.asalMi(n),
+          MükemmelMİ: () => { let t=0; for(let i=1;i<n;i++) if(n%i===0) t+=i; return t===n; },
+          ArmstrongMu: () => { const u=r.length; return r.reduce((a,x)=>a+Math.pow(x,u),0)===n; },
+          PalindromMu: () => { const s=String(n); return s===s.split('').reverse().join(''); },
+        };
+        return (B[fn] || (() => 0))();
+      }
+
+      asalMi(n) { if(n<2)return false; for(let i=2;i<=Math.sqrt(n);i++) if(n%i===0) return false; return true; }
+      ebob(a,b) { while(b){[a,b]=[b,a%b];} return a; }
+      faktoriyel(n) { let r=1; for(let i=2;i<=n;i++) r*=i; return r; }
+      fibonacci(n) { if(n<=0)return 0; if(n===1)return 1; let a=0,b=1; for(let i=2;i<=n;i++){[a,b]=[b,a+b];} return b; }
+
+      dahiliFonksiyon(ad, argStr) {
+        const a = argStr ? this.listeParcala(argStr).map(x => this.ifadeCoz(x.trim())) : [];
+        const F = {
+          sayıya: () => parseInt(a[0]), sayiya: () => parseInt(a[0]),
+          ondalıklıya: () => parseFloat(a[0]), ondalikliya: () => parseFloat(a[0]),
+          metne: () => String(a[0]), uzunluk: () => Array.isArray(a[0])?a[0].length:String(a[0]).length,
+          maks: () => Math.max(...a), max: () => Math.max(...a), min: () => Math.min(...a),
+          yuvarla: () => Math.round(a[0]), mutlak: () => Math.abs(a[0]),
+          _sqrt: () => Math.sqrt(a[0]), kök: () => Math.sqrt(a[0]),
+          üs: () => Math.pow(a[0],a[1]||2), us: () => Math.pow(a[0],a[1]||2),
+          içeriyorMu: () => String(a[0]).includes(String(a[1])),
+          iceriyorMu: () => String(a[0]).includes(String(a[1])),
+          böl: () => String(a[0]).split(a[1]||' '), bol: () => String(a[0]).split(a[1]||' '),
+          birleştir: () => Array.isArray(a[0])?a[0].join(a[1]||''):'',
+          birlestir: () => Array.isArray(a[0])?a[0].join(a[1]||''):'',
+          temizle: () => String(a[0]).trim(),
+          büyükHarf: () => String(a[0]).toUpperCase(), buyukHarf: () => String(a[0]).toUpperCase(),
+          küçükHarf: () => String(a[0]).toLowerCase(), kucukHarf: () => String(a[0]).toLowerCase(),
+          rastgele: () => Math.random(), Rastgele: () => Math.random(),
+          iste: () => { const cevap = prompt(a.length > 0 ? String(a[0]) : 'Değer girin:'); return cevap !== null ? cevap : ''; },
+        };
+        return (F[ad] || (() => null))();
+      }
+
+      listeParcala(str) {
+        const sonuclar = []; let derinlik = 0, birikim = '', tirnak = null;
+        for (let i = 0; i < str.length; i++) {
+          const ch = str[i];
+          if (tirnak) { birikim += ch; if (ch === tirnak) tirnak = null; continue; }
+          if (ch === '"' || ch === "'") { tirnak = ch; birikim += ch; continue; }
+          if (ch === '(' || ch === '[' || ch === '{') { derinlik++; birikim += ch; continue; }
+          if (ch === ')' || ch === ']' || ch === '}') { derinlik--; birikim += ch; continue; }
+          if (ch === ',' && derinlik === 0) { sonuclar.push(birikim); birikim = ''; }
+          else birikim += ch;
+        }
+        if (birikim.trim()) sonuclar.push(birikim);
+        return sonuclar;
+      }
+      argumanlariAl(f) { const e = f.match(/\((.+)\)$/); return e ? this.listeParcala(e[1]) : []; }
+
+      // YAZDIR
+      yazdirCalistir(satir) {
+        const eslesme = satir.match(/^yazd[ıi]r\s*\((.*)\)$/);
+        if (!eslesme) return;
+        const arglar = this.listeParcala(eslesme[1]);
+        const degerler = arglar.map(a => {
+          const d = this.ifadeCoz(a.trim());
+          if (d === null) return 'boş';
+          if (d === true) return 'doğru';
+          if (d === false) return 'yanlış';
+          if (Array.isArray(d)) return '[' + d.join(', ') + ']';
+          if (typeof d === 'object' && d !== null) return '{' + Object.entries(d).map(([k,v])=>k+': '+String(v)).join(', ') + '}';
+          return String(d);
+        });
+        this.cikti.push(degerler.join(' '));
+      }
+
+      // İSTE
+      isteCalistir(mesaj) {
+        const cevap = prompt(mesaj || 'Değer girin:');
+        return cevap !== null ? cevap : '';
+      }
+
+      // FONKSİYON
+      fonksiyonTanimla(i) {
+        const satir = this.satirlar[i].trim();
+        const eslesme = satir.match(/^fonksiyon\s+([a-zA-ZçğıöşüÇĞİÖÜ0-9_]+)\s*\(([^)]*)\)\s*$/);
+        if (!eslesme) return i + 1;
+        const [, ad, paramStr] = eslesme;
+        const parametreler = paramStr ? paramStr.split(',').map(p => p.trim()).filter(Boolean) : [];
+        let govde = [], j = i + 1, derinlik = 1;
+        while (j < this.satirlar.length && derinlik > 0) {
+          const s = this.satirlar[j].trim();
+          if (this.blokBaslangiciMi(s)) derinlik++;
+          if (s === 'son') { derinlik--; if (derinlik === 0) break; }
+          if (derinlik > 0) govde.push(this.satirlar[j]);
+          j++;
+        }
+        this.fonksiyonlar[ad] = { parametreler, govde };
+        return j + 1;
+      }
+
+      fonksiyonuCalistir(ad, argStr) {
+        const fonk = this.fonksiyonlar[ad];
+        if (!fonk) return null;
+        const arglar = argStr ? this.listeParcala(argStr).map(a => this.ifadeCoz(a.trim())) : [];
+        const eskiDegiskenler = { ...this.degiskenler };
+        const eskiSatirlar = this.satirlar;
+        
+        fonk.parametreler.forEach((p, idx) => {
+          this.degiskenler[p] = arglar[idx] !== undefined ? arglar[idx] : null;
+        });
+        
+        this.satirlar = fonk.govde;
+        let sonuc = null;
+        try {
+          this.calistir(0, fonk.govde.length);
+        } catch (e) {
+          if (e && e.don) sonuc = e.deger;
+          else throw e;
+        } finally {
+          this.degiskenler = eskiDegiskenler;
+          this.satirlar = eskiSatirlar;
+        }
+        return sonuc;
+      }
+
+      fonksiyonCagir(satir) {
+        const t = satir.trim();
+        if (t.startsWith('yazdır(') || t.startsWith('yazdir(')) { this.yazdirCalistir(t); return; }
+        const e = t.match(/^([a-zA-ZçğıöşüÇĞİÖÜ0-9_]+)\((.*)\)$/);
+        if (e) {
+          const [, ad, argStr] = e;
+          if (this.fonksiyonlar[ad]) this.fonksiyonuCalistir(ad, argStr);
+          else this.dahiliFonksiyon(ad, argStr);
+        }
+      }
+
+      // EGER
+      egerCalistir(i, bitis) {
+        const satir = this.satirlar[i].trim();
+        let kosulStr = satir.replace(/^(eğer|eger)\s+/, '').replace(/\s+ise\s*$/, '');
+        const kosul = this.ifadeCoz(kosulStr);
+
+        let j = i + 1, derinlik = 1;
+        let egerBas = j;
+        let egerBit = -1;
+        let degilseBas = -1;
+        let degilseBit = -1;
+
+        while (j < bitis && derinlik > 0) {
+          const s = this.satirlar[j].trim();
+          if (this.blokBaslangiciMi(s)) derinlik++;
+          else if (s === 'değilse' || s === 'degilse') {
+            if (derinlik === 1 && egerBit === -1) {
+              egerBit = j;
+              degilseBas = j + 1;
+            }
+          } else if (s === 'son') {
+            derinlik--;
+            if (derinlik === 0) {
+              if (egerBit === -1) egerBit = j;
+              else degilseBit = j;
+              break;
+            }
+          }
+          j++;
+        }
+
+        if (kosul) {
+          if (egerBas < egerBit) this.calistir(egerBas, egerBit);
+        } else {
+          if (degilseBas !== -1 && degilseBas < degilseBit) this.calistir(degilseBas, degilseBit);
+        }
+        return j + 1;
+      }
+
+      // DÖNGÜ
+      donguCalistir(i, bitis) {
+        const satir = this.satirlar[i].trim();
+        const eslesme = satir.match(/d[öo]ng[üu]\s+(\d+)\s+kez/);
+        const tekrar = eslesme ? parseInt(eslesme[1]) : 1;
+        let j = i + 1, derinlik = 1;
+        let bas = j;
+        while (j < bitis && derinlik > 0) {
+          const s = this.satirlar[j].trim();
+          if (this.blokBaslangiciMi(s)) derinlik++;
+          else if (s === 'son') {
+            derinlik--;
+            if (derinlik === 0) break;
+          }
+          j++;
+        }
+        let bit = j;
+        for (let t = 0; t < tekrar; t++) {
+          try {
+            this.calistir(bas, bit);
+          } catch (e) {
+            if (e && e.kiril) break;
+            if (e && e.devam) continue;
+            throw e;
+          }
+        }
+        return j + 1;
+      }
+
+      icinDongu(i, bitis) {
+        const satir = this.satirlar[i].trim();
+        const eslesme = satir.match(/i[cç]in\s+(\w+)\s+i[cç]inde\s+aral[ıi]k\((.+)\)/);
+        if (!eslesme) return i + 1;
+        const [, degiskenAdi, aralikStr] = eslesme;
+        const arglar = this.listeParcala(aralikStr).map(a => this.ifadeCoz(a.trim()));
+        const baslangicVal = arglar[0] || 0, bitisVal = arglar[1] || 10, adim = arglar[2] || 1;
+        let j = i + 1, derinlik = 1;
+        let bas = j;
+        while (j < bitis && derinlik > 0) {
+          const s = this.satirlar[j].trim();
+          if (this.blokBaslangiciMi(s)) derinlik++;
+          else if (s === 'son') {
+            derinlik--;
+            if (derinlik === 0) break;
+          }
+          j++;
+        }
+        let bit = j;
+        for (let t = baslangicVal; t < bitisVal; t += adim) {
+          this.degiskenler[degiskenAdi] = t;
+          try {
+            this.calistir(bas, bit);
+          } catch (e) {
+            if (e && e.kiril) break;
+            if (e && e.devam) continue;
+            throw e;
+          }
+        }
+        return j + 1;
+      }
+
+      herDongu(i, bitis) {
+        const satir = this.satirlar[i].trim();
+        const eslesme = satir.match(/her\s+(\w+)\s+i[cç]in\s+(\w+)\s+(i[cç]in|i[cç]inde)?/);
+        if (!eslesme) return i + 1;
+        const [, elemanAdi, listeAdi] = eslesme;
+        const liste = this.degiskenler[listeAdi] || [];
+        let j = i + 1, derinlik = 1;
+        let bas = j;
+        while (j < bitis && derinlik > 0) {
+          const s = this.satirlar[j].trim();
+          if (this.blokBaslangiciMi(s)) derinlik++;
+          else if (s === 'son') {
+            derinlik--;
+            if (derinlik === 0) break;
+          }
+          j++;
+        }
+        let bit = j;
+        for (const eleman of liste) {
+          this.degiskenler[elemanAdi] = eleman;
+          try {
+            this.calistir(bas, bit);
+          } catch (e) {
+            if (e && e.kiril) break;
+            if (e && e.devam) continue;
+            throw e;
+          }
+        }
+        return j + 1;
+      }
+
+      sonsuzDongu(i, bitis) {
+        let j = i + 1, derinlik = 1;
+        let bas = j;
+        while (j < bitis && derinlik > 0) {
+          const s = this.satirlar[j].trim();
+          if (this.blokBaslangiciMi(s)) derinlik++;
+          else if (s === 'son') {
+            derinlik--;
+            if (derinlik === 0) break;
+          }
+          j++;
+        }
+        let bit = j;
+        for (let t = 0; t < 10000; t++) {
+          try {
+            this.calistir(bas, bit);
+          } catch (e) {
+            if (e && e.kiril) break;
+            if (e && e.devam) continue;
+            throw e;
+          }
+        }
+        return j + 1;
+      }
+
+      deneYakala(i, bitis) {
+        let j = i + 1, derinlik = 1;
+        let bas = j;
+        while (j < bitis && derinlik > 0) {
+          const s = this.satirlar[j].trim();
+          if (this.blokBaslangiciMi(s)) derinlik++;
+          else if (s === 'son') {
+            derinlik--;
+            if (derinlik === 0) break;
+          }
+          j++;
+        }
+        let bit = j;
+        try {
+          this.calistir(bas, bit);
+        } catch (e) {}
+        return j + 1;
+      }
+    }
+
+    // ===== ARAYÜZ =====
+    const editor = document.getElementById('editor');
+    const highlight = document.getElementById('highlight');
+    const output = document.getElementById('output');
+    const autocomplete = document.getElementById('autocomplete');
+    const statusDot = document.getElementById('statusDot');
+    const statusText = document.getElementById('statusText');
+
+    const KELIMELER = ['değişken','degisken','sabit','fonksiyon','dön','don','eger','eğer','ise','değilse','degilse','son','döngü','dongu','kez','için','icin','içinde','icinde','her','SonsuzDoğru','SonsuzDogru','kırıl','kiril','devam','dene','yakala','doğru','dogru','yanlış','yanlis','boş','bos','içe_aktar','dışa_aktar','pi','e','Rastgele','RastgeleSeç','RastgeleSec','RastgeleTamSayı','RastgeleTamSayi'];
+    const FONKSIYONLAR = ['yazdır','yazdir','iste','tür','tur','sayıya','sayiya','ondalıklıya','metne','uzunluk','büyükHarf','küçükHarf','temizle','böl','bol','birleştir','içeriyorMu','yuvarla','mutlak','min','max','maks','üs','us','kök','kok','toplam','ortalama','medyan','asalMı','ebob','ekok','faktöriyel','fibonacci','Matematik','Basamak','Rastgele'];
+
+    function syntaxHighlight(kod) {
+      let html = (kod || '')
+        .replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')
+        .replace(/(\/\/.*)/g, '<span class="syn-cm">$1</span>')
+        .replace(/"([^"]*)"/g, '<span class="syn-str">"$1"</span>')
+        .replace(/'([^']*)'/g, '<span class="syn-str">\'$1\'</span>');
+      html = html.replace(/\b(\d+\.?\d*)\b/g, '<span class="syn-num">$1</span>');
+      for (const k of KELIMELER) {
+        const re = new RegExp('\\b(' + k.replace(/[.*+?^${}()|[\]\\]/g, '\\$&') + ')\\b', 'g');
+        html = html.replace(re, '<span class="syn-kw">$1</span>');
+      }
+      for (const f of FONKSIYONLAR) {
+        const re = new RegExp('\\b(' + f.replace(/[.*+?^${}()|[\]\\]/g, '\\$&') + ')\\s*\\(', 'g');
+        html = html.replace(re, '<span class="syn-fn">$1</span>(');
+      }
+      return html;
+    }
+
+    function senkronize() {
+      highlight.innerHTML = syntaxHighlight(editor.value) + '\n';
+      highlight.scrollTop = editor.scrollTop;
+      highlight.scrollLeft = editor.scrollLeft;
+      satirNumaralariniGuncelle();
+    }
+
+    editor.addEventListener('input', senkronize);
+    // ===== SATIR NUMARALARI =====
+    const lineNumbers = document.getElementById('lineNumbers');
+    let oncekiSatirSayisi = 0;
+
+    function satirNumaralariniGuncelle() {
+      const satirSayisi = editor.value.split('\n').length;
+      if (satirSayisi === oncekiSatirSayisi) return;
+      oncekiSatirSayisi = satirSayisi;
+
+      const cursorPos = editor.selectionStart;
+      const oncekiMetin = editor.value.substring(0, cursorPos);
+      const aktifSatir = oncekiMetin.split('\n').length;
+
+      let html = '';
+      for (let i = 1; i <= satirSayisi; i++) {
+        html += `<div class="ln${i === aktifSatir ? ' active' : ''}">${i}</div>`;
+      }
+      lineNumbers.innerHTML = html;
+    }
+
+    function satirNumarasiSenkronize() {
+      lineNumbers.scrollTop = editor.scrollTop;
+    }
+
+    editor.addEventListener('scroll', satirNumarasiSenkronize);
+    editor.addEventListener('scroll', () => { highlight.scrollTop = editor.scrollTop; highlight.scrollLeft = editor.scrollLeft; });
+    editor.addEventListener('click', satirNumaralariniGuncelle);
+    editor.addEventListener('keyup', satirNumaralariniGuncelle);
+
+    // ===== PARANTEZ EŞLEŞTİRME =====
+    function parantezEslestir() {
+      const eski = highlight.querySelectorAll('.bracket-match');
+      eski.forEach(el => el.classList.remove('bracket-match'));
+
+      const pos = editor.selectionStart;
+      if (pos === 0) return;
+
+      const metin = editor.value;
+      const ch = metin[pos - 1];
+      const eslesmeCiftleri = { '(': ')', ')': '(', '[': ']', ']': '[', '{': '}', '}': '{' };
+      if (!eslesmeCiftleri[ch]) return;
+
+      const ters = eslesmeCiftleri[ch];
+      const acma = ch === '(' || ch === '[' || ch === '{' ? ch : ters;
+      const kapama = ch === '(' || ch === '[' || ch === '{' ? ters : ch;
+
+      let derinlik = 0;
+      let bas = -1, son = -1;
+      const aramaYonu = ch === acma ? 1 : -1;
+      const baslangic = aramaYonu === 1 ? pos - 1 : pos - 2;
+
+      for (let i = baslangic; i >= 0 && i < metin.length; i += aramaYonu) {
+        if (metin[i] === acma) derinlik++;
+        else if (metin[i] === kapama) derinlik--;
+        if (derinlik === 0) {
+          if (aramaYonu === 1) { bas = pos - 1; son = i; }
+          else { bas = i; son = pos - 1; }
+          break;
+        }
+      }
+
+      if (bas === -1 || son === -1) return;
+
+      const highlightMetin = highlight.innerHTML;
+      const acmaIkiNokta = bas;
+      const kapamaIkiNokta = son;
+
+      const yeniHighlight = highlightMetin.replace(/&(#40|#41|#91|#93|#123|#125|lt|gt|amp);/g, (match, entity) => {
+        return match;
+      });
+
+      const tumKarakterler = [];
+      let htmlBirikim = '';
+      let htmlIndeks = 0;
+      let metinIndeks = 0;
+
+      for (let i = 0; i < highlightMetin.length; i++) {
+        if (highlightMetin[i] === '&') {
+          const ampersand = highlightMetin.indexOf(';', i);
+          if (ampersand !== -1) {
+            const entity = highlightMetin.substring(i, ampersand + 1);
+            tumKarakterler.push({ char: entity, html: true });
+            i = ampersand;
+            continue;
+          }
+        }
+        if (highlightMetin.substring(i, i + 4) === '<spa') {
+          const tagBitis = highlightMetin.indexOf('>', i);
+          if (tagBitis !== -1) {
+            tumKarakterler.push({ char: highlightMetin.substring(i, tagBitis + 1), html: true });
+            i = tagBitis;
+            continue;
+          }
+        }
+        if (highlightMetin.substring(i, i + 6) === '</span') {
+          const tagBitis = highlightMetin.indexOf('>', i);
+          if (tagBitis !== -1) {
+            tumKarakterler.push({ char: highlightMetin.substring(i, tagBitis + 1), html: true });
+            i = tagBitis;
+            continue;
+          }
+        }
+        tumKarakterler.push({ char: highlightMetin[i], html: false });
+      }
+
+      let plainIndex = 0;
+      let result = '';
+      for (const item of tumKarakterler) {
+        if (!item.html && plainIndex === acmaIkiNokta) {
+          result += `<span class="bracket-match">${item.char}</span>`;
+        } else if (!item.html && plainIndex === kapamaIkiNokta) {
+          result += `<span class="bracket-match">${item.char}</span>`;
+        } else {
+          result += item.char;
+        }
+        if (!item.html) plainIndex++;
+      }
+
+      highlight.innerHTML = result;
+    }
+
+    editor.addEventListener('click', parantezEslestir);
+    editor.addEventListener('keyup', parantezEslestir);
+
+    // ===== BUL VE DEĞİŞTİR =====
+    let bulKaplama = null;
+
+    function toggleFind() {
+      const panel = document.getElementById('findPanel');
+      if (panel.classList.contains('show')) {
+        panel.classList.remove('show');
+        bulKapat();
+      } else {
+        panel.classList.add('show');
+        const input = document.getElementById('findInput');
+        input.value = '';
+        input.focus();
+        document.getElementById('replaceInput').value = '';
+        document.getElementById('findInfo').textContent = '';
+      }
+    }
+
+    function bulGetir() {
+      const terim = document.getElementById('findInput').value;
+      if (!terim) { bulKapat(); return []; }
+
+      const metin = editor.value;
+      const bulunanlar = [];
+      let indeks = metin.indexOf(terim);
+      while (indeks !== -1) {
+        bulunanlar.push(indeks);
+        indeks = metin.indexOf(terim, indeks + 1);
+      }
+      return bulunanlar;
+    }
+
+    function bulHighlight(bulunanlar, aktifIndex) {
+      bulKapat();
+      if (bulunanlar.length === 0) return;
+
+      const terim = document.getElementById('findInput').value;
+      const metin = editor.value;
+
+      for (let i = 0; i < bulunanlar.length; i++) {
+        const bas = bulunanlar[i];
+        const son = bas + terim.length;
+
+        const onceki = editor.setSelectionRange;
+        editor.focus();
+
+        if (i === aktifIndex) {
+          editor.setSelectionRange(bas, son);
+          const satir = metin.substring(0, bas).split('\n').length;
+          const satirBasligi = document.querySelectorAll('.ln')[satir - 1];
+          if (satirBasligi) {
+            const editorRect = editor.getBoundingClientRect();
+            const linRect = satirBasligi.getBoundingClientRect();
+            if (linRect.top < editorRect.top || linRect.bottom > editorRect.bottom) {
+              editor.scrollTop += linRect.top - editorRect.top - editorRect.height / 2;
+            }
+          }
+        }
+      }
+    }
+
+    function bulSonraki() {
+      const bulunanlar = bulGetir();
+      if (bulunanlar.length === 0) {
+        document.getElementById('findInfo').textContent = '0/0';
+        return;
+      }
+
+      const mevcut = editor.selectionStart;
+      let aktif = bulunanlar.findIndex(b => b >= mevcut);
+      if (aktif === -1) aktif = 0;
+
+      document.getElementById('findInfo').textContent = `${aktif + 1}/${bulunanlar.length}`;
+      bulHighlight(bulunanlar, aktif);
+    }
+
+    function bulOnceki() {
+      const bulunanlar = bulGetir();
+      if (bulunanlar.length === 0) {
+        document.getElementById('findInfo').textContent = '0/0';
+        return;
+      }
+
+      const mevcut = editor.selectionStart;
+      let aktif = bulunanlar.findLastIndex(b => b < mevcut);
+      if (aktif === -1) aktif = bulunanlar.length - 1;
+
+      document.getElementById('findInfo').textContent = `${aktif + 1}/${bulunanlar.length}`;
+      bulHighlight(bulunanlar, aktif);
+    }
+
+    function bulKapat() {
+      if (bulKaplama) { bulKaplama.remove(); bulKaplama = null; }
+    }
+
+    function degistirBirTane() {
+      const terim = document.getElementById('findInput').value;
+      const degistir = document.getElementById('replaceInput').value;
+      if (!terim) return;
+
+      const metin = editor.value;
+      const bas = editor.selectionStart;
+      const secili = metin.substring(bas, editor.selectionEnd);
+
+      if (secili === terim) {
+        editor.value = metin.substring(0, bas) + degistir + metin.substring(bas + terim.length);
+        editor.selectionStart = editor.selectionEnd = bas + degistir.length;
+        senkronize();
+      }
+
+      bulSonraki();
+    }
+
+    function tumunuDegistir() {
+      const terim = document.getElementById('findInput').value;
+      const degistir = document.getElementById('replaceInput').value;
+      if (!terim) return;
+
+      const onceki = editor.value;
+      editor.value = onceki.split(terim).join(degistir);
+      senkronize();
+
+      const sayi = onceki.split(terim).length - 1;
+      document.getElementById('findInfo').textContent = `${sayi} değiştirildi`;
+    }
+
+    function findNext() { bulSonraki(); }
+    function findPrev() { bulOnceki(); }
+    function replaceOne() { degistirBirTane(); }
+    function replaceAll() { tumunuDegistir(); }
+
+    // ===== OTOMATİK GİRİNTİLEME =====
+    editor.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter' && !autocomplete.classList.contains('show')) {
+        e.preventDefault();
+        const pos = editor.selectionStart;
+        const metin = editor.value;
+        const oncekiSatirBasindanCursora = metin.substring(0, pos);
+        const sonSatir = oncekiSatirBasindanCursora.split('\n').pop();
+        const girinti = sonSatir.match(/^(\s*)/)[1];
+
+        let ekGirinti = '';
+        const sonTrimmed = sonSatir.trim();
+        if (sonTrimmed.endsWith(':') || sonTrimmed.endsWith('{') || sonTrimmed.endsWith('[') || sonTrimmed.endsWith('(')) {
+          ekGirinti = '    ';
+        }
+
+        const yeniSatir = '\n' + girinti + ekGirinti;
+        editor.value = metin.substring(0, pos) + yeniSatir + metin.substring(editor.selectionEnd);
+        editor.selectionStart = editor.selectionEnd = pos + yeniSatir.length;
+        senkronize();
+        satirNumaralariniGuncelle();
+      }
+    });
+
+    // ===== KLAVYE KISAYOLU: Ctrl+H =====
+    document.addEventListener('keydown', (e) => {
+      if ((e.ctrlKey || e.metaKey) && e.key === 'h') {
+        e.preventDefault();
+        toggleFind();
+      }
+      if ((e.ctrlKey || e.metaKey) && e.key === 'f') {
+        e.preventDefault();
+        toggleFind();
+      }
+    });
+
+    // Bul input Enter ile arama
+    document.getElementById('findInput').addEventListener('keydown', (e) => {
+      if (e.key === 'Enter') {
+        if (e.shiftKey) bulOnceki();
+        else bulSonraki();
+      }
+      if (e.key === 'Escape') toggleFind();
+    });
+
+    document.getElementById('replaceInput').addEventListener('keydown', (e) => {
+      if (e.key === 'Enter') degistirBirTane();
+      if (e.key === 'Escape') toggleFind();
+    });
+
+    const SABIT_ONERILER = [
+      { ad: 'değişken', tip: 'anahtar kelime' },
+      { ad: 'fonksiyon', tip: 'anahtar kelime' },
+      { ad: 'eğer', tip: 'anahtar kelime' },
+      { ad: 'ise', tip: 'anahtar kelime' },
+      { ad: 'değilse', tip: 'anahtar kelime' },
+      { ad: 'son', tip: 'anahtar kelime' },
+      { ad: 'döngü', tip: 'anahtar kelime' },
+      { ad: 'kez', tip: 'anahtar kelime' },
+      { ad: 'için', tip: 'anahtar kelime' },
+      { ad: 'içinde', tip: 'anahtar kelime' },
+      { ad: 'her', tip: 'anahtar kelime' },
+      { ad: 'SonsuzDoğru', tip: 'anahtar kelime' },
+      { ad: 'kırıl', tip: 'anahtar kelime' },
+      { ad: 'devam', tip: 'anahtar kelime' },
+      { ad: 'dön', tip: 'anahtar kelime' },
+      { ad: 'dene', tip: 'anahtar kelime' },
+      { ad: 'yakala', tip: 'anahtar kelime' },
+      { ad: 'sabit', tip: 'anahtar kelime' },
+      { ad: 'doğru', tip: 'sabit' },
+      { ad: 'yanlış', tip: 'sabit' },
+      { ad: 'boş', tip: 'sabit' },
+      { ad: 'yazdır', tip: 'fonksiyon' },
+      { ad: 'iste', tip: 'fonksiyon' },
+      { ad: 'tür', tip: 'fonksiyon' },
+      { ad: 'sayıya', tip: 'fonksiyon' },
+      { ad: 'ondalıklıya', tip: 'fonksiyon' },
+      { ad: 'metne', tip: 'fonksiyon' },
+      { ad: 'uzunluk', tip: 'fonksiyon' },
+      { ad: 'büyükHarf', tip: 'fonksiyon' },
+      { ad: 'küçükHarf', tip: 'fonksiyon' },
+      { ad: 'temizle', tip: 'fonksiyon' },
+      { ad: 'böl', tip: 'fonksiyon' },
+      { ad: 'birleştir', tip: 'fonksiyon' },
+      { ad: 'içeriyorMu', tip: 'fonksiyon' },
+      { ad: 'yuvarla', tip: 'fonksiyon' },
+      { ad: 'mutlak', tip: 'fonksiyon' },
+      { ad: 'toplam', tip: 'fonksiyon' },
+      { ad: 'ortalama', tip: 'fonksiyon' },
+      { ad: 'medyan', tip: 'fonksiyon' },
+      { ad: 'asalMı', tip: 'fonksiyon' },
+      { ad: 'ebob', tip: 'fonksiyon' },
+      { ad: 'ekok', tip: 'fonksiyon' },
+      { ad: 'faktöriyel', tip: 'fonksiyon' },
+      { ad: 'fibonacci', tip: 'fonksiyon' },
+      { ad: 'Rastgele()', tip: 'fonksiyon' },
+      { ad: 'RastgeleSeç', tip: 'fonksiyon' },
+      { ad: 'RastgeleTamSayı', tip: 'fonksiyon' },
+      { ad: 'Matematik.mutlak', tip: 'modül' },
+      { ad: 'Matematik.yuvarla', tip: 'modül' },
+      { ad: 'Matematik.toplam', tip: 'modül' },
+      { ad: 'Matematik.ortalama', tip: 'modül' },
+      { ad: 'Matematik.asalMı', tip: 'modül' },
+      { ad: 'Matematik.ebob', tip: 'modül' },
+      { ad: 'Matematik.ekok', tip: 'modül' },
+      { ad: 'Matematik.faktöriyel', tip: 'modül' },
+      { ad: 'BasamakToplam', tip: 'modül' },
+      { ad: 'BasamakUzunluk', tip: 'modül' },
+      { ad: 'BasamakCarpim', tip: 'modül' },
+      { ad: 'BasamakTers', tip: 'modül' },
+      { ad: 'BasamakAsalMİ', tip: 'modül' },
+      { ad: 'BasamakPalindromMu', tip: 'modül' }
+    ];
+
+    let acIndex = 0;
+    let acFiltre = [];
+
+    function dinamikOnerileriAl() {
+      const kod = editor.value;
+      const dinamik = [];
+      const degiskenEsl = kod.matchAll(/(?:değişken|degisken|sabit)\s+([a-zA-ZçğıöşüÇĞİÖÜ0-9_]+)/g);
+      for (const m of degiskenEsl) {
+        if (!dinamik.some(d => d.ad === m[1])) {
+          dinamik.push({ ad: m[1], tip: 'değişken' });
+        }
+      }
+      const fonkEsl = kod.matchAll(/fonksiyon\s+([a-zA-ZçğıöşüÇĞİÖÜ0-9_]+)/g);
+      for (const m of fonkEsl) {
+        if (!dinamik.some(d => d.ad === m[1])) {
+          dinamik.push({ ad: m[1], tip: 'fonksiyon' });
+        }
+      }
+      return [...dinamik, ...SABIT_ONERILER];
+    }
+
+    function onerileriGoster() {
+      const cursor = editor.selectionStart;
+      const metin = editor.value.substring(0, cursor);
+      const kelimeMatch = metin.match(/([a-zA-ZçğıöşüÇĞİÖÜ0-9_.]+)$/);
+
+      if (kelimeMatch && kelimeMatch[1].length >= 1) {
+        const aranan = kelimeMatch[1].toLowerCase();
+        const tumOneriler = dinamikOnerileriAl();
+        const map = new Map();
+        for (const item of tumOneriler) {
+          if (item.ad.toLowerCase().startsWith(aranan) && item.ad.toLowerCase() !== aranan) {
+            if (!map.has(item.ad)) map.set(item.ad, item);
+          }
+        }
+        acFiltre = Array.from(map.values()).slice(0, 10);
+
+        if (acFiltre.length > 0) {
+          const lines = metin.split('\n');
+          const lineNum = lines.length;
+          const currentLine = lines[lines.length - 1];
+          const topPos = Math.min(lineNum * 24 + 10, editor.clientHeight - 180);
+          const leftPos = Math.min(currentLine.length * 8.5 + 20, editor.clientWidth - 230);
+
+          autocomplete.style.top = topPos + 'px';
+          autocomplete.style.left = leftPos + 'px';
+          acIndex = 0;
+          acRender();
+          autocomplete.classList.add('show');
+        } else {
+          autocomplete.classList.remove('show');
+        }
+      } else {
+        autocomplete.classList.remove('show');
+      }
+    }
+
+    function acRender() {
+      autocomplete.innerHTML = acFiltre.map((o, idx) =>
+        `<div class="ac-item ${idx===acIndex?'active':''}" onmousedown="acEkle('${o.ad}')">
+          <span class="ac-item-name">${o.ad}</span>
+          <span class="ac-item-type">${o.tip}</span>
+        </div>`
+      ).join('');
+    }
+
+    editor.addEventListener('keyup', (e) => {
+      if (['ArrowDown', 'ArrowUp', 'Enter', 'Tab', 'Escape'].includes(e.key)) return;
+      onerileriGoster();
+    });
+
+    editor.addEventListener('keydown', (e) => {
+      if (autocomplete.classList.contains('show')) {
+        if (e.key === 'ArrowDown') {
+          e.preventDefault();
+          acIndex = (acIndex + 1) % acFiltre.length;
+          acGuncelle();
+        } else if (e.key === 'ArrowUp') {
+          e.preventDefault();
+          acIndex = (acIndex - 1 + acFiltre.length) % acFiltre.length;
+          acGuncelle();
+        } else if (e.key === 'Enter' || e.key === 'Tab') {
+          if (acIndex >= 0 && acIndex < acFiltre.length) {
+            e.preventDefault();
+            acEkle(acFiltre[acIndex].ad);
+          }
+        } else if (e.key === 'Escape') {
+          autocomplete.classList.remove('show');
+        }
+      } else if (e.key === 'Tab') {
+        e.preventDefault();
+        const s = editor.selectionStart, end = editor.selectionEnd;
+        editor.value = editor.value.substring(0, s) + '    ' + editor.value.substring(end);
+        editor.selectionStart = editor.selectionEnd = s + 4;
+        senkronize();
+      }
+    });
+
+    function acGuncelle() {
+      autocomplete.querySelectorAll('.ac-item').forEach((el, idx) => {
+        el.classList.toggle('active', idx === acIndex);
+      });
+    }
+
+    function acEkle(ad) {
+      const cursor = editor.selectionStart;
+      const metin = editor.value.substring(0, cursor);
+      const geriKalan = editor.value.substring(cursor);
+      const kelimeMatch = metin.match(/([a-zA-ZçğıöşüÇĞİÖÜ0-9_.]+)$/);
+      if (kelimeMatch) {
+        const baslangic = cursor - kelimeMatch[1].length;
+        editor.value = editor.value.substring(0, baslangic) + ad + geriKalan;
+        editor.selectionStart = editor.selectionEnd = baslangic + ad.length;
+      } else {
+        editor.value = metin + ad + geriKalan;
+        editor.selectionStart = editor.selectionEnd = cursor + ad.length;
+      }
+      autocomplete.classList.remove('show');
+      senkronize();
+      editor.focus();
+    }
+
+    function calistir() {
+      const kaynak = editor.value;
+      if (!kaynak.trim()) return;
+      output.innerHTML = '';
+      statusDot.className = 'status-dot';
+      statusText.textContent = 'Çalıştırılıyor...';
+
+      setTimeout(() => {
+        const yorumlayici = new TurkodYorumlayici();
+        const sonuc = yorumlayici.run(kaynak);
+
+        if (sonuc.hata) {
+          output.innerHTML += `<div class="out-line error">❌ ${sonuc.hata}</div>`;
+          statusDot.className = 'status-dot err';
+          statusText.textContent = 'Hata';
+        } else {
+          for (const satir of sonuc.cikti) {
+            output.innerHTML += `<div class="out-line">${satir}</div>`;
+          }
+          if (sonuc.cikti.length === 0) {
+            output.innerHTML += `<div class="out-line info">(Çıktı yok)</div>`;
+          }
+          output.innerHTML += `<div class="out-line success" style="margin-top:12px;border-top:1px solid var(--bd);padding-top:12px;">✓ Başarıyla tamamlandı</div>`;
+          statusDot.className = 'status-dot ok';
+          statusText.textContent = 'Başarılı';
+        }
+      }, 30);
+    }
+
+    function temizle() {
+      editor.value = '';
+      output.innerHTML = '';
+      senkronize();
+      statusDot.className = 'status-dot';
+      statusText.textContent = 'Hazır';
+    }
+
+    const ORNEK = `// Merhaba Dünya!
+yazdır("Merhaba, TÜRKOD!")
+
+// Değişkenler
+değişken ad := "Dünya"
+değişken yaş := 25
+yazdır("Merhaba " + ad)
+yazdır("Yaş: " + yaş)
+
+// Koşullar
+eğer yaş >= 18 ise
+  yazdır("Reşitsiniz!")
+değilse
+  yazdır("Reşit değilsiniz!")
+son
+
+// Döngü
+döngü 5 kez
+  yazdır("Tekrar!")
+son
+
+// Fonksiyon
+fonksiyon kare(x)
+  dön x * x
+son
+yazdır("3'ün karesi: " + kare(3))
+
+// Liste
+değişken meyveler := ["elma", "armut", "kavun"]
+her meyve için meyveler için
+  yazdır("Meyve: " + meyve)
+son
+
+// Sayısal işlemler
+yazdır("10 + 5 = " + 15)
+yazdır("10 * 3 = " + 30)
+yazdır("Faktöriyel 5: " + 120)
+yazdır("Rastgele: " + Rastgele())
+`;
+
+    function ornekYukle() { editor.value = ORNEK; senkronize(); }
+
+    // F5
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'F5') { e.preventDefault(); calistir(); }
+    });
+
+    // "e" tuşu ile geliştirici sayfasına geçiş
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'e' && !e.ctrlKey && !e.altKey && !e.metaKey) {
+        const hedef = document.activeElement;
+        if (hedef.tagName !== 'INPUT' && hedef.tagName !== 'TEXTAREA' && !hedef.isContentEditable) {
+          e.preventDefault();
+          window.location.href = 'gelistirici.html';
+        }
+      }
+    });
+
+    senkronize();
+  </script>
+</body>
+</html>

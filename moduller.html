@@ -1,0 +1,925 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>TÜRKOD Modüller</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #0a0a0f;
+      --bg2: #111118;
+      --bg3: #18181f;
+      --bg4: #1e1e28;
+      --tx: #e8e8f0;
+      --tx2: #8888a0;
+      --tx3: #555568;
+      --red: #e53e3e;
+      --red-dim: rgba(229,62,62,0.12);
+      --bd: #222230;
+      --gn: #4ade80;
+      --cy: #22d3ee;
+      --pk: #f472b6;
+      --yl: #facc15;
+      --or: #fb923c;
+    }
+    * { margin:0; padding:0; box-sizing:border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: 'Inter', system-ui, -apple-system, sans-serif;
+      background: var(--bg);
+      color: var(--tx);
+      line-height: 1.6;
+    }
+
+    /* HEADER */
+    .header {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 100;
+      background: rgba(10,10,15,0.92);
+      backdrop-filter: blur(20px);
+      border-bottom: 1px solid var(--bd);
+      padding: 0 32px;
+      height: 60px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .header-left { display: flex; align-items: center; gap: 20px; }
+    .header-logo {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      text-decoration: none;
+      color: var(--tx);
+    }
+    .header-logo img {
+      height: 32px;
+      width: auto;
+      border-radius: 8px;
+    }
+    .header-logo-text {
+      font-size: 16px;
+      font-weight: 700;
+      color: #fff;
+    }
+    .header-links { display: flex; gap: 8px; }
+    .header-link {
+      padding: 8px 14px;
+      background: var(--bg3);
+      border: 1px solid var(--bd);
+      border-radius: 8px;
+      color: var(--tx2);
+      font-size: 13px;
+      text-decoration: none;
+      transition: all 0.2s;
+      font-weight: 500;
+    }
+    .header-link:hover {
+      border-color: var(--red);
+      color: var(--red);
+    }
+
+    /* MAIN */
+    .main {
+      margin-top: 60px;
+      padding: 40px;
+      max-width: 1200px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    /* PAGE TITLE */
+    .page-title {
+      text-align: center;
+      margin-bottom: 48px;
+    }
+    .page-title h1 {
+      font-size: 42px;
+      font-weight: 800;
+      color: #fff;
+      margin-bottom: 12px;
+      letter-spacing: -1px;
+    }
+    .page-title p {
+      font-size: 16px;
+      color: var(--tx2);
+    }
+
+    /* MODULE GRID */
+    .modul-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 16px;
+    }
+    .modul-card {
+      background: var(--bg2);
+      border: 1px solid var(--bd);
+      border-radius: 16px;
+      padding: 28px 20px;
+      text-align: center;
+      cursor: pointer;
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      position: relative;
+      overflow: hidden;
+    }
+    .modul-card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 3px;
+      background: linear-gradient(90deg, var(--red), transparent);
+      opacity: 0;
+      transition: opacity 0.3s;
+    }
+    .modul-card:hover {
+      border-color: var(--red);
+      transform: translateY(-4px);
+      box-shadow: 0 12px 40px rgba(229,62,62,0.15);
+    }
+    .modul-card:hover::before { opacity: 1; }
+    .modul-card .mi {
+      font-size: 40px;
+      margin-bottom: 14px;
+      display: block;
+    }
+    .modul-card h3 {
+      font-size: 15px;
+      font-weight: 700;
+      color: #fff;
+      margin-bottom: 6px;
+    }
+    .modul-card p {
+      font-size: 12px;
+      color: var(--tx3);
+      line-height: 1.4;
+    }
+
+    /* MODAL */
+    .modal-overlay {
+      display: none;
+      position: fixed;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background: rgba(0,0,0,0.8);
+      backdrop-filter: blur(8px);
+      z-index: 200;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+    }
+    .modal-overlay.active {
+      display: flex;
+    }
+    .modal {
+      background: var(--bg2);
+      border: 1px solid var(--bd);
+      border-radius: 20px;
+      width: 100%;
+      max-width: 900px;
+      max-height: 85vh;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      box-shadow: 0 24px 80px rgba(0,0,0,0.5);
+    }
+    .modal-header {
+      padding: 24px 28px;
+      border-bottom: 1px solid var(--bd);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: var(--bg3);
+    }
+    .modal-header-left {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+    .modal-header-left .mi {
+      font-size: 36px;
+    }
+    .modal-header-left h2 {
+      font-size: 22px;
+      font-weight: 700;
+      color: #fff;
+    }
+    .modal-header-left p {
+      font-size: 13px;
+      color: var(--tx2);
+      margin-top: 2px;
+    }
+    .modal-close {
+      width: 40px;
+      height: 40px;
+      border-radius: 10px;
+      background: var(--bg4);
+      border: 1px solid var(--bd);
+      color: var(--tx2);
+      font-size: 20px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.2s;
+    }
+    .modal-close:hover {
+      background: var(--red);
+      color: #fff;
+      border-color: var(--red);
+    }
+    .modal-body {
+      padding: 24px 28px;
+      overflow-y: auto;
+      flex: 1;
+    }
+    .modal-body::-webkit-scrollbar { width: 6px; }
+    .modal-body::-webkit-scrollbar-thumb { background: var(--bd); border-radius: 3px; }
+
+    /* COMMAND SECTION */
+    .cmd-section {
+      margin-bottom: 24px;
+    }
+    .cmd-section-title {
+      font-size: 16px;
+      font-weight: 700;
+      color: var(--red);
+      margin-bottom: 12px;
+      padding-bottom: 8px;
+      border-bottom: 1px solid var(--bd);
+    }
+    .cmd-item {
+      background: var(--bg3);
+      border: 1px solid var(--bd);
+      border-radius: 10px;
+      padding: 14px 16px;
+      margin-bottom: 8px;
+      transition: all 0.2s;
+    }
+    .cmd-item:hover {
+      border-color: var(--red);
+    }
+    .cmd-name {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--cy);
+      margin-bottom: 4px;
+    }
+    .cmd-syntax {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 12px;
+      color: var(--pk);
+      background: var(--bg);
+      padding: 6px 10px;
+      border-radius: 6px;
+      margin-bottom: 6px;
+      white-space: pre-wrap;
+      overflow-x: auto;
+    }
+    .cmd-desc {
+      font-size: 12.5px;
+      color: var(--tx2);
+      line-height: 1.5;
+    }
+    .cmd-example {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 11.5px;
+      color: var(--gn);
+      background: var(--bg);
+      padding: 8px 10px;
+      border-radius: 6px;
+      margin-top: 6px;
+      white-space: pre-wrap;
+      overflow-x: auto;
+      border-left: 2px solid var(--gn);
+    }
+
+    /* FOOTER */
+    .footer {
+      border-top: 1px solid var(--bd);
+      padding: 40px 32px;
+      text-align: center;
+      margin-top: 60px;
+    }
+    .footer p {
+      font-size: 13px;
+      color: var(--tx3);
+    }
+
+    /* RESPONSIVE */
+    @media (max-width: 1000px) {
+      .modul-grid { grid-template-columns: repeat(3, 1fr); }
+    }
+    @media (max-width: 700px) {
+      .modul-grid { grid-template-columns: repeat(2, 1fr); }
+      .main { padding: 24px 16px; }
+      .page-title h1 { font-size: 30px; }
+      .modal { max-height: 90vh; border-radius: 16px; }
+    }
+    @media (max-width: 500px) {
+      .modul-grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- HEADER -->
+  <header class="header">
+    <div class="header-left">
+      <a href="index.html" class="header-logo">
+        <img src="turkod.png" alt="TÜRKOD">
+        <span class="header-logo-text">TÜRKOD</span>
+      </a>
+    </div>
+    <div class="header-links">
+      <a href="index.html" class="header-link">Ana Sayfa</a>
+      <a href="referans.html" class="header-link">Referans</a>
+      <a href="deneme.html" class="header-link">Canlı Deneme</a>
+      <a href="gelistirici.html" class="header-link">Geliştirici</a>
+      <a href="https://github.com/aelif7826-ai/T-rkod/releases/download/T%C3%BCrkod/Turkod.Studyosu.Installer.3.exe" class="header-link" style="background:var(--red);color:#fff;border-color:var(--red);font-weight:700;padding:8px 18px;">&#10515; Yükle</a>
+    </div>
+  </header>
+
+  <!-- MAIN -->
+  <main class="main">
+    <div class="page-title">
+      <h1>Modüller</h1>
+      <p>TÜRKOD ile birlikte gelen güçlü modüller. Bir modüle tıklayarak detaylı bilgi alın.</p>
+    </div>
+
+    <div class="modul-grid" id="modulGrid"></div>
+
+    <!-- BİLGİ NOTU -->
+    <div style="margin-top:48px;padding:24px 28px;background:var(--bg2);border:1px solid var(--bd);border-radius:14px;text-align:center;">
+      <p style="font-size:14px;color:var(--tx2);line-height:1.7;">
+        Bu sayfada listelenen <strong style="color:var(--red);">tüm modüller</strong>, TÜRKOD uygulamasının <strong style="color:#fff;">Modüller</strong> kısmında hazır olarak gelmektedir.<br>
+        Uygulamayı açıp <strong style="color:#fff;">Modüller</strong> sekmesinden bu modülleri kurabilir, kaldırabilir ve yönetebilirsiniz.
+      </p>
+    </div>
+  </main>
+
+  <!-- MODAL -->
+  <div class="modal-overlay" id="modalOverlay">
+    <div class="modal">
+      <div class="modal-header">
+        <div class="modal-header-left">
+          <span class="mi" id="modalIcon"></span>
+          <div>
+            <h2 id="modalTitle"></h2>
+            <p id="modalDesc"></p>
+          </div>
+        </div>
+        <button class="modal-close" onclick="closeModal()">&#10005;</button>
+      </div>
+      <div class="modal-body" id="modalBody"></div>
+    </div>
+  </div>
+
+  <!-- FOOTER -->
+  <footer class="footer">
+    <p>TÜRKOD &copy; 2026 &mdash; MetogramStudios Tarafından</p>
+  </footer>
+
+  <script>
+    const MODULLER = {
+      "TürkUI": {
+        icon: "&#127912;",
+        desc: "Electron tabanlı masaüstü uygulamaları oluşturun. Pencere yönetimi, buton, metin kutusu, menü, tablo, sürükle-bırak ve daha fazlası.",
+        import: "içe_aktar TürkUI",
+        sections: [
+          {
+            title: "Pencere Oluşturma",
+            commands: [
+              { name: "TürkUI.pencere", syntax: 'TürkUI.pencere("Başlık")', desc: "Yeni bir pencere oluşturur.", example: 'içe_aktar TürkUI\ndeğişken uygulama := TürkUI.pencere("İlk Uygulamam")\nuygulama.göster()' },
+              { name: "uygulama.göster()", syntax: "uygulama.göster()", desc: "Pencereyi ekranda gösterir.", example: 'uygulama.göster()' },
+            ]
+          },
+          {
+            title: "Pencere Özellikleri",
+            commands: [
+              { name: ".başlık", syntax: 'uygulama.başlık := "Yeni Başlık"', desc: "Pencere başlığını değiştirir.", example: 'uygulama.başlık := "Yeni Uygulama"' },
+              { name: ".arkaPlan", syntax: "uygulama.arkaPlan := renk.mavi", desc: "Pencere arka plan rengini ayarlar.", example: 'uygulama.arkaPlan := renk.kırmızı' },
+              { name: ".genişlik / .yükseklik", syntax: "uygulama.genişlik := 800", desc: "Pencere boyutunu ayarlar.", example: 'uygulama.genişlik := 1024\nuygulama.yükseklik := 768' },
+              { name: ".x / .y", syntax: "uygulama.x := 100", desc: "Pencere konumunu ayarlar.", example: 'uygulama.x := 200\nuygulama.y := 150' },
+              { name: ".şeffaflık", syntax: "uygulama.şeffaflık := 0.8", desc: "Pencere şeffaflığını ayarlar (0-1).", example: 'uygulama.şeffaflık := 0.5' },
+              { name: ".üstte", syntax: "uygulama.üstte := Doğru", desc: "Pencereyi en üstte tutar.", example: 'uygulama.üstte := Doğru' },
+              { name: ".tamEkran", syntax: "uygulama.tamEkran := Doğru", desc: "Pencereyi tam ekran yapar.", example: 'uygulama.tamEkran := Doğru' },
+            ]
+          },
+          {
+            title: "Pencere Metotları",
+            commands: [
+              { name: ".göster()", syntax: "uygulama.göster()", desc: "Pencereyi gösterir.", example: 'uygulama.göster()' },
+              { name: ".gizle()", syntax: "uygulama.gizle()", desc: "Pencereyi gizler.", example: 'uygulama.gizle()' },
+              { name: ".küçült()", syntax: "uygulama.küçült()", desc: "Pencereyi küçültür.", example: 'uygulama.küçült()' },
+              { name: ".büyüt()", syntax: "uygulama.büyüt()", desc: "Pencereyi büyütür.", example: 'uygulama.büyüt()' },
+              { name: ".normal()", syntax: "uygulama.normal()", desc: "Pencereyi normale döndürür.", example: 'uygulama.normal()' },
+              { name: ".kapat()", syntax: "uygulama.kapat()", desc: "Pencereyi kapatır.", example: 'uygulama.kapat()' },
+              { name: ".merkezle()", syntax: "uygulama.merkezle()", desc: "Pencereyi ekranın ortasına getirir.", example: 'uygulama.merkezle()' },
+            ]
+          },
+          {
+            title: "Renkler",
+            commands: [
+              { name: "Hazır Renkler", syntax: "renk.kırmızı, renk.mavi, renk.yeşil, renk.sarı, renk.turuncu, renk.mor, renk.pembe, renk.beyaz, renk.siyah, renk.gri, renk.turkuaz, renk.şeffaf", desc: "Hazır renk sabitleri.", example: 'uygulama.arkaPlan := renk.mavi' },
+              { name: "Özel Renk", syntax: "renk.rgb(255, 0, 0)", desc: "Özel RGB rengi oluşturur.", example: 'uygulama.arkaPlan := renk.rgb(128, 64, 200)' },
+              { name: "Hex Renk", syntax: 'renk.hex("#FF0000")', desc: "Hex kodu ile renk oluşturur.", example: 'uygulama.arkaPlan := renk.hex("#3498db")' },
+              { name: "Renk Geçişi", syntax: "renk.mavi.geçiş(3)", desc: "Renk geçişi efekti verir.", example: 'uygulama.arkaPlan := renk.mavi.geçiş(3)' },
+            ]
+          },
+          {
+            title: "Metinler",
+            commands: [
+              { name: "Metin Oluşturma", syntax: 'uygulama.metin("İçerik")', desc: "Metin bileşeni ekler.", example: 'uygulama.metin("Merhaba Dünya!")' },
+              { name: ".içerik", syntax: 'metin.içerik := "Yeni Metin"', desc: "Metin içeriğini değiştirir.", example: 'metin.içerik := "Güncellendi"' },
+              { name: ".renk / .yazıRenk", syntax: "metin.renk := renk.mavi", desc: "Metin rengini ayarlar.", example: 'metin.renk := renk.kırmızı' },
+              { name: ".yazıBoyutu", syntax: "metin.yazıBoyutu := 24", desc: "Yazı boyutunu ayarlar.", example: 'metin.yazıBoyutu := 32' },
+              { name: ".kalın", syntax: "metin.kalın := Doğru", desc: "Metni kalın yapar.", example: 'metin.kalın := Doğru' },
+              { name: ".değiştir()", syntax: 'metin.değiştir("Yeni")', desc: "Metni değiştirir.", example: 'metin.değiştir("Yeni Metin")' },
+            ]
+          },
+          {
+            title: "Butonlar",
+            commands: [
+              { name: "Buton Oluşturma", syntax: 'uygulama.buton("Tıkla")', desc: "Buton oluşturur.", example: 'değişken btn := uygulama.buton("Tıkla")' },
+              { name: ".metin", syntax: 'buton.metin := "Yeni"', desc: "Buton metnini değiştirir.", example: 'buton.metin := "Güncelle"' },
+              { name: ".renk / .arkaPlan", syntax: "buton.renk := renk.mavi", desc: "Buton renklerini ayarlar.", example: 'buton.arkaPlan := renk.kırmızı\nbuton.renk := renk.beyaz' },
+              { name: ".genişlik / .yükseklik", syntax: "buton.genişlik := 200", desc: "Buton boyutunu ayarlar.", example: 'buton.genişlik := 150\nbuton.yükseklik := 50' },
+              { name: ".tıklandığında", syntax: "buton.tıklandığında ... son", desc: "Tıklama olayını dinler.", example: 'buton.tıklandığında\n  yazdır("Tıklandı!")\nson' },
+              { name: ".göster() / .gizle()", syntax: "buton.göster()", desc: "Butonu gösterir/gizler.", example: 'buton.gizle()' },
+            ]
+          },
+          {
+            title: "Giriş Kutuları",
+            commands: [
+              { name: "Giriş Kutusu", syntax: 'uygulama.giriş("Placeholder")', desc: "Giriş kutusu oluşturur.", example: 'değişken gt := uygulama.giriş("Adınızı girin")' },
+              { name: ".değer", syntax: "giriş.değer", desc: "Giriş değerini okur.", example: 'yazdır(giriş.değer)' },
+              { name: ".ayarla()", syntax: 'giriş.ayarla("değer")', desc: "Giriş değerini ayarlar.", example: 'giriş.ayarla("Varsayılan")' },
+              { name: ".değiştiğinde", syntax: "giriş.değiştiğinde ... son", desc: "Değişim olayını dinler.", example: 'giriş.değiştiğinde\n  yazdır("Yeni:", giriş.değer)\nson' },
+            ]
+          },
+          {
+            title: "Düzen ve Yerleşim",
+            commands: [
+              { name: "Dikey Düzen", syntax: "uygulama.dikeyDüzen()", desc: "Dikey yerleşim düzeni oluşturur.", example: 'değişken d := uygulama.dikeyDüzen()\nd.ekle(buton1)\nd.ekle(metin1)' },
+              { name: "Yatay Düzen", syntax: "uygulama.yatayDüzen()", desc: "Yatay yerleşim düzeni oluşturur.", example: 'değişken y := uygulama.yatayDüzen()\ny.ekle(buton1)\ny.ekle(buton2)' },
+              { name: "Grid Düzen", syntax: "uygulama.gridDüzen()", desc: "Izgara yerleşim düzeni oluşturur.", example: 'değişken g := uygulama.gridDüzen()\ng.sütun := 3' },
+            ]
+          }
+        ]
+      },
+      "Dosyaİşlemleri": {
+        icon: "&#128193;",
+        desc: "Dosya ve klasör oluşturun, okuyun, yazın, silin, kopyalayın veya taşıyın. Metin dosyaları, EXE oluşturma ve dizin yönetimi.",
+        import: "içe_aktar Dosyaİşlemleri",
+        sections: [
+          {
+            title: "Dosya İşlemleri",
+            commands: [
+              { name: "Dosya Açma", syntax: 'Dosyaİşlemleri.aç("dosya.txt")', desc: "Mevcut bir dosyayı açar.", example: 'değişken dosya := Dosyaİşlemleri.aç("notlar.txt")' },
+              { name: "Dosya Oluşturma", syntax: 'Dosyaİşlemleri.oluştur("dosya.txt")', desc: "Yeni bir dosya oluşturur.", example: 'değişken dosya := Dosyaİşlemleri.oluştur("yeni.txt")' },
+              { name: "Dosya Silme", syntax: 'Dosyaİşlemleri.sil("dosya.txt")', desc: "Bir dosyayı siler.", example: 'Dosyaİşlemleri.sil("eski.txt")' },
+              { name: "Varlık Kontrolü", syntax: 'Dosyaİşlemleri.varMı("dosya.txt")', desc: "Dosyanın var olup olmadığını kontrol eder.", example: 'eğer Dosyaİşlemleri.varMı("notlar.txt") ise\n  yazdır("Dosya mevcut")\nson' },
+              { name: "Dosya Kopyalama", syntax: 'Dosyaİşlemleri.kopyala("kaynak.txt", "hedef.txt")', desc: "Dosyayı kopyalar.", example: 'Dosyaİşlemleri.kopyala("notlar.txt", "yedek/notlar.txt")' },
+              { name: "Dosya Taşıma", syntax: 'Dosyaİşlemleri.taşı("eski.txt", "yeni.txt")', desc: "Dosyayı taşır.", example: 'Dosyaİşlemleri.taşı("notlar.txt", "arsiv/notlar.txt")' },
+            ]
+          },
+          {
+            title: "Klasör İşlemleri",
+            commands: [
+              { name: "Klasör Oluşturma", syntax: 'Dosyaİşlemleri.klasörOluştur("klasör")', desc: "Yeni bir klasör oluşturur.", example: 'Dosyaİşlemleri.klasörOluştur("Belgeler")' },
+              { name: "Klasör Silme", syntax: 'Dosyaİşlemleri.klasörSil("klasör")', desc: "Bir klasörü siler.", example: 'Dosyaİşlemleri.klasörSil("EskiProje")' },
+              { name: "Klasör Varlık", syntax: 'Dosyaİşlemleri.klasörVarMı("klasör")', desc: "Klasörün var olup olmadığını kontrol eder.", example: 'eğer Dosyaİşlemleri.klasörVarMı("Belgeler") ise\n  yazdır("Klasör mevcut")\nson' },
+              { name: "İçerik Listeleme", syntax: 'Dosyaİşlemleri.içeriğiGetir()', desc: "Klasörün içeriğini listeler.", example: 'değişken dosyalar := Dosyaİşlemleri.dosyalarıGetir("Belgeler")' },
+            ]
+          },
+          {
+            title: "Okuma ve Yazma",
+            commands: [
+              { name: "Dosya Okuma", syntax: "dosya.oku()", desc: "Dosyanın tüm içeriğini okur.", example: 'değişken içerik := dosya.oku()\nyazdır(içerik)' },
+              { name: "Dosyaya Yazma", syntax: 'dosya.yaz("içerik")', desc: "Dosyaya yazar (mevcut içeriği siler).", example: 'dosya.yaz("Merhaba Dünya!")' },
+              { name: "Dosyaya Ekleme", syntax: 'dosya.ekle("içerik")', desc: "Dosyanın sonuna ekler.", example: 'dosya.ekle("Yeni satır")' },
+              { name: "Dosya Temizleme", syntax: "dosya.temizle()", desc: "Dosyanın içeriğini temizler.", example: 'dosya.temizle()' },
+            ]
+          },
+          {
+            title: "Dosya Özellikleri",
+            commands: [
+              { name: ".isim", syntax: "dosya.isim", desc: "Dosya adını döndürür.", example: 'yazdır(dosya.isim)' },
+              { name: ".uzantı", syntax: "dosya.uzantı", desc: "Dosya uzantısını döndürür.", example: 'yazdır(dosya.uzantı)' },
+              { name: ".yol", syntax: "dosya.yol", desc: "Dosya yolunu döndürür.", example: 'yazdır(dosya.yol)' },
+              { name: ".boyut", syntax: "dosya.boyut", desc: "Dosya boyutunu döndürür.", example: 'yazdır(dosya.boyut)' },
+            ]
+          }
+        ]
+      },
+      "JSON": {
+        icon: "&#129518;",
+        desc: "JSON formatında verileri okuyun, yazın, doğrulayın ve dönüştürün. API verilerini işlemek için ideal.",
+        import: "içe_aktar json",
+        sections: [
+          {
+            title: "JSON İşlemleri",
+            commands: [
+              { name: "json.oku", syntax: 'json.oku("dosya.json")', desc: "JSON dosyasını okur.", example: 'değişken ayar := json.oku("ayarlar.json")\nyazdır(ayar["tema"])' },
+              { name: "json.parse", syntax: 'json.parse("[1, 2, 3]")', desc: "JSON metnini TürkKod verisine çevirir.", example: 'değişken liste := json.parse("[1, 2, 3]")\nyazdır(liste.uzunluk)   # 3' },
+              { name: "json.oluştur", syntax: "json.oluştur(veri)", desc: "TürkKod verisini JSON metnine dönüştürür.", example: 'değişken veri := {"isim": "Ali", "yaş": 25}\ndeğişken metin := json.oluştur(veri)\nyazdır(metin)' },
+              { name: "json.yaz", syntax: 'json.yaz("dosya.json", veri)', desc: "Veriyi JSON dosyasına yazar.", example: 'json.yaz("cikti.json", veri)' },
+              { name: "json.geçerli_mi", syntax: 'json.geçerli_mi("metin")', desc: "Metnin geçerli JSON olup olmadığını kontrol eder.", example: 'yazdır(json.geçerli_mi("[1, 2, 3]"))   # Doğru\nyazdır(json.geçerli_mi("merhaba"))     # Yanlış' },
+            ]
+          }
+        ]
+      },
+      "Matematik": {
+        icon: "&#129518;",
+        desc: "Temel ve ileri matematik işlemleri, trigonometri, istatistik, geometri, sayı teorisi ve yüzde hesaplamaları.",
+        import: "içe_aktar Matematik",
+        sections: [
+          {
+            title: "Temel İşlemler",
+            commands: [
+              { name: "Matematik.mutlak", syntax: "Matematik.mutlak(sayı)", desc: "Mutlak değeri döndürür.", example: 'yazdır(Matematik.mutlak(-10))  # 10' },
+              { name: "Matematik.yuvarla", syntax: "Matematik.yuvarla(sayı)", desc: "Sayıyı yuvarlar.", example: 'yazdır(Matematik.yuvarla(3.7))  # 4' },
+              { name: "Matematik.yukarıYuvarla", syntax: "Matematik.yukarıYuvarla(sayı)", desc: "Sayıyı yukarı yuvarlar.", example: 'yazdır(Matematik.yukarıYuvarla(3.2))  # 4' },
+              { name: "Matematik.aşağıYuvarla", syntax: "Matematik.aşağıYuvarla(sayı)", desc: "Sayıyı aşağı yuvarlar.", example: 'yazdır(Matematik.aşağıYuvarla(3.7))  # 3' },
+              { name: "Matematik.kalan", syntax: "Matematik.kalan(sayı, bölen)", desc: "Bölme sonucu kalanı döndürür.", example: 'yazdır(Matematik.kalan(10, 3))  # 1' },
+            ]
+          },
+          {
+            title: "Üs ve Kök",
+            commands: [
+              { name: "Matematik.üs", syntax: "Matematik.üs(taban, üs)", desc: "Üs alma işlemi yapar.", example: 'yazdır(Matematik.üs(2, 3))  # 8' },
+              { name: "Matematik.karekök", syntax: "Matematik.karekök(sayı)", desc: "Karekök alır.", example: 'yazdır(Matematik.karekök(144))  # 12' },
+              { name: "Matematik.küpKök", syntax: "Matematik.küpKök(sayı)", desc: "Küp kök alır.", example: 'yazdır(Matematik.küpKök(27))  # 3' },
+              { name: "Matematik.logaritma", syntax: "Matematik.logaritma(sayı, taban)", desc: "Logaritma hesaplar.", example: 'yazdır(Matematik.logaritma(100, 10))  # 2' },
+            ]
+          },
+          {
+            title: "Trigonometri",
+            commands: [
+              { name: "Matematik.sinüs", syntax: "Matematik.sinüs(derece)", desc: "Sinüs değerini hesaplar.", example: 'yazdır(Matematik.sinüs(90))  # 1' },
+              { name: "Matematik.kosinüs", syntax: "Matematik.kosinüs(derece)", desc: "Kosinüs değerini hesaplar.", example: 'yazdır(Matematik.kosinüs(0))  # 1' },
+              { name: "Matematik.tanjant", syntax: "Matematik.tanjant(derece)", desc: "Tanjant değerini hesaplar.", example: 'yazdır(Matematik.tanjant(45))  # 1' },
+            ]
+          },
+          {
+            title: "İstatistik",
+            commands: [
+              { name: "Matematik.toplam", syntax: "Matematik.toplam(liste)", desc: "Listenin toplamını hesaplar.", example: 'yazdır(Matematik.toplam([10, 20, 30]))  # 60' },
+              { name: "Matematik.ortalama", syntax: "Matematik.ortalama(liste)", desc: "Ortalamayı hesaplar.", example: 'yazdır(Matematik.ortalama([10, 20, 30]))  # 20' },
+              { name: "Matematik.medyan", syntax: "Matematik.medyan(liste)", desc: "Medyani hesaplar.", example: 'yazdır(Matematik.medyan([1, 2, 3, 4, 5]))  # 3' },
+              { name: "Matematik.standartSapma", syntax: "Matematik.standartSapma(liste)", desc: "Standart sapmayı hesaplar.", example: 'yazdır(Matematik.standartSapma([10, 20, 30]))' },
+            ]
+          },
+          {
+            title: "Sayı Teorisi",
+            commands: [
+              { name: "Matematik.asalMı", syntax: "Matematik.asalMı(sayı)", desc: "Sayının asal olup olmadığını kontrol eder.", example: 'yazdır(Matematik.asalMı(7))   # Doğru\nyazdır(Matematik.asalMı(10))  # Yanlış' },
+              { name: "Matematik.ebob", syntax: "Matematik.ebob(sayı1, sayı2)", desc: "En büyük ortak böleni bulur.", example: 'yazdır(Matematik.ebob(12, 18))  # 6' },
+              { name: "Matematik.ekok", syntax: "Matematik.ekok(sayı1, sayı2)", desc: "En küçük ortak katını bulur.", example: 'yazdır(Matematik.ekok(4, 6))  # 12' },
+              { name: "Matematik.faktöriyel", syntax: "Matematik.faktöriyel(sayı)", desc: "Faktöriyel hesaplar.", example: 'yazdır(Matematik.faktöriyel(5))  # 120' },
+            ]
+          },
+          {
+            title: "Geometri",
+            commands: [
+              { name: "Matematik.kareAlanı", syntax: "Matematik.kareAlanı(kenar)", desc: "Kare alanını hesaplar.", example: 'yazdır(Matematik.kareAlanı(5))  # 25' },
+              { name: "Matematik.dikdörtgenAlanı", syntax: "Matematik.dikdörtgenAlanı(uzunluk, genişlik)", desc: "Dikdörtgen alanını hesaplar.", example: 'yazdır(Matematik.dikdörtgenAlanı(10, 5))  # 50' },
+              { name: "Matematik.daireAlanı", syntax: "Matematik.daireAlanı(yarıçap)", desc: "Daire alanını hesaplar.", example: 'yazdır(Matematik.daireAlanı(5))  # 78.54' },
+              { name: "Matematik.pisagor", syntax: "Matematik.pisagor(kenar1, kenar2)", desc: "Pisagor teoremi ile hipotenüsü hesaplar.", example: 'yazdır(Matematik.pisagor(3, 4))  # 5' },
+            ]
+          },
+          {
+            title: "Yüzde Hesaplamaları",
+            commands: [
+              { name: "Matematik.yüzde", syntax: "Matematik.yüzde(sayı, yüzde)", desc: "Yüzde hesaplar.", example: 'yazdır(Matematik.yüzde(200, 15))  # 30' },
+              { name: "Matematik.yüzdeArtır", syntax: "Matematik.yüzdeArtır(sayı, yüzde)", desc: "Sayıyı yüzde kadar artırır.", example: 'yazdır(Matematik.yüzdeArtır(200, 15))  # 230' },
+              { name: "Matematik.yüzdeAzalt", syntax: "Matematik.yüzdeAzalt(sayı, yüzde)", desc: "Sayıyı yüzde kadar azaltır.", example: 'yazdır(Matematik.yüzdeAzalt(200, 15))  # 170' },
+            ]
+          }
+        ]
+      },
+      "Web": {
+        icon: "&#127760;",
+        desc: "HTTP istekleri gönderin, API'lerden veri çekin, JSON dosyaları okuyun, web sayfalarını tarayın.",
+        import: "içe_aktar Web",
+        sections: [
+          {
+            title: "HTTP İşlemleri",
+            commands: [
+              { name: "Web.al", syntax: 'Web.al("https://adres")', desc: "GET isteği gönderir.", example: 'değişken yanit := Web.al("https://api.ornek.com/veriler")\nyazdır(yanit)' },
+              { name: "Web.gönder", syntax: 'Web.gönder("https://adres", veri)', desc: "POST isteği gönderir.", example: 'Web.gönder("https://api.ornek.com/kayit", { "ad": "Ali" })' },
+              { name: "Web.jsonAl", syntax: 'Web.jsonAl("https://adres")', desc: "JSON verisi çeker.", example: 'değişken veri := Web.jsonAl("https://api.ornek.com/kullanicilar")' },
+              { name: "Web.durumKodu", syntax: 'Web.durumKodu("https://adres")', desc: "HTTP durum kodunu döndürür.", example: 'yazdır(Web.durumKodu("https://www.google.com"))  # 200' },
+              { name: "Web.bağlantıVarMı", syntax: 'Web.bağlantıVarMı("https://adres")', desc: "İnternet bağlantısını kontrol eder.", example: 'eğer Web.bağlantıVarMı("https://google.com") ise\n  yazdır("Bağlantı aktif")\nson' },
+            ]
+          }
+        ]
+      },
+      "Sistem": {
+        icon: "&#128421;",
+        desc: "İşletim sistemi bilgilerini öğrenin, programları çalıştırın/durdurun, dosyaları varsayılan uygulamalarla açın.",
+        import: "içe_aktar Sistem",
+        sections: [
+          {
+            title: "Sistem Bilgileri",
+            commands: [
+              { name: "Sistem.işletimSistemi", syntax: "Sistem.işletimSistemi()", desc: "İşletim sistemi adını döndürür.", example: 'yazdır(Sistem.işletimSistemi())' },
+              { name: "Sistem.sürüm", syntax: "Sistem.sürüm()", desc: "Sistem sürümünü döndürür.", example: 'yazdır(Sistem.sürüm())' },
+              { name: "Sistem.işlemci", syntax: "Sistem.işlemci()", desc: "İşlemci bilgisini döndürür.", example: 'yazdır(Sistem.işlemci())' },
+              { name: "Sistem.bilgisayarAdı", syntax: "Sistem.bilgisayarAdı()", desc: "Bilgisayar adını döndürür.", example: 'yazdır(Sistem.bilgisayarAdı())' },
+              { name: "Sistem.kullanıcıAdı", syntax: "Sistem.kullanıcıAdı()", desc: "Kullanıcı adını döndürür.", example: 'yazdır(Sistem.kullanıcıAdı())' },
+            ]
+          },
+          {
+            title: "Sistem Durumu",
+            commands: [
+              { name: "Sistem.ram", syntax: "Sistem.ram()", desc: "Toplam RAM bilgisini döndürür.", example: 'yazdır(Sistem.ram() + " GB")' },
+              { name: "Sistem.kullanılanRam", syntax: "Sistem.kullanılanRam()", desc: "Kullanılan RAM'i döndürür.", example: 'yazdır(Sistem.kullanılanRam())' },
+              { name: "Sistem.cpuKullanımı", syntax: "Sistem.cpuKullanımı()", desc: "CPU kullanımını döndürür.", example: 'yazdır(Sistem.cpuKullanımı())' },
+              { name: "Sistem.diskAlanı", syntax: 'Sistem.diskAlanı("C:\\\\")', desc: "Disk alanını döndürür.", example: 'yazdır(Sistem.diskAlanı("C:\\\\"))' },
+            ]
+          },
+          {
+            title: "Klasör ve Yol",
+            commands: [
+              { name: "Sistem.masaüstü", syntax: "Sistem.masaüstü()", desc: "Masaüstü yolunu döndürür.", example: 'yazdır(Sistem.masaüstü())' },
+              { name: "Sistem.belgeler", syntax: "Sistem.belgeler()", desc: "Belgeler klasörü yolunu döndürür.", example: 'yazdır(Sistem.belgeler())' },
+              { name: "Sistem.indirilenler", syntax: "Sistem.indirilenler()", desc: "İndirilenler klasörü yolunu döndürür.", example: 'yazdır(Sistem.indirilenler())' },
+            ]
+          },
+          {
+            title: "Program Yönetimi",
+            commands: [
+              { name: "Sistem.programVarMı", syntax: 'Sistem.programVarMı("notepad.exe")', desc: "Programın çalışıp çalışmadığını kontrol eder.", example: 'eğer Sistem.programVarMı("notepad.exe") ise\n  yazdır("Program çalışıyor")\nson' },
+              { name: "Sistem.komutÇalıştır", syntax: 'Sistem.komutÇalıştır("dir")', desc: "Sistem komutu çalıştırır.", example: 'Sistem.komutÇalıştır("notepad.exe")' },
+              { name: "Sistem.dosyaAç", syntax: 'Sistem.dosyaAç("dosya.txt")', desc: "Dosyayı varsayılan uygulamayla açar.", example: 'Sistem.dosyaAç("notlar.txt")' },
+              { name: "Sistem.urlAç", syntax: 'Sistem.urlAç("https://google.com")', desc: "URL'yi tarayıcıda açar.", example: 'Sistem.urlAç("https://turkod.com")' },
+            ]
+          }
+        ]
+      },
+      "Klavye": {
+        icon: "&#9000;",
+        desc: "Klavye tuşlarının durumunu kontrol edin, tuş kombinasyonlarını dinleyin, belirli tuşlara basılmayı bekleyin.",
+        import: "içe_aktar Klavye",
+        sections: [
+          {
+            title: "Tuş Durumları",
+            commands: [
+              { name: "Klavye.basıldı", syntax: 'Klavye.basıldı("Space")', desc: "Bir tuşun basılıp basılmadığını kontrol eder.", example: 'eğer Klavye.basıldı("Space") ise\n  yazdır("Space basılı")\nson' },
+              { name: "Klavye.yeniBasıldı", syntax: 'Klavye.yeniBasıldı("Enter")', desc: "Tuşun yeni basılıp basılmadığını kontrol eder.", example: 'eğer Klavye.yeniBasıldı("Enter") ise\n  yazdır("Enter yeni basıldı")\nson' },
+              { name: "Klavye.bırakıldı", syntax: 'Klavye.bırakıldı("Space")', desc: "Tuşun bırakılıp bırakılmadığını kontrol eder.", example: 'eğer Klavye.bırakıldı("Space") ise\n  yazdır("Space bırakıldı")\nson' },
+              { name: "Klavye.bekle", syntax: 'Klavye.bekle("Enter")', desc: "Belirli bir tuşa basılmayı bekler.", example: 'Klavye.bekle("Enter")\nyazdır("Enter basıldı!")' },
+            ]
+          }
+        ]
+      },
+      "Ses": {
+        icon: "&#128266;",
+        desc: "Bip sesleri çıkarın, belirli frekanslarda ses üretin, metinleri sesli olarak söyleyin veya WAV dosyaları oynatın.",
+        import: "içe_aktar Ses",
+        sections: [
+          {
+            title: "Ses İşlemleri",
+            commands: [
+              { name: "Ses.bip", syntax: "Ses.bip()", desc: "Basit bir bip sesi çıkarır.", example: 'Ses.bip()' },
+              { name: "Ses.frekans", syntax: "Ses.frekans(herz, milisaniye)", desc: "Belirli frekansda ses çıkarır.", example: 'Ses.frekans(440, 500)  # 440 Hz, 500 ms' },
+              { name: "Ses.konuş", syntax: 'Ses.konuş("Merhaba!")', desc: "Metni sesli olarak söyler.", example: 'Ses.konuş("Merhaba Dünya!")' },
+              { name: "Ses.çal", syntax: 'Ses.çal("dosya.wav")', desc: "WAV dosyası oynatır.", example: 'Ses.çal("ses.wav")' },
+            ]
+          }
+        ]
+      },
+      "Müzik": {
+        icon: "&#127925;",
+        desc: "Notalar, melodiler, akorlar, gamlar ve ritimler üretin. Piyano, gitar ve keman sesleriyle müzikler oluşturun.",
+        import: "içe_aktar Müzik",
+        sections: [
+          {
+            title: "Notalar ve Melodiler",
+            commands: [
+              { name: "Müzik.çalDo...çalSi", syntax: "Müzik.çalDo(süre?)", desc: "Temel notaları çalar.", example: 'Müzik.çalDo()\nMüzik.çalRe()\nMüzik.çalMi()' },
+              { name: "Müzik.nota", syntax: 'Müzik.nota("Do", 4, 500)', desc: "Belirli bir notayı çalar.", example: 'Müzik.nota("La", 4, 500)' },
+              { name: "Müzik.melodi", syntax: 'Müzik.melodi("Do Re Mi Fa Sol")', desc: "Melodi çalar.", example: 'Müzik.melodi("Do Re Mi Fa Sol La Si Do")' },
+              { name: "Müzik.gam", syntax: 'Müzik.gam("Do Majör")', desc: "Belirli bir gamı çalar.", example: 'Müzik.gam("Do Majör")' },
+            ]
+          },
+          {
+            title: "Akorlar",
+            commands: [
+              { name: "Müzik.akor", syntax: 'Müzik.akor("Do", "Mi", "Sol")', desc: "Akor çalar.", example: 'Müzik.akor("DoMajör")' },
+            ]
+          },
+          {
+            title: "Davul ve Ritim",
+            commands: [
+              { name: "Müzik.davul", syntax: 'Müzik.davul("kick")', desc: "Davul sesi çalar.", example: 'Müzik.davul("kick")\nMüzik.davul("snare")' },
+              { name: "Müzik.ritim", syntax: 'Müzik.ritim("kick hiHat snare")', desc: "Ritim çalar.", example: 'Müzik.ritim("kick hiHat snare hiHat")' },
+            ]
+          },
+          {
+            title: "Tempo ve Ses",
+            commands: [
+              { name: "Müzik.BPM", syntax: "Müzik.BPM(120)", desc: "Tempo ayarlar.", example: 'Müzik.BPM(120)' },
+              { name: "Müzik.ses", syntax: "Müzik.ses := 70", desc: "Ses seviyesini ayarlar.", example: 'Müzik.ses := 80' },
+            ]
+          }
+        ]
+      },
+      "YapayZeka": {
+        icon: "&#129302;",
+        desc: "OpenAI, Ollama ve diğer modellerle sohbet edin, görselleri analiz edin, kod üretin, çeviriler yapın.",
+        import: "içe_aktar YapayZeka",
+        sections: [
+          {
+            title: "Sohbet",
+            commands: [
+              { name: "YapayZeka.sor", syntax: 'YapayZeka.sor("Soru")', desc: "Yapay zekaya soru sorar.", example: 'değişken yanit := YapayZeka.sor("Merhaba, nasılsın?")\nyazdır(yanit)' },
+              { name: "YapayZeka.sorCanlı", syntax: 'YapayZeka.sorCanlı("Soru")', desc: "Streaming ile yanıt alır.", example: 'YapayZeka.sorCanlı("Hikaye anlat")\n  yazdır(mesaj)\nson' },
+              { name: "YapayZeka.JSON", syntax: 'YapayZeka.JSON("İstek")', desc: "JSON formatında yanıt alır.", example: 'değişken veri := YapayZeka.JSON("Bana 5 ülke ver")' },
+            ]
+          },
+          {
+            title: "Yapılandırma",
+            commands: [
+              { name: ".sağlayıcı", syntax: 'YapayZeka.sağlayıcı := "OpenAI"', desc: "Yapay zeka sağlayıcısını ayarlar.", example: 'YapayZeka.sağlayıcı := "OpenAI"' },
+              { name: ".model", syntax: 'YapayZeka.model := "gpt-4o-mini"', desc: "Modeli ayarlar.", example: 'YapayZeka.model := "gpt-4o-mini"' },
+              { name: ".apiAnahtarı", syntax: 'YapayZeka.apiAnahtarı := "sk-..."', desc: "API anahtarını ayarlar.", example: 'YapayZeka.apiAnahtarı := "sk-..."' },
+              { name: ".sistem", syntax: 'YapayZeka.sistem := "Sen yardımcı bir asistansın."', desc: "Sistem mesajını ayarlar.", example: 'YapayZeka.sistem := "Sen bir Türk asistanısın."' },
+            ]
+          },
+          {
+            title: "Görseller ve Dosyalar",
+            commands: [
+              { name: "YapayZeka.görüntüSor", syntax: 'YapayZeka.görüntüSor("Soru", "dosya.png")', desc: "Görsel analiz eder.", example: 'YapayZeka.görüntüSor("Bu görselde ne var?", "gorsel.jpg")' },
+              { name: "YapayZeka.dosyaEkle", syntax: 'YapayZeka.dosyaEkle("veri.json")', desc: "Dosya ekler.", example: 'YapayZeka.dosyaEkle("veri.json")' },
+            ]
+          },
+          {
+            title: "Yardımcı İşlevler",
+            commands: [
+              { name: "YapayZeka.özetle", syntax: 'YapayZeka.özetle("Metin")', desc: "Metni özetler.", example: 'YapayZeka.özetle("Uzun bir metin...")' },
+              { name: "YapayZeka.çevir", syntax: 'YapayZeka.çevir("Metin", "İngilizce")', desc: "Metni çevirir.", example: 'YapayZeka.çevir("Merhaba Dünya", "İngilizce")' },
+              { name: "YapayZeka.kodÜret", syntax: 'YapayZeka.kodÜret("Açıklama", "Türkod")', desc: "Kod üretir.", example: 'YapayZeka.kodÜret("Faktöriyel hesapla", "Türkod")' },
+            ]
+          }
+        ]
+      },
+      "Çizim": {
+        icon: "&#9999;",
+        desc: "Kaplumbağa benzeri 2D çizim yapın. Şekiller, renkler, animasyonlar ve interaktif grafikler oluşturun.",
+        import: "içe_aktar Çizim",
+        sections: [
+          {
+            title: "Pencere ve Başlangıç",
+            commands: [
+              { name: "Çizim.pencere", syntax: 'Çizim.pencere("Başlık", 800, 600)', desc: "Çizim penceresi oluşturur.", example: 'Çizim.pencere("Çizim Penceresi", 800, 600)' },
+              { name: "Çizim.arkaPlanRengi", syntax: "Çizim.arkaPlanRengi(renk)", desc: "Arka plan rengini ayarlar.", example: 'Çizim.arkaPlanRengi(renk.beyaz)' },
+            ]
+          },
+          {
+            title: "Hareket ve Açı",
+            commands: [
+              { name: "Çizim.ileri", syntax: "Çizim.ileri(uzunluk)", desc: "İleri gider.", example: 'Çizim.ileri(100)' },
+              { name: "Çizim.geri", syntax: "Çizim.geri(uzunluk)", desc: "Geri gider.", example: 'Çizim.geri(50)' },
+              { name: "Çizim.sağ / .sol", syntax: "Çizim.sağ(derece)", desc: "Sağa/sola döner.", example: 'Çizim.sağ(90)' },
+              { name: "Çizim.konumaGit", syntax: "Çizim.konumaGit(x, y)", desc: "Belirli bir konuma gider.", example: 'Çizim.konumaGit(200, 200)' },
+              { name: "Çizim.eveDön", syntax: "Çizim.eveDön()", desc: "Başlangıç konumuna döner.", example: 'Çizim.eveDön()' },
+            ]
+          },
+          {
+            title: "Kalem ve Renk",
+            commands: [
+              { name: "Çizim.kalemiİndir", syntax: "Çizim.kalemiİndir()", desc: "Kalemi indirir (çizmeye başlar).", example: 'Çizim.kalemiİndir()' },
+              { name: "Çizim.kalemiKaldır", syntax: "Çizim.kalemiKaldır()", desc: "Kalemi kaldırır (çizmeyi durdurur).", example: 'Çizim.kalemiKaldır()' },
+              { name: "Çizim.kalemKalınlığı", syntax: "Çizim.kalemKalınlığı(3)", desc: "Kalem kalınlığını ayarlar.", example: 'Çizim.kalemKalınlığı(5)' },
+              { name: "Çizim.kalemRengi", syntax: "Çizim.kalemRengi(renk.kırmızı)", desc: "Kalem rengini ayarlar.", example: 'Çizim.kalemRengi(renk.mavi)' },
+              { name: "Çizim.dolguRengi", syntax: "Çizim.dolguRengi(renk.sarı)", desc: "Dolgu rengini ayarlar.", example: 'Çizim.dolguRengi(renk.yeşil)' },
+            ]
+          },
+          {
+            title: "Şekiller",
+            commands: [
+              { name: "Çizim.daire", syntax: "Çizim.daire(yarıçap)", desc: "Daire çizer.", example: 'Çizim.daire(50)' },
+              { name: "Çizim.nokta", syntax: "Çizim.nokta(10, renk)", desc: "Nokta çizer.", example: 'Çizim.nokta(10, renk.turuncu)' },
+              { name: "Çizim.yaz", syntax: 'Çizim.yaz("Metin")', desc: "Yazı yazar.", example: 'Çizim.yaz("Merhaba!", "orta", "Arial", 18)' },
+            ]
+          },
+          {
+            title: "Hız ve Animasyon",
+            commands: [
+              { name: "Çizim.KalemHızı", syntax: "Çizim.KalemHızı(6)", desc: "Çizim hızını ayarlar (0-10).", example: 'Çizim.KalemHızı(5)' },
+              { name: "Çizim.gecikme", syntax: "Çizim.gecikme(20)", desc: "Milisaniye cinsinden gecikme ekler.", example: 'Çizim.gecikme(100)' },
+              { name: "Çizim.temizle", syntax: "Çizim.temizle()", desc: "Ekranı temizler.", example: 'Çizim.temizle()' },
+            ]
+          }
+        ]
+      },
+      "Oyun2D": {
+        icon: "&#127918;",
+        desc: "2D oyun geliştirme motoru. Karakter kontrolü, çarpışma testleri, oyun döngüsü ve sahne yönetimi.",
+        import: "içe_aktar Oyun2D",
+        sections: [
+          {
+            title: "Pencere ve Başlangıç",
+            commands: [
+              { name: "Oyun2D.pencere", syntax: 'Oyun2D.pencere("Başlık", 800, 600)', desc: "Oyun penceresi oluşturur.", example: 'Oyun2D.pencere("2D Oyun", 1024, 768)' },
+              { name: "Oyun2D.fps", syntax: "Oyun2D.fps(60)", desc: "FPS limitini ayarlar.", example: 'Oyun2D.fps(60)' },
+            ]
+          },
+          {
+            title: "Çizim Şekilleri",
+            commands: [
+              { name: "Oyun2D.dikdörtgen", syntax: "Oyun2D.dikdörtgen(x, y, genişlik, yükseklik, renk)", desc: "Dikdörtgen çizer.", example: 'Oyun2D.dikdörtgen(100, 100, 200, 150, renk.kırmızı)' },
+              { name: "Oyun2D.kare", syntax: "Oyun2D.kare(x, y, boyut, renk)", desc: "Kare çizer.", example: 'Oyun2D.kare(50, 50, 100, renk.mavi)' },
+              { name: "Oyun2D.daire", syntax: "Oyun2D.daire(x, y, yarıçap, renk)", desc: "Daire çizer.", example: 'Oyun2D.daire(300, 200, 50, renk.yeşil)' },
+              { name: "Oyun2D.çizgi", syntax: "Oyun2D.çizgi(x1, y1, x2, y2, renk)", desc: "Çizgi çizer.", example: 'Oyun2D.çizgi(0, 0, 800, 600, renk.beyaz)' },
+              { name: "Oyun2D.metin", syntax: 'Oyun2D.metin("Skor: 100", x, y)', desc: "Metin çizer.", example: 'Oyun2D.metin("Oyun Bitti!", 300, 300)' },
+            ]
+          },
+          {
+            title: "Oyun Döngüsü",
+            commands: [
+              { name: "Oyun2D.güncelle", syntax: "Oyun2D.güncelle()", desc: "Oyun durumunu günceller.", example: 'Oyun2D.güncelle()' },
+              { name: "Oyun2D.çiz", syntax: "Oyun2D.çiz()", desc: "Ekrani çizer.", example: 'Oyun2D.çiz()' },
+              { name: "Oyun2D.deltaZaman", syntax: "Oyun2D.deltaZaman()", desc: "Son kareden bu yana geçen süreyi döndürür.", example: 'değişken dt := Oyun2D.deltaZaman()' },
+            ]
+          }
+        ]
+      }
+    };
+
+    // Build grid
+    const grid = document.getElementById('modulGrid');
+    for (const [name, data] of Object.entries(MODULLER)) {
+      const card = document.createElement('div');
+      card.className = 'modul-card';
+      card.onclick = () => openModal(name);
+      card.innerHTML = `
+        <span class="mi">${data.icon}</span>
+        <h3>${name}</h3>
+      `;
+      grid.appendChild(card);
+    }
+
+    // Modal
+    function openModal(name) {
+      const data = MODULLER[name];
+      document.getElementById('modalIcon').innerHTML = data.icon;
+      document.getElementById('modalTitle').textContent = name;
+      document.getElementById('modalDesc').textContent = data.desc;
+
+      let html = `<div style="margin-bottom:20px;padding:16px 20px;background:var(--bg3);border-radius:10px;border:1px solid var(--bd);font-size:14px;color:var(--tx2);line-height:1.7;">${data.desc}</div>`;
+      html += `<div style="margin-bottom:20px;padding:12px 16px;background:var(--bg);border-radius:8px;font-family:'JetBrains Mono',monospace;font-size:13px;color:var(--pk);border:1px solid var(--bd);">${data.import}</div>`;
+
+      for (const section of data.sections) {
+        html += `<div class="cmd-section">`;
+        html += `<div class="cmd-section-title">${section.title}</div>`;
+        for (const cmd of section.commands) {
+          html += `<div class="cmd-item">`;
+          html += `<div class="cmd-name">${cmd.name}</div>`;
+          html += `<div class="cmd-syntax">${cmd.syntax}</div>`;
+          html += `<div class="cmd-desc">${cmd.desc}</div>`;
+          if (cmd.example) {
+            html += `<div class="cmd-example">${cmd.example}</div>`;
+          }
+          html += `</div>`;
+        }
+        html += `</div>`;
+      }
+
+      document.getElementById('modalBody').innerHTML = html;
+      document.getElementById('modalOverlay').classList.add('active');
+      document.body.style.overflow = 'hidden';
+    }
+
+    function closeModal() {
+      document.getElementById('modalOverlay').classList.remove('active');
+      document.body.style.overflow = '';
+    }
+
+    // Close on overlay click
+    document.getElementById('modalOverlay').addEventListener('click', (e) => {
+      if (e.target === document.getElementById('modalOverlay')) closeModal();
+    });
+
+    // Close on Escape
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') closeModal();
+    });
+
+    // "e" tuşu ile geliştirici sayfasına geçiş
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'e' && !e.ctrlKey && !e.altKey && !e.metaKey) {
+        const hedef = document.activeElement;
+        if (hedef.tagName !== 'INPUT' && hedef.tagName !== 'TEXTAREA' && !hedef.isContentEditable) {
+          e.preventDefault();
+          window.location.href = 'gelistirici.html';
+        }
+      }
+    });
+  </script>
+</body>
+</html>

@@ -1,0 +1,765 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>MetogramStudios - Geliştirici Sayfası</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #0a0a0f; --bg2: #111118; --bg3: #18181f; --bg4: #1e1e28;
+      --tx: #e8e8f0; --tx2: #8888a0; --tx3: #555568;
+      --red: #e53e3e; --red-dim: rgba(229,62,62,0.12); --red-glow: rgba(229,62,62,0.25);
+      --bd: #222230; --bd2: #2a2a3a;
+      --gn: #4ade80; --cy: #22d3ee; --pk: #f472b6; --yl: #facc15; --or: #fb923c;
+    }
+    * { margin:0; padding:0; box-sizing:border-box; }
+    html { scroll-behavior:smooth; }
+    body {
+      font-family:'Inter',system-ui,sans-serif; background:var(--bg); color:var(--tx);
+      line-height:1.6; overflow-x:hidden;
+    }
+
+    .header {
+      height:56px; background:rgba(10,10,15,0.95); border-bottom:1px solid var(--bd);
+      display:flex; align-items:center; justify-content:space-between; padding:0 24px;
+      position:sticky; top:0; z-index:100; backdrop-filter:blur(12px);
+    }
+    .header-left { display:flex; align-items:center; gap:16px; }
+    .header-logo { display:flex; align-items:center; gap:8px; text-decoration:none; color:var(--tx); }
+    .header-logo img { height:28px; border-radius:6px; }
+    .header-logo span { font-size:15px; font-weight:700; color:#fff; }
+    .header-links { display:flex; gap:8px; }
+    .header-link {
+      padding:7px 12px; background:var(--bg3); border:1px solid var(--bd); border-radius:8px;
+      color:var(--tx2); font-size:12px; text-decoration:none; font-weight:500; transition:all 0.2s;
+    }
+    .header-link:hover { border-color:var(--red); color:var(--red); }
+    .header-link.active { border-color:var(--red); color:var(--red); background:var(--red-dim); }
+
+    /* WIKI STYLE LAYOUT */
+    .wiki-container { max-width:1100px; margin:0 auto; padding:40px 32px; }
+
+    .wiki-title-section {
+      display:flex; align-items:flex-start; gap:32px; margin-bottom:48px;
+      padding-bottom:32px; border-bottom:2px solid var(--bd);
+    }
+    .wiki-logo {
+      width:180px; height:180px; border-radius:20px; object-fit:cover;
+      border:2px solid var(--bd); flex-shrink:0;
+      box-shadow:0 8px 32px rgba(0,0,0,0.4);
+    }
+    .wiki-title-info { flex:1; }
+    .wiki-title-info h1 {
+      font-size:32px; font-weight:800; color:#fff; margin-bottom:8px; letter-spacing:-0.5px;
+    }
+    .wiki-title-info .subtitle {
+      font-size:16px; color:var(--tx2); margin-bottom:16px;
+    }
+    .wiki-meta {
+      display:flex; flex-wrap:wrap; gap:12px;
+    }
+    .wiki-badge {
+      display:inline-flex; align-items:center; gap:6px;
+      padding:6px 14px; background:var(--bg3); border:1px solid var(--bd);
+      border-radius:20px; font-size:12px; color:var(--tx2); font-weight:500;
+    }
+    .wiki-badge .dot {
+      width:8px; height:8px; border-radius:50%;
+    }
+    .dot-green { background:var(--gn); }
+    .dot-blue { background:var(--cy); }
+    .dot-red { background:var(--red); }
+    .dot-yellow { background:var(--yl); }
+
+    /* TABLE OF CONTENTS */
+    .wiki-toc {
+      background:var(--bg2); border:1px solid var(--bd); border-radius:12px;
+      padding:20px 24px; margin-bottom:40px;
+    }
+    .wiki-toc h3 {
+      font-size:14px; font-weight:700; color:#fff; margin-bottom:12px;
+      text-transform:uppercase; letter-spacing:1px;
+    }
+    .wiki-toc-list { list-style:none; }
+    .wiki-toc-list li { margin-bottom:6px; }
+    .wiki-toc-list a {
+      color:var(--cy); text-decoration:none; font-size:14px; font-weight:500;
+      transition:color 0.2s;
+    }
+    .wiki-toc-list a:hover { color:var(--pk); text-decoration:underline; }
+    .wiki-toc-list .toc-sub { padding-left:20px; margin-top:4px; }
+    .wiki-toc-list .toc-sub a { font-size:13px; color:var(--tx2); }
+
+    /* SECTIONS */
+    .wiki-section { margin-bottom:48px; }
+    .wiki-section h2 {
+      font-size:24px; font-weight:700; color:#fff; margin-bottom:16px;
+      padding-bottom:10px; border-bottom:1px solid var(--bd);
+      display:flex; align-items:center; gap:10px;
+    }
+    .wiki-section h2 .sec-icon {
+      width:32px; height:32px; border-radius:8px; background:var(--red-dim);
+      display:flex; align-items:center; justify-content:center; font-size:16px;
+    }
+    .wiki-section h3 {
+      font-size:18px; font-weight:600; color:#fff; margin:20px 0 10px;
+    }
+    .wiki-section p {
+      font-size:15px; color:var(--tx2); line-height:1.8; margin-bottom:12px;
+    }
+
+    /* INFO BOX */
+    .wiki-infobox {
+      float:right; width:340px; background:var(--bg2); border:1px solid var(--bd);
+      border-radius:14px; margin:0 0 24px 32px; overflow:hidden;
+    }
+    .wiki-infobox-header {
+      background:var(--bg3); padding:16px 20px; text-align:center;
+      border-bottom:1px solid var(--bd);
+    }
+    .wiki-infobox-header img {
+      width:80px; height:80px; border-radius:14px; margin-bottom:10px;
+      border:2px solid var(--bd);
+    }
+    .wiki-infobox-header h3 {
+      font-size:16px; font-weight:700; color:#fff;
+    }
+    .wiki-infobox-header p {
+      font-size:12px; color:var(--tx3); margin:0;
+    }
+    .wiki-infobox table { width:100%; border-collapse:collapse; }
+    .wiki-infobox td {
+      padding:10px 16px; font-size:13px; border-bottom:1px solid var(--bd);
+      vertical-align:top;
+    }
+    .wiki-infobox td:first-child {
+      font-weight:600; color:var(--tx3); white-space:nowrap; width:110px;
+    }
+    .wiki-infobox td:last-child { color:var(--tx2); }
+    .wiki-infobox tr:last-child td { border-bottom:none; }
+    .wiki-infobox a { color:var(--cy); text-decoration:none; }
+    .wiki-infobox a:hover { text-decoration:underline; }
+
+    /* PROJECT CARDS */
+    .project-grid {
+      display:grid; grid-template-columns:repeat(3, 1fr); gap:20px;
+    }
+    .project-card {
+      background:var(--bg2); border:1px solid var(--bd); border-radius:14px;
+      overflow:hidden; transition:all 0.3s;
+    }
+    .project-card:hover {
+      border-color:var(--red); transform:translateY(-4px);
+      box-shadow:0 12px 40px rgba(229,62,62,0.12);
+    }
+    .project-card-header {
+      padding:24px 24px 0;
+    }
+    .project-card-platform {
+      display:inline-flex; align-items:center; gap:6px;
+      padding:4px 10px; border-radius:6px; font-size:11px; font-weight:600;
+      margin-bottom:12px;
+    }
+    .platform-windows { background:rgba(34,211,238,0.12); color:var(--cy); }
+    .platform-android { background:rgba(74,222,128,0.12); color:var(--gn); }
+    .platform-web { background:rgba(250,204,21,0.12); color:var(--yl); }
+    .project-card h4 {
+      font-size:17px; font-weight:700; color:#fff; margin-bottom:8px;
+    }
+    .project-card p {
+      font-size:13px; color:var(--tx2); line-height:1.6; padding:0 24px;
+    }
+    .project-card-footer {
+      padding:16px 24px; border-top:1px solid var(--bd); margin-top:16px;
+      display:flex; align-items:center; justify-content:space-between;
+    }
+    .project-card-footer .stat {
+      font-size:12px; color:var(--tx3); display:flex; align-items:center; gap:4px;
+    }
+    .project-link {
+      display:inline-flex; align-items:center; gap:6px;
+      padding:7px 14px; background:var(--red-dim); border:1px solid var(--red);
+      border-radius:8px; color:var(--red); font-size:12px; font-weight:600;
+      text-decoration:none; transition:all 0.2s;
+    }
+    .project-link:hover { background:var(--red); color:#fff; }
+
+    /* WEB SITES */
+    .web-grid {
+      display:grid; grid-template-columns:1fr 1fr; gap:20px;
+    }
+    .web-card {
+      background:var(--bg2); border:1px solid var(--bd); border-radius:14px;
+      padding:28px; transition:all 0.3s; position:relative; overflow:hidden;
+    }
+    .web-card::before {
+      content:''; position:absolute; top:0; left:0; right:0; height:3px;
+      background:linear-gradient(90deg, var(--red), transparent); opacity:0;
+      transition:opacity 0.3s;
+    }
+    .web-card:hover {
+      border-color:var(--red); transform:translateY(-3px);
+      box-shadow:0 10px 32px rgba(229,62,62,0.12);
+    }
+    .web-card:hover::before { opacity:1; }
+    .web-card h4 {
+      font-size:17px; font-weight:700; color:#fff; margin-bottom:8px;
+    }
+    .web-card p {
+      font-size:13px; color:var(--tx2); line-height:1.6; margin-bottom:16px;
+    }
+    .web-card .url {
+      font-family:'JetBrains Mono',monospace; font-size:12px; color:var(--cy);
+    }
+
+    /* TEAM */
+    .team-card {
+      background:var(--bg2); border:1px solid var(--bd); border-radius:16px;
+      padding:32px; display:flex; align-items:center; gap:28px;
+    }
+    .team-avatar {
+      width:100px; height:100px; border-radius:50%;
+      background:linear-gradient(135deg, var(--red), #b91c1c);
+      display:flex; align-items:center; justify-content:center;
+      font-size:40px; font-weight:800; color:#fff; flex-shrink:0;
+      box-shadow:0 8px 24px rgba(229,62,62,0.3);
+    }
+    .team-info { flex:1; }
+    .team-info h3 { font-size:22px; font-weight:700; color:#fff; margin-bottom:4px; }
+    .team-info .role { font-size:14px; color:var(--red); font-weight:600; margin-bottom:12px; }
+    .team-info p { font-size:14px; color:var(--tx2); line-height:1.7; }
+    .team-links {
+      display:flex; gap:10px; margin-top:16px;
+    }
+    .team-link {
+      padding:8px 16px; background:var(--bg3); border:1px solid var(--bd);
+      border-radius:8px; color:var(--tx2); font-size:13px; text-decoration:none;
+      font-weight:500; transition:all 0.2s; display:flex; align-items:center; gap:6px;
+    }
+    .team-link:hover { border-color:var(--cy); color:var(--cy); }
+
+    /* STATS */
+    .stats-grid {
+      display:grid; grid-template-columns:repeat(4, 1fr); gap:16px; margin-bottom:32px;
+    }
+    .stat-card {
+      background:var(--bg2); border:1px solid var(--bd); border-radius:12px;
+      padding:20px; text-align:center;
+    }
+    .stat-card .num {
+      font-size:28px; font-weight:800; color:#fff; margin-bottom:4px;
+    }
+    .stat-card .label {
+      font-size:12px; color:var(--tx3); text-transform:uppercase; letter-spacing:0.5px;
+    }
+
+    /* HISTORY */
+    .timeline { position:relative; padding-left:32px; }
+    .timeline::before {
+      content:''; position:absolute; left:11px; top:0; bottom:0;
+      width:2px; background:var(--bd);
+    }
+    .timeline-item {
+      position:relative; margin-bottom:28px; padding:16px 20px;
+      background:var(--bg2); border:1px solid var(--bd); border-radius:12px;
+      transition:border-color 0.2s;
+    }
+    .timeline-item:hover { border-color:var(--red); }
+    .timeline-item::before {
+      content:''; position:absolute; left:-27px; top:20px;
+      width:12px; height:12px; border-radius:50%;
+      background:var(--red); border:2px solid var(--bg);
+    }
+    .timeline-item .date {
+      font-size:12px; color:var(--red); font-weight:600; margin-bottom:6px;
+    }
+    .timeline-item h4 { font-size:15px; font-weight:600; color:#fff; margin-bottom:4px; }
+    .timeline-item p { font-size:13px; color:var(--tx2); margin:0; }
+
+    /* DIVIDER */
+    .divider {
+      width:100%; height:1px;
+      background:linear-gradient(90deg, transparent, var(--bd), transparent);
+      margin:40px auto;
+    }
+
+    /* FOOTER */
+    .footer {
+      border-top:1px solid var(--bd); padding:40px 32px; text-align:center;
+    }
+    .footer p { font-size:13px; color:var(--tx3); }
+    .footer a { color:var(--red); text-decoration:none; }
+
+    /* RESPONSIVE */
+    @media(max-width:900px) {
+      .wiki-title-section { flex-direction:column; align-items:center; text-align:center; }
+      .wiki-logo { width:140px; height:140px; }
+      .wiki-infobox { float:none; width:100%; margin:0 0 24px 0; }
+      .project-grid { grid-template-columns:1fr; }
+      .web-grid { grid-template-columns:1fr; }
+      .stats-grid { grid-template-columns:1fr 1fr; }
+      .team-card { flex-direction:column; text-align:center; }
+    }
+    @media(max-width:600px) {
+      .wiki-container { padding:24px 16px; }
+      .wiki-title-info h1 { font-size:24px; }
+      .stats-grid { grid-template-columns:1fr 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+  <header class="header">
+    <div class="header-left">
+      <a href="index.html" class="header-logo"><img src="turkod.png" alt="TÜRKOD"><span>TÜRKOD</span></a>
+      <span style="font-size:13px;color:var(--tx3);">Geliştirici</span>
+    </div>
+    <div class="header-links">
+      <a href="index.html" class="header-link">Ana Sayfa</a>
+      <a href="referans.html" class="header-link">Referans</a>
+      <a href="moduller.html" class="header-link">Modüller</a>
+      <a href="deneme.html" class="header-link">Canlı Deneme</a>
+      <a href="gelistirici.html" class="header-link active">Geliştirici</a>
+    </div>
+  </header>
+
+  <div class="wiki-container">
+
+    <!-- BASLIK + LOGO -->
+    <div class="wiki-title-section">
+      <img src="metogram.png" alt="MetogramStudios" class="wiki-logo">
+      <div class="wiki-title-info">
+        <h1>MetogramStudios</h1>
+        <div class="subtitle">Yazılım geliştirme şirketi &middot; Ankara, Türkiye</div>
+        <div class="wiki-meta">
+          <span class="wiki-badge"><span class="dot dot-green"></span> Aktif</span>
+          <span class="wiki-badge"><span class="dot dot-blue"></span> 2025 - Günümüz</span>
+          <span class="wiki-badge"><span class="dot dot-red"></span> 1 Çalışan</span>
+          <span class="wiki-badge"><span class="dot dot-yellow"></span> 5 Ürün</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- ICINDEKILER -->
+    <div class="wiki-toc">
+      <h3>İçindekiler</h3>
+      <ul class="wiki-toc-list">
+        <li><a href="#hakkinda">Hakkında</a></li>
+        <li><a href="#istatistikler">İstatistikler</a></li>
+        <li><a href="#ekip">Ekip</a></li>
+        <li><a href="#metogram7">Metogram7</a></li>
+        <li><a href="#calisanlar">Çalışan Kayıtları <span style="padding:2px 6px;background:var(--yl);color:#000;border-radius:4px;font-size:9px;font-weight:700;">YAKINDA</span></a></li>
+        <li>
+          <a href="#urunler">Ürünler</a>
+          <ul class="wiki-toc-list toc-sub">
+            <li><a href="#uygulamalar">Uygulamalar</a></li>
+            <li><a href="#websiteleri">Web Siteleri</a></li>
+          </ul>
+        </li>
+        <li><a href="#tarihce">Tarihçe</a></li>
+        <li><a href="#teknolojiler">Teknolojiler</a></li>
+      </ul>
+    </div>
+
+    <!-- INFO BOX -->
+    <div class="wiki-infobox">
+      <div class="wiki-infobox-header">
+        <img src="metogram.png" alt="MetogramStudios">
+        <h3>MetogramStudios</h3>
+        <p>Yazılım Geliştirme Şirketi</p>
+      </div>
+      <table>
+        <tr><td>Tür</td><td>Özel Şirket</td></tr>
+        <tr><td>Kuruluş</td><td>2025</td></tr>
+        <tr><td>Merkez</td><td>Ankara, Türkiye</td></tr>
+        <tr><td>Kurucu</td><td><a href="#ekip">Metehan Akkaya</a></td></tr>
+        <tr><td>Çalışan</td><td>1</td></tr>
+        <tr><td>Alan</td><td>Yazılım Geliştirme</td></tr>
+        <tr><td>Ürünler</td><td>Türkod, NovaQuest, RoNa, TÜRKOD, NovaWeBB</td></tr>
+        <tr><td>Web</td><td><a href="https://novawebb.com" target="_blank">novawebb.com</a></td></tr>
+        <tr><td>E-posta</td><td><a href="mailto:metehanakkaya30@gmail.com">metehanakkaya30@gmail.com</a></td></tr>
+      </table>
+    </div>
+
+    <!-- HAKKINDA -->
+    <div class="wiki-section" id="hakkinda">
+      <h2><span class="sec-icon">i</span> Hakkında</h2>
+      <p>
+        <strong>MetogramStudios</strong>, Türkiye merkezli bir yazılım geliştirme şirketidir. 2025 yılında
+        <strong>Metehan Akkaya</strong> tarafından kurulmuştur. Şirket, eğitim amaçlı uygulamalar,
+        yapay zeka asistanı uygulamaları ve Türkçe programlama dili gibi çeşitli projeler geliştirmektedir.
+      </p>
+      <p>
+        MetogramStudios'un vizyonu, yazılım öğrenimini herkes için erişilebilir ve eğlenceli hale getirmektir.
+        Bu bağlamda <strong>NovaQuest</strong> ile yazılıma sıfırdan adım atmak isteyenler için interaktif
+        eğitim içerikleri, <strong>RoNa</strong> ile yapay zeka destekli sohbet ve yardım, <strong>Türkod</strong>
+        ile Türkçe programlama dili gibi projeler geliştirilmektedir.
+      </p>
+
+      <!-- SES KAYDI -->
+      <div style="margin-top:24px;padding:20px 24px;background:var(--bg2);border:1px solid var(--bd);border-radius:14px;">
+        <div style="display:flex;align-items:center;gap:12px;margin-bottom:12px;">
+          <span style="font-size:24px;">🔊</span>
+          <div style="flex:1;">
+            <h4 style="font-size:15px;font-weight:600;color:#fff;margin-bottom:2px;">Ses Kaydı</h4>
+            <p style="font-size:12px;color:var(--tx3);margin:0;">Bu metnin yapay zeka tarafından seslendirilmiş hali</p>
+          </div>
+          <button id="sesBtn" onclick="sesiDinlet()" style="padding:10px 20px;background:var(--red);color:#fff;border:none;border-radius:8px;font-size:13px;font-weight:600;cursor:pointer;font-family:inherit;transition:all 0.2s;">
+            ▶ Dinle
+          </button>
+          <button id="sesDurdurBtn" onclick="sesiDurdur()" style="padding:10px 20px;background:var(--bg4);color:var(--tx2);border:1px solid var(--bd);border-radius:8px;font-size:13px;font-weight:600;cursor:pointer;font-family:inherit;display:none;transition:all 0.2s;">
+            ⏸ Durdur
+          </button>
+        </div>
+        <div id="sesDurum" style="font-size:12px;color:var(--tx3);min-height:18px;"></div>
+      </div>
+
+      <script>
+        let konusma = null;
+
+        function sesiDinlet() {
+          if (!('speechSynthesis' in window)) {
+            document.getElementById('sesDurum').innerHTML = '<span style="color:var(--red);">Tarayıcınız sesi desteklemiyor.</span>';
+            return;
+          }
+
+          window.speechSynthesis.cancel();
+
+          const metin = "MetogramStudios, Türkiye merkezli bir yazılım geliştirme şirketidir. 2025 yılında Metehan Akkaya tarafından kurulmuştur. Şirket, eğitim amaçlı uygulamalar, yapay zeka asistanı uygulamaları ve Türkçe programlama dili gibi çeşitli projeler geliştirmektedir. MetogramStudios'un vizyonu, yazılım öğrenimini herkes için erişilebilir ve eğlenceli hale getirmektir.";
+
+          konusma = new SpeechSynthesisUtterance(metin);
+          konusma.lang = 'tr-TR';
+          konusma.rate = 1.0;
+          konusma.pitch = 1.0;
+
+          const sesler = window.speechSynthesis.getVoices();
+          const turkceSes = sesler.find(s => s.lang.startsWith('tr'));
+          if (turkceSes) konusma.voice = turkceSes;
+
+          document.getElementById('sesBtn').style.display = 'none';
+          document.getElementById('sesDurdurBtn').style.display = 'inline-block';
+          document.getElementById('sesDurum').innerHTML = '<span style="color:var(--gn);">▶ Ses çalıyor...</span>';
+
+          konusma.onend = function() {
+            document.getElementById('sesBtn').style.display = 'inline-block';
+            document.getElementById('sesDurdurBtn').style.display = 'none';
+            document.getElementById('sesDurum').innerHTML = '<span style="color:var(--gn);">✓ Ses tamamlandı</span>';
+          };
+
+          konusma.onerror = function() {
+            document.getElementById('sesBtn').style.display = 'inline-block';
+            document.getElementById('sesDurdurBtn').style.display = 'none';
+            document.getElementById('sesDurum').innerHTML = '<span style="color:var(--red);">Ses oynatma hatası</span>';
+          };
+
+          window.speechSynthesis.speak(konusma);
+        }
+
+        function sesiDurdur() {
+          window.speechSynthesis.cancel();
+          document.getElementById('sesBtn').style.display = 'inline-block';
+          document.getElementById('sesDurdurBtn').style.display = 'none';
+          document.getElementById('sesDurum').innerHTML = '<span style="color:var(--tx3);">⏸ Durduruldu</span>';
+        }
+
+        if ('speechSynthesis' in window) {
+          window.speechSynthesis.onvoiceschanged = function() {
+            window.speechSynthesis.getVoices();
+          };
+        }
+      </script>
+    </div>
+
+    <div class="divider"></div>
+
+    <!-- CALISAN KAYITLARI -->
+    <div class="wiki-section" id="calisanlar">
+      <h2><span class="sec-icon">👤</span> Çalışan Kayıtları
+        <span style="padding:4px 12px;background:var(--yl);color:#000;border-radius:20px;font-size:11px;font-weight:700;margin-left:12px;">YAKINDA</span>
+      </h2>
+      <p style="margin-bottom:20px;">MetogramStudios çalışanlarının listesi. Bu bölüm yakında aktif hale gelecektir.</p>
+
+      <div style="background:var(--bg2);border:1px solid var(--bd);border-radius:14px;padding:40px;text-align:center;">
+        <div style="font-size:64px;margin-bottom:16px;opacity:0.3;">🚧</div>
+        <h3 style="font-size:20px;font-weight:700;color:#fff;margin-bottom:8px;">Yakında Geliyor</h3>
+        <p style="font-size:14px;color:var(--tx2);max-width:400px;margin:0 auto 20px;">
+          Çalışan kayıtları bölümü şu anda geliştirilme aşamasındadır. Çok yakında tüm çalışan bilgilerine buradan ulaşabileceksiniz.
+        </p>
+        <div style="display:inline-flex;align-items:center;gap:8px;padding:10px 20px;background:var(--bg3);border:1px solid var(--bd);border-radius:10px;">
+          <span style="width:10px;height:10px;border-radius:50%;background:var(--yl);animation:blink 1.5s infinite;"></span>
+          <span style="font-size:13px;color:var(--tx2);font-weight:500;">Geliştirme devam ediyor</span>
+        </div>
+      </div>
+
+      <style>
+        @keyframes blink {
+          0%, 100% { opacity: 1; }
+          50% { opacity: 0.3; }
+        }
+      </style>
+    </div>
+
+    <div class="divider"></div>
+
+    <!-- ISTATISTIKLER -->
+    <div class="wiki-section" id="istatistikler">
+      <h2><span class="sec-icon">+</span> İstatistikler</h2>
+      <div class="stats-grid">
+        <div class="stat-card">
+          <div class="num">3</div>
+          <div class="label">Uygulama</div>
+        </div>
+        <div class="stat-card">
+          <div class="num">2</div>
+          <div class="label">Web Sitesi</div>
+        </div>
+        <div class="stat-card">
+          <div class="num">1</div>
+          <div class="label">Dil (TURKOD)</div>
+        </div>
+        <div class="stat-card">
+          <div class="num">100+</div>
+          <div class="label">İndirme</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="divider"></div>
+
+    <!-- EKIP -->
+    <div class="wiki-section" id="ekip">
+      <h2><span class="sec-icon">k</span> Ekip</h2>
+      <div class="team-card">
+        <div class="team-avatar">MA</div>
+        <div class="team-info">
+          <h3>Metehan Akkaya</h3>
+          <div class="role">Kurucu & Baş Yazılımcı</div>
+          <p>
+            MetogramStudios'un tek çalışanı ve kurucusu. Tüm uygulama ve projelerin geliştirilmesinden
+            sorumludur. Yazılım öğretme ve Türkçe programlama dili geliştirme konularında çalışmaktadır.
+          </p>
+          <div class="team-links">
+            <a href="https://play.google.com/store/apps/developer?id=Metogram7" target="_blank" class="team-link">
+              Google Play
+            </a>
+            <a href="mailto:metehanakkaya30@gmail.com" class="team-link">
+              E-posta
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="divider"></div>
+
+    <!-- METOGRAM7 -->
+    <div class="wiki-section" id="metogram7">
+      <h2><span class="sec-icon">7</span> Metogram7</h2>
+      <div class="wiki-infobox" style="float:none;width:100%;margin:0 0 24px 0;">
+        <div class="wiki-infobox-header">
+          <div style="width:80px;height:80px;border-radius:50%;background:linear-gradient(135deg,var(--red),#b91c1c);display:flex;align-items:center;justify-content:center;font-size:32px;font-weight:800;color:#fff;margin:0 auto 10px;">M7</div>
+          <h3>Metogram7</h3>
+          <p>Kullanıcı Adı</p>
+        </div>
+        <table>
+          <tr><td>Gerçek Ad</td><td>Metehan Akkaya</td></tr>
+          <tr><td>Kullanıcı Adı</td><td><strong>Metogram7</strong></td></tr>
+          <tr><td>Platform</td><td>Google Play</td></tr>
+          <tr><td>Uygulamalar</td><td>NovaQuest, RoNa, Türkod Stüdyosu</td></tr>
+          <tr><td>Web Siteleri</td><td><a href="https://novawebb.com" target="_blank">NovaWeBB</a>, TÜRKOD</td></tr>
+          <tr><td>E-posta</td><td><a href="mailto:metehanakkaya30@gmail.com">metehanakkaya30@gmail.com</a></td></tr>
+        </table>
+      </div>
+      <p>
+        <strong>Metogram7</strong>, Metehan Akkaya'nın Google Play'de kullandığı geliştirici adıdır.
+        Tüm mobil uygulamaları bu isimle yayınlanmaktadır.
+      </p>
+      <p>
+        Bu isim, "Metogram" ve "7" sayısından oluşmaktadır. Metogram, Metehan'ın isminin
+        ilk hecesinden türetilmiş bir marka adıdır. "7" sayısı ise kişisel tercih olup,
+        şanslı sayı olarak seçilmiştir.
+      </p>
+      <h3>Platform</h3>
+      <div style="display:flex;flex-wrap:wrap;gap:12px;margin-top:12px;">
+        <a href="https://play.google.com/store/apps/developer?id=Metogram7" target="_blank" style="display:inline-flex;align-items:center;gap:8px;padding:12px 20px;background:var(--bg3);border:1px solid var(--bd);border-radius:10px;text-decoration:none;color:var(--tx2);font-size:13px;font-weight:500;transition:all 0.2s;">
+          <span style="font-size:20px;">📱</span>
+          <div>
+            <div style="font-weight:600;color:#fff;">Google Play</div>
+            <div style="font-size:11px;color:var(--tx3);">Metogram7</div>
+          </div>
+        </a>
+        <a href="mailto:metehanakkaya30@gmail.com" style="display:inline-flex;align-items:center;gap:8px;padding:12px 20px;background:var(--bg3);border:1px solid var(--bd);border-radius:10px;text-decoration:none;color:var(--tx2);font-size:13px;font-weight:500;transition:all 0.2s;">
+          <span style="font-size:20px;">✉️</span>
+          <div>
+            <div style="font-weight:600;color:#fff;">E-posta</div>
+            <div style="font-size:11px;color:var(--tx3);">metehanakkaya30@gmail.com</div>
+          </div>
+        </a>
+      </div>
+    </div>
+
+    <div class="divider"></div>
+
+    <!-- URUNLER -->
+    <div class="wiki-section" id="urunler">
+      <h2><span class="sec-icon">*</span> Ürünler</h2>
+
+      <!-- UYGULAMALAR -->
+      <h3 id="uygulamalar">Uygulamalar</h3>
+      <div class="project-grid">
+
+        <!-- TURKOD STUDYOSU -->
+        <div class="project-card">
+          <div class="project-card-header">
+            <span class="project-card-platform platform-windows">Windows</span>
+            <h4>Turkod Stüdyosu</h4>
+          </div>
+          <p>
+            Türkçe programlama dili TÜRKOD için geliştirilmiş masaüstü entegre geliştirme ortamı (IDE).
+            Kod yazma, düzeltme ve çalıştırma imkanı sağlar.
+          </p>
+          <div class="project-card-footer">
+            <span class="stat">v1.3.0</span>
+            <a href="https://apps.microsoft.com/detail/9pmfnc2vzsgk?hl=en-US&gl=US" target="_blank" class="project-link">
+              Microsoft Store
+            </a>
+          </div>
+        </div>
+
+        <!-- NOVAQUEST -->
+        <div class="project-card">
+          <div class="project-card-header">
+            <span class="project-card-platform platform-android">Android</span>
+            <h4>NovaQuest</h4>
+          </div>
+          <p>
+            Yazılım öğrenmek isteyenler için interaktif eğitim uygulaması. Adım adım dersler,
+            örnekler ve mini projeler ile yazılımı sıfırdan öğrenin.
+          </p>
+          <div class="project-card-footer">
+            <span class="stat">10+ indirme</span>
+            <a href="https://play.google.com/store/apps/details?id=com.novaquest.app" target="_blank" class="project-link">
+              Google Play
+            </a>
+          </div>
+        </div>
+
+        <!-- RONA -->
+        <div class="project-card">
+          <div class="project-card-header">
+            <span class="project-card-platform platform-android">Android</span>
+            <h4>RoNa</h4>
+          </div>
+          <p>
+            Yapay zeka destekli canlı sohbet asistanı. Sorularınızı yanıtlar, fikirlerinizi paylaşır
+            ve sesli yanıtlar ile öğrenmenizi sağlar.
+          </p>
+          <div class="project-card-footer">
+            <span class="stat">50+ indirme</span>
+            <a href="https://play.google.com/store/apps/details?id=com.novawebb.app" target="_blank" class="project-link">
+              Google Play
+            </a>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- WEB SITELERI -->
+      <h3 id="websiteleri" style="margin-top:32px;">Web Siteleri</h3>
+      <div class="web-grid">
+
+        <div class="web-card">
+          <h4>TURKOD Web</h4>
+          <p>
+            Türkçe programlama dili TÜRKOD için tanıtım sayfası. Referans, modüller, canlı deneme
+            ve indirme imkanları sunar. Şimdi bulunduğunuz sayfadır.
+          </p>
+          <span class="url">turkod.web.app</span>
+        </div>
+
+        <div class="web-card">
+          <h4>NovaWeBB</h4>
+          <p>
+            MetogramStudios'un yapay zeka asistanı Nova'nın web arayüzü. Soru sorun, cevaplar alın,
+            sohbet edin.
+          </p>
+          <span class="url">novawebb.com</span>
+        </div>
+
+      </div>
+    </div>
+
+    <div class="divider"></div>
+
+    <!-- TARIHCE -->
+    <div class="wiki-section" id="tarihce">
+      <h2><span class="sec-icon">></span> Tarihçe</h2>
+      <div class="timeline">
+        <div class="timeline-item">
+          <div class="date">2025</div>
+          <h4>MetogramStudios Kuruldu</h4>
+          <p>Metehan Akkaya tarafından Ankara'da kuruldu.</p>
+        </div>
+        <div class="timeline-item">
+          <div class="date">2025</div>
+          <h4>RoNa Yayınlandı</h4>
+          <p>Yapay zeka destekli canlı sohbet asistanı RoNa, Google Play'de yayınlandı.</p>
+        </div>
+        <div class="timeline-item">
+          <div class="date">2025 Sonları</div>
+          <h4>NovaQuest Yayınlandı</h4>
+          <p>Yazılım öğrenmek isteyenler için interaktif eğitim uygulaması NovaQuest yayınlandı.</p>
+        </div>
+        <div class="timeline-item">
+          <div class="date">2026 Temmuz</div>
+          <h4>Türkod Yayınlandı</h4>
+          <p>Türkçe programlama dili TÜRKOD için masaüstü IDE, Microsoft Store'da yayınlandı.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="divider"></div>
+
+    <!-- TEKNOLOJILER -->
+    <div class="wiki-section" id="teknolojiler">
+      <h2><span class="sec-icon">#</span> Kullanılan Teknolojiler</h2>
+      <div style="display:flex;flex-wrap:wrap;gap:10px;">
+        <span style="padding:8px 16px;background:var(--bg3);border:1px solid var(--bd);border-radius:8px;font-size:13px;color:var(--tx2);font-weight:500;">Node.js</span>
+        <span style="padding:8px 16px;background:var(--bg3);border:1px solid var(--bd);border-radius:8px;font-size:13px;color:var(--tx2);font-weight:500;">Electron</span>
+        <span style="padding:8px 16px;background:var(--bg3);border:1px solid var(--bd);border-radius:8px;font-size:13px;color:var(--tx2);font-weight:500;">JavaScript</span>
+        <span style="padding:8px 16px;background:var(--bg3);border:1px solid var(--bd);border-radius:8px;font-size:13px;color:var(--tx2);font-weight:500;">HTML/CSS</span>
+        <span style="padding:8px 16px;background:var(--bg3);border:1px solid var(--bd);border-radius:8px;font-size:13px;color:var(--tx2);font-weight:500;">PowerShell</span>
+        <span style="padding:8px 16px;background:var(--bg3);border:1px solid var(--bd);border-radius:8px;font-size:13px;color:var(--tx2);font-weight:500;">Kotlin</span>
+        <span style="padding:8px 16px;background:var(--bg3);border:1px solid var(--bd);border-radius:8px;font-size:13px;color:var(--tx2);font-weight:500;">Java</span>
+        <span style="padding:8px 16px;background:var(--bg3);border:1px solid var(--bd);border-radius:8px;font-size:13px;color:var(--tx2);font-weight:500;">OpenAI API</span>
+        <span style="padding:8px 16px;background:var(--bg3);border:1px solid var(--bd);border-radius:8px;font-size:13px;color:var(--tx2);font-weight:500;">Ollama</span>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- FOOTER -->
+  <footer class="footer">
+    <p>MetogramStudios &copy; 2026 &mdash; Tüm hakları saklıdır.</p>
+    <p style="margin-top:8px;">
+      <a href="index.html">TÜRKOD</a> &middot;
+      <a href="https://novawebb.com" target="_blank">NovaWeBB</a> &middot;
+      <a href="mailto:metehanakkaya30@gmail.com">İletişim</a>
+    </p>
+  </footer>
+
+  <script>
+    // "e" tuşu ile ana sayfaya dönüş
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'e' && !e.ctrlKey && !e.altKey && !e.metaKey) {
+        const hedef = document.activeElement;
+        if (hedef.tagName !== 'INPUT' && hedef.tagName !== 'TEXTAREA' && !hedef.isContentEditable) {
+          e.preventDefault();
+          window.location.href = 'index.html';
+        }
+      }
+    });
+  </script>
+</body>
+</html>
