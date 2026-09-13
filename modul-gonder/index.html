@@ -285,16 +285,26 @@
       var reader = new FileReader();
       reader.onload = function(e) {
         var metin = String(e.target.result || "");
-        var obj;
-        try { obj = JSON.parse(metin); }
-        catch (err) { dosyaHata("❌ Bu dosya geçerli bir .turkod paketi değil (içerik okunamadı). Stüdyo'da modül_derle ile derlediğinden emin ol."); return; }
-        if (!obj || obj.turkodModul !== true || !obj.dosyalar || !Object.keys(obj.dosyalar).length) {
-          dosyaHata("❌ Geçersiz paket: modül imzası veya dosyalar bulunamadı.");
-          return;
+        if (!metin.length) { dosyaHata("❌ Dosya boş görünüyor."); return; }
+        var testModu = /\.txt$/i.test(file.name);
+        var obj = null;
+        if (!testModu) {
+          try { obj = JSON.parse(metin); }
+          catch (err) { dosyaHata("❌ Bu dosya geçerli bir .turkod paketi değil (içerik okunamadı). Stüdyo'da modül_derle ile derlediğinden emin ol."); return; }
+          if (!obj || obj.turkodModul !== true || !obj.dosyalar || !Object.keys(obj.dosyalar).length) {
+            dosyaHata("❌ Geçersiz paket: modül imzası veya dosyalar bulunamadı.");
+            return;
+          }
         }
         seciliDosya = file;
         paketMetin = metin;
-        paketBilgi = {
+        paketBilgi = testModu ? {
+          ad: file.name.replace(/\.txt$/i, "") + " (TEST)",
+          surum: "test",
+          aciklama: "🧪 Test gönderimi — paket doğrulaması atlandı",
+          yazar: "—",
+          dosyaSayisi: 1
+        } : {
           ad: obj.ad || file.name.replace(/\.turkod$/i, ""),
           surum: String(obj.version || obj.versiyon || "?"),
           aciklama: obj.aciklama || "—",
