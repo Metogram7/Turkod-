@@ -361,6 +361,7 @@
         formHata("⚠️ Geçerli bir e-posta yazman gerek."); adim(1); return;
       }
       if (!seciliDosya) { formHata("⚠️ Lütfen .turkod dosyanı yükle."); adim(2); return; }
+      if (seciliDosya.size > 10 * 1024 * 1024) { formHata("⚠️ Dosya 10 MB'tan büyük olamaz (seçilen: " + (seciliDosya.size / 1048576).toFixed(1) + " MB)."); adim(2); return; }
 
       sendBtn.disabled = true;
       sendBtn.textContent = "⏳ Gönderiliyor...";
@@ -373,7 +374,8 @@
       data.append("Sürüm", paketBilgi.surum);
       data.append("Açıklama", paketBilgi.aciklama);
       data.append("Dosya Sayısı", String(paketBilgi.dosyaSayisi));
-      data.append("Dosya", seciliDosya, seciliDosya.name);
+      // Servis ek dosyayı yalnız "attachment" adlı alanda kabul eder
+      data.append("attachment", seciliDosya, seciliDosya.name);
       data.append("_subject", "[TürkOD] Yeni modül: " + paketBilgi.ad + " v" + paketBilgi.surum + " — " + isim);
       data.append("_template", "table");
       data.append("_captcha", "false");
