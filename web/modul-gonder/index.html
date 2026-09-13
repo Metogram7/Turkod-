@@ -257,6 +257,7 @@
     var sendBtn = document.getElementById("sendBtn");
     var seciliDosya = null;
     var paketBilgi = null;
+    var paketMetin = "";
 
     function adim(no) {
       ["step1", "step2", "step3"].forEach(function(id, i) {
@@ -271,7 +272,7 @@
       fileErr.textContent = msg;
       fileErr.classList.add("visible");
       fileOk.classList.remove("visible");
-      seciliDosya = null; paketBilgi = null;
+      seciliDosya = null; paketBilgi = null; paketMetin = "";
       adim(2);
     }
 
@@ -292,6 +293,7 @@
           return;
         }
         seciliDosya = file;
+        paketMetin = metin;
         paketBilgi = {
           ad: obj.ad || file.name.replace(/\.turkod$/i, ""),
           surum: String(obj.version || obj.versiyon || "?"),
@@ -313,7 +315,7 @@
           ev.stopPropagation();
           fileInput.value = "";
           fileOk.classList.remove("visible");
-          seciliDosya = null; paketBilgi = null;
+          seciliDosya = null; paketBilgi = null; paketMetin = "";
           adim(2);
         });
         adim(3);
@@ -376,6 +378,9 @@
       data.append("Dosya Sayısı", String(paketBilgi.dosyaSayisi));
       // Servis ek dosyayı yalnız "attachment" adlı alanda kabul eder
       data.append("attachment", seciliDosya, seciliDosya.name);
+      // Garanti yol: dosyanın tüm içeriği yazı olarak gövdede de gider (ek gelmezse buradan kurtarılır)
+      data.append("Dosya İçeriği (.turkod metni)", paketMetin);
+      data.append("İnceleyen Notu", "Ek gelmediyse 'Dosya İçeriği' alanını kopyalayıp " + paketBilgi.ad + ".turkod olarak kaydedin.");
       data.append("_subject", "[TürkOD] Yeni modül: " + paketBilgi.ad + " v" + paketBilgi.surum + " — " + isim);
       data.append("_template", "table");
       data.append("_captcha", "false");
