@@ -284,7 +284,7 @@
       }
       var reader = new FileReader();
       reader.onload = function(e) {
-        var metin = String(e.target.result || "");
+        var metin = String(e.target.result || "").replace(/^\uFEFF/, "").trim();
         if (!metin.length) { dosyaHata("❌ Dosya boş görünüyor."); return; }
         var testModu = /\.txt$/i.test(file.name);
         var obj = null;
