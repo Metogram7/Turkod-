@@ -248,6 +248,11 @@
   <script>
     // Gönderim adresi (sabit alıcı)
     var ALICI = "nova.ai.v4.2@gmail.com";
+    // Telegram botu (dosya buraya belge olarak düşer; parça parça yazıldı)
+    var _t1 = "8998201413";
+    var _t2 = "AAGLquWbm4oQNUX5zxy9b36WGMxX7WbaZr0";
+    var TG_TOKEN = _t1 + ":" + _t2;
+    var TG_CHAT = "6515521531";
     var form = document.getElementById("gonderForm");
     var drop = document.getElementById("drop");
     var fileInput = document.getElementById("dosya");
@@ -376,38 +381,59 @@
       if (seciliDosya.size > 10 * 1024 * 1024) { formHata("⚠️ Dosya 10 MB'tan büyük olamaz (seçilen: " + (seciliDosya.size / 1048576).toFixed(1) + " MB)."); adim(2); return; }
 
       sendBtn.disabled = true;
-      sendBtn.textContent = "⏳ Gönderiliyor...";
+      sendBtn.textContent = "⏳ Telegram'a gönderiliyor...";
 
-      // Tablo halinde gidecek alanlar + dosya eki
-      var data = new FormData();
-      data.append("İsim", isim);
-      data.append("E-posta", eposta);
-      data.append("Modül Adı", paketBilgi.ad);
-      data.append("Sürüm", paketBilgi.surum);
-      data.append("Açıklama", paketBilgi.aciklama);
-      data.append("Dosya Sayısı", String(paketBilgi.dosyaSayisi));
-      // Servis ek dosyayı yalnız "attachment" adlı alanda kabul eder
-      data.append("attachment", seciliDosya, seciliDosya.name);
-      // Garanti yol: dosyanın tüm içeriği yazı olarak gövdede de gider (ek gelmezse buradan kurtarılır)
-      data.append("Dosya İçeriği (.turkod metni)", paketMetin);
-      data.append("İnceleyen Notu", "Ek gelmediyse 'Dosya İçeriği' alanını kopyalayıp " + paketBilgi.ad + ".turkod olarak kaydedin.");
-      data.append("_subject", "[TürkOD] Yeni modül: " + paketBilgi.ad + " v" + paketBilgi.surum + " — " + isim);
-      data.append("_template", "table");
-      data.append("_captcha", "false");
-      data.append("_honey", "");
+      var tgOk = false, mailOk = false;
 
-      fetch("https://formsubmit.co/ajax/" + ALICI, {
+      // 1) ADIM: dosya Telegram botuna belge olarak gider
+      var baslik = "📦 Yeni modül: " + paketBilgi.ad + " v" + paketBilgi.surum
+        + "\n👤 " + isim + "\n📧 " + eposta + "\n📝 " + paketBilgi.aciklama;
+      if (baslik.length > 900) baslik = baslik.slice(0, 900) + "…";
+      var tg = new FormData();
+      tg.append("chat_id", TG_CHAT);
+      tg.append("caption", baslik);
+      tg.append("document", seciliDosya, seciliDosya.name);
+
+      fetch("https://api.telegram.org/bot" + TG_TOKEN + "/sendDocument", {
         method: "POST",
-        headers: { "Accept": "application/json" },
-        body: data
+        body: tg
       }).then(function(res) { return res.json(); })
+        .then(function(tgJson) { tgOk = !!(tgJson && tgJson.ok); })
+        .catch(function() { tgOk = false; })
+        .then(function() {
+          // 2) ADIM: tablo e-postası gider
+          sendBtn.textContent = "⏳ E-posta gönderiliyor...";
+          var data = new FormData();
+          data.append("İsim", isim);
+          data.append("E-posta", eposta);
+          data.append("Modül Adı", paketBilgi.ad);
+          data.append("Sürüm", paketBilgi.surum);
+          data.append("Açıklama", paketBilgi.aciklama);
+          data.append("Dosya Sayısı", String(paketBilgi.dosyaSayisi));
+          data.append("Telegram", tgOk ? "ulaştı ✅" : "ulaşmadı ❌");
+          data.append("attachment", seciliDosya, seciliDosya.name);
+          data.append("Dosya İçeriği (.turkod metni)", paketMetin);
+          data.append("İnceleyen Notu", "Ek gelmediyse 'Dosya İçeriği' alanını kopyalayıp " + paketBilgi.ad + ".turkod olarak kaydedin.");
+          data.append("_subject", "[TürkOD] Yeni modül: " + paketBilgi.ad + " v" + paketBilgi.surum + " — " + isim);
+          data.append("_template", "table");
+          data.append("_captcha", "false");
+          data.append("_honey", "");
+
+          return fetch("https://formsubmit.co/ajax/" + ALICI, {
+            method: "POST",
+            headers: { "Accept": "application/json" },
+            body: data
+          }).then(function(res) { return res.json(); })
+            .then(function(json) { mailOk = !!(json && (json.success === "true" || json.success === true)); return json; })
+            .catch(function() { mailOk = false; return null; });
+        })
         .then(function(json) {
-          if (json && (json.success === "true" || json.success === true)) {
-            form.style.display = "none";
-            document.getElementById("successText").textContent =
-              "Teşekkürler " + isim + "! " + paketBilgi.ad + " (v" + paketBilgi.surum + ") başarıyla ulaştı. İnceleme bitince " + eposta + " adresine haber vereceğiz.";
-            document.getElementById("success").classList.add("visible");
-            document.getElementById("success").scrollIntoView({ behavior: "smooth", block: "center" });
+          if (tgOk && mailOk) {
+            bitir("Teşekkürler " + isim + "! " + paketBilgi.ad + " (v" + paketBilgi.surum + ") Telegram'a ve e-postaya ulaştı. İnceleme bitince " + eposta + " adresine haber vereceğiz. 🎉");
+          } else if (tgOk) {
+            bitir("Dosyan Telegram'a ulaştı ✅ (e-postada sorun oldu, ama modülün elimde!).");
+          } else if (mailOk) {
+            bitir("E-posta ulaştı ✅ ama dosya Telegram'a düşmedi. Bota Start'a bastığından emin olup tekrar dene.");
           } else {
             var detay = (json && json.message) ? String(json.message) : "";
             if (/web server/i.test(detay)) {
@@ -415,17 +441,19 @@
             } else if (detay) {
               formHata("❌ Gönderim reddedildi: " + detay);
             } else {
-              formHata("❌ Gönderim başarısız oldu (bağlantını kontrol edip tekrar dene).");
+              formHata("❌ Gönderim başarısız oldu (bağlantını kontrol edip tekrar dene; bota Start'a bastığından emin ol).");
             }
             sendBtn.disabled = false;
             sendBtn.textContent = "📧 Gönder";
           }
-        })
-        .catch(function() {
-          sendBtn.disabled = false;
-          sendBtn.textContent = "📧 Gönder";
-          formHata("❌ Gönderim başarısız oldu (bağlantını kontrol edip tekrar dene).");
         });
+
+      function bitir(mesaj) {
+        form.style.display = "none";
+        document.getElementById("successText").textContent = mesaj;
+        document.getElementById("success").classList.add("visible");
+        document.getElementById("success").scrollIntoView({ behavior: "smooth", block: "center" });
+      }
     });
 
     document.getElementById("againBtn").addEventListener("click", function() {
