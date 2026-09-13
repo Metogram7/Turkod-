@@ -212,9 +212,9 @@
         <div class="drop" id="drop">
           <span class="d-icon">📄</span>
           <div class="d-title">Dosyayı buraya bırak ya da seçmek için tıkla</div>
-          <div class="d-sub">Yalnızca <code>.turkod</code> paketi kabul edilir</div>
+          <div class="d-sub"><code>.turkod</code> paketi seç (test için <code>.txt</code> de olur)</div>
         </div>
-        <input type="file" id="dosya" accept=".turkod" hidden>
+        <input type="file" id="dosya" accept=".turkod,.txt" hidden>
         <div class="file-ok" id="fileOk"></div>
         <div class="file-err" id="fileErr"></div>
       </div>
@@ -278,8 +278,8 @@
 
     function dosyaSec(file) {
       if (!file) return;
-      if (!/\.turkod$/i.test(file.name)) {
-        dosyaHata("❌ Yalnızca .turkod uzantılı paket kabul edilir. (Seçilen: " + file.name + ")");
+      if (!/\.(turkod|txt)$/i.test(file.name)) {
+        dosyaHata("❌ Yalnızca .turkod paketi kabul edilir (test için .txt de olur). (Seçilen: " + file.name + ")");
         return;
       }
       var reader = new FileReader();
