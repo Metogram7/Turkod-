@@ -295,7 +295,7 @@
     <!-- HERO -->
     <div class="hero">
       <div class="hero-content">
-        <img src="../işbirligi.png" alt="İşbirliği">
+        <img src="../isbirligi.png" alt="İşbirliği">
         <h1>TÜRKOD'U <span>BERABER</span> GELİŞTİRELİM!</h1>
         <p>TÜRKOD, topluluk katkılarıyla büyüyor. Sen de kendi modülünü oluştur, binlerce geliştiriciye ulaş. Nasıl mı? İşte rehberimiz.</p>
       </div>
@@ -530,7 +530,7 @@
         <div class="drop" id="drop">
           <span class="d-icon">📄</span>
           <div class="d-title">Dosyayı buraya bırak ya da seçmek için tıkla</div>
-          <div class="d-sub"><code>.turkod</code> paketi seç (test için <code>.txt</code> de olur)</div>
+          <div class="d-sub"><code>.turkod</code> paketi seç</div>
         </div>
         <input type="file" id="dosya" hidden>
         <div class="file-ok" id="fileOk"></div>
@@ -602,7 +602,7 @@
     function dosyaSec(file) {
       if (!file) return;
       if (!/\.(turkod|txt)$/i.test(file.name)) {
-        dosyaHata("❌ Yalnızca .turkod paketi kabul edilir (test için .txt de olur). (Seçilen: " + file.name + ")");
+        dosyaHata("❌ Yalnızca .turkod paketi kabul edilir. (Seçilen: " + file.name + ")");
         return;
       }
       var reader = new FileReader();
