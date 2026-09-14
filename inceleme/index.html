@@ -1063,46 +1063,29 @@ function computeDiff(oldFiles, newFiles) {
 }
 
 function lineDiff(oldLines, newLines) {
+  // LCS (Longest Common Subsequence) tabanlı diff
+  const n = oldLines.length, m = newLines.length;
+  // LCS tablosu oluştur
+  const dp = Array.from({length: n + 1}, () => new Array(m + 1).fill(0));
+  for (let i = 1; i <= n; i++) {
+    for (let j = 1; j <= m; j++) {
+      if (oldLines[i-1] === newLines[j-1]) dp[i][j] = dp[i-1][j-1] + 1;
+      else dp[i][j] = Math.max(dp[i-1][j], dp[i][j-1]);
+    }
+  }
+  // Geri izle
   const rows = [];
-  const maxLen = Math.max(oldLines.length, newLines.length);
-  let i = 0, j = 0;
-  const ol = oldLines.slice(), nl = newLines.slice();
-
-  while (i < ol.length || j < nl.length) {
-    if (i < ol.length && j < nl.length) {
-      if (ol[i] === nl[j]) {
-        rows.push({ type: "ctx", oldLn: i + 1, newLn: j + 1, text: ol[i] });
-        i++; j++;
-      } else {
-        let foundOld = -1, foundNew = -1;
-        for (let k = j + 1; k < Math.min(j + 8, nl.length); k++) {
-          if (nl[k] === ol[i]) { foundNew = k; break; }
-        }
-        for (let k = i + 1; k < Math.min(i + 8, ol.length); k++) {
-          if (ol[k] === nl[j]) { foundOld = k; break; }
-        }
-        if (foundNew === -1 && foundOld === -1) {
-          rows.push({ type: "removed", oldLn: i + 1, text: ol[i] });
-          rows.push({ type: "added", newLn: j + 1, text: nl[j] });
-          i++; j++;
-        } else if (foundNew !== -1 && (foundOld === -1 || foundNew - j <= foundOld - i)) {
-          while (j < foundNew) {
-            rows.push({ type: "removed", oldLn: i + 1, text: ol[i] });
-            i++;
-          }
-        } else {
-          while (i < foundOld) {
-            rows.push({ type: "added", newLn: j + 1, text: nl[j] });
-            j++;
-          }
-        }
-      }
-    } else if (i < ol.length) {
-      rows.push({ type: "removed", oldLn: i + 1, text: ol[i] });
-      i++;
+  let i = n, j = m;
+  while (i > 0 || j > 0) {
+    if (i > 0 && j > 0 && oldLines[i-1] === newLines[j-1]) {
+      rows.unshift({ type: "ctx", oldLn: i, newLn: j, text: oldLines[i-1] });
+      i--; j--;
+    } else if (j > 0 && (i === 0 || dp[i][j-1] >= dp[i-1][j])) {
+      rows.unshift({ type: "added", newLn: j, text: newLines[j-1] });
+      j--;
     } else {
-      rows.push({ type: "added", newLn: j + 1, text: nl[j] });
-      j++;
+      rows.unshift({ type: "removed", oldLn: i, text: oldLines[i-1] });
+      i--;
     }
   }
   return rows;
@@ -1171,29 +1154,15 @@ function openDiffModal() {
     } else {
       const rows = lineDiff(d.oldLines, d.newLines);
       let tableHtml = "";
-      let ctxCount = 0;
-      const CTX_LIMIT = 4;
 
       for (let ri = 0; ri < rows.length; ri++) {
         const r = rows[ri];
-        if (r.type === "ctx") {
-          ctxCount++;
-          if (ctxCount <= CTX_LIMIT) {
-            tableHtml += `<tr class="d-ctx"><td class="dl">${r.oldLn}</td><td class="ds"> </td><td class="dc">${esc(r.text)}</td></tr>`;
-          } else if (ctxCount === CTX_LIMIT + 1) {
-            // Bir sonraki ctx değilse separator göster
-            const nextNonCtx = rows.slice(ri + 1).find(x => x.type !== "ctx");
-            if (nextNonCtx) {
-              tableHtml += `<tr class="d-sep" colspan="3"><td colspan="3">⋯ ${countConsecutiveCtx(rows, ri)} unchanged lines ⋯</td></tr>`;
-            }
-          }
+        if (r.type === "added") {
+          tableHtml += `<tr class="d-add"><td class="dl">${r.newLn || ""}</td><td class="ds">+</td><td class="dc">${esc(r.text)}</td></tr>`;
+        } else if (r.type === "removed") {
+          tableHtml += `<tr class="d-del"><td class="dl">${r.oldLn || ""}</td><td class="ds">-</td><td class="dc">${esc(r.text)}</td></tr>`;
         } else {
-          ctxCount = 0;
-          if (r.type === "added") {
-            tableHtml += `<tr class="d-add"><td class="dl">${r.newLn || ""}</td><td class="ds">+</td><td class="dc">${esc(r.text)}</td></tr>`;
-          } else {
-            tableHtml += `<tr class="d-del"><td class="dl">${r.oldLn || ""}</td><td class="ds">-</td><td class="dc">${esc(r.text)}</td></tr>`;
-          }
+          tableHtml += `<tr class="d-ctx"><td class="dl">${r.oldLn}</td><td class="ds"> </td><td class="dc">${esc(r.text)}</td></tr>`;
         }
       }
       section.innerHTML = `
@@ -1206,15 +1175,6 @@ function openDiffModal() {
     body.appendChild(section);
   }
   $("diffModal").classList.add("visible");
-}
-
-function countConsecutiveCtx(rows, startIdx) {
-  let count = 0;
-  for (let i = startIdx; i < rows.length; i++) {
-    if (rows[i].type === "ctx") count++;
-    else break;
-  }
-  return count;
 }
 
 function closeDiffModal() {
