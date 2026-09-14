@@ -91,7 +91,197 @@
       margin-right: auto;
     }
 
-    /* PAGE TITLE */
+    /* HERO */
+    .hero {
+      text-align: center;
+      padding: 60px 20px 40px;
+      margin-bottom: 48px;
+      background: linear-gradient(135deg, var(--bg2) 0%, var(--bg3) 100%);
+      border: 1px solid var(--bd);
+      border-radius: 20px;
+      position: relative;
+      overflow: hidden;
+    }
+    .hero::before {
+      content: '';
+      position: absolute;
+      top: -50%; left: -50%;
+      width: 200%; height: 200%;
+      background: radial-gradient(circle at 30% 30%, rgba(229,62,62,0.08) 0%, transparent 50%),
+                  radial-gradient(circle at 70% 70%, rgba(74,222,128,0.06) 0%, transparent 50%);
+      animation: heroGlow 8s ease-in-out infinite alternate;
+    }
+    @keyframes heroGlow {
+      0% { transform: translate(0, 0); }
+      100% { transform: translate(-5%, -5%); }
+    }
+    .hero-content { position: relative; z-index: 1; }
+    .hero img {
+      width: 180px;
+      height: auto;
+      margin-bottom: 24px;
+      filter: drop-shadow(0 8px 32px rgba(229,62,62,0.3));
+    }
+    .hero h1 {
+      font-size: 38px;
+      font-weight: 900;
+      color: #fff;
+      margin-bottom: 12px;
+      letter-spacing: -1px;
+    }
+    .hero h1 span { color: var(--red); }
+    .hero p {
+      font-size: 16px;
+      color: var(--tx2);
+      max-width: 600px;
+      margin: 0 auto;
+      line-height: 1.7;
+    }
+
+    /* INFO SECTIONS */
+    .info-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 20px;
+      margin-bottom: 48px;
+    }
+    .info-card {
+      background: var(--bg2);
+      border: 1px solid var(--bd);
+      border-radius: 16px;
+      padding: 32px 24px;
+      transition: all 0.3s;
+    }
+    .info-card:hover {
+      border-color: var(--red);
+      transform: translateY(-3px);
+      box-shadow: 0 12px 40px rgba(229,62,62,0.1);
+    }
+    .info-card .icon {
+      font-size: 36px;
+      margin-bottom: 16px;
+      display: block;
+    }
+    .info-card h3 {
+      font-size: 18px;
+      font-weight: 700;
+      color: #fff;
+      margin-bottom: 12px;
+    }
+    .info-card p {
+      font-size: 14px;
+      color: var(--tx2);
+      line-height: 1.7;
+    }
+    .info-card ul {
+      list-style: none;
+      margin-top: 12px;
+    }
+    .info-card ul li {
+      font-size: 13px;
+      color: var(--tx2);
+      padding: 6px 0;
+      border-bottom: 1px solid var(--bd);
+      line-height: 1.5;
+    }
+    .info-card ul li:last-child { border-bottom: none; }
+    .info-card ul li::before {
+      content: '→ ';
+      color: var(--red);
+      font-weight: 700;
+    }
+
+    /* STEP CARDS */
+    .steps {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 16px;
+      margin-bottom: 48px;
+    }
+    .step {
+      background: var(--bg2);
+      border: 1px solid var(--bd);
+      border-radius: 14px;
+      padding: 24px 18px;
+      text-align: center;
+      position: relative;
+    }
+    .step::after {
+      content: '→';
+      position: absolute;
+      right: -14px;
+      top: 50%;
+      transform: translateY(-50%);
+      color: var(--tx3);
+      font-size: 20px;
+      z-index: 1;
+    }
+    .step:last-child::after { display: none; }
+    .step-num {
+      width: 36px;
+      height: 36px;
+      background: var(--red);
+      color: #fff;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 16px;
+      font-weight: 800;
+      margin: 0 auto 12px;
+    }
+    .step h4 {
+      font-size: 14px;
+      font-weight: 700;
+      color: #fff;
+      margin-bottom: 6px;
+    }
+    .step p {
+      font-size: 12px;
+      color: var(--tx3);
+      line-height: 1.5;
+    }
+
+    /* CTA */
+    .cta-box {
+      text-align: center;
+      padding: 40px 24px;
+      background: linear-gradient(135deg, rgba(229,62,62,0.1), rgba(74,222,128,0.05));
+      border: 1px solid var(--bd);
+      border-radius: 16px;
+      margin-bottom: 48px;
+    }
+    .cta-box h3 {
+      font-size: 22px;
+      font-weight: 800;
+      color: #fff;
+      margin-bottom: 10px;
+    }
+    .cta-box p {
+      font-size: 14px;
+      color: var(--tx2);
+      margin-bottom: 20px;
+    }
+    .cta-btn {
+      display: inline-block;
+      padding: 14px 32px;
+      background: var(--red);
+      color: #fff;
+      border: none;
+      border-radius: 12px;
+      font-size: 15px;
+      font-weight: 700;
+      text-decoration: none;
+      cursor: pointer;
+      transition: all 0.3s;
+    }
+    .cta-btn:hover {
+      background: #c53030;
+      transform: translateY(-2px);
+      box-shadow: 0 8px 24px rgba(229,62,62,0.3);
+    }
+
+    /* PAGE TITLE (fallback) */
     .page-title {
       text-align: center;
       margin-bottom: 48px;
@@ -106,6 +296,13 @@
     .page-title p {
       font-size: 16px;
       color: var(--tx2);
+    }
+
+    @media (max-width: 900px) {
+      .info-grid { grid-template-columns: 1fr; }
+      .steps { grid-template-columns: repeat(2, 1fr); }
+      .step::after { display: none; }
+      .hero h1 { font-size: 28px; }
     }
 
     /* MODULE GRID */
@@ -328,23 +525,107 @@
   <!-- HEADER -->
   <header class="header">
     <div class="header-left">
-      <a href="../index.html" class="header-logo">
+      <a href="../" class="header-logo">
         <img src="../turkod.png" alt="TÜRKOD">
         <span class="header-logo-text">TÜRKOD</span>
       </a>
     </div>
     <div class="header-links">
-      <a href="../index.html" class="header-link">Ana Sayfa</a>
-      <a href="../referans/index.html" class="header-link">Referans</a>
-      <a href="./index.html" class="header-link active">Modüller</a>
-      <a href="../deneme/index.html" class="header-link">Canlı Deneme</a>
-      <a href="../gelistirici/index.html" class="header-link">Geliştirici</a>
+      <a href="../" class="header-link">Ana Sayfa</a>
+      <a href="../referans/" class="header-link">Referans</a>
+      <a href="." class="header-link active">Modüller</a>
+      <a href="../deneme/" class="header-link">Canlı Deneme</a>
+      <a href="../gelistirici/" class="header-link">Geliştirici</a>
       <a href="https://github.com/aelif7826-ai/T-rkod/releases/download/T%C3%BCrkod/Turkod.Studyosu.Installer.3.exe" class="header-link" style="background:var(--red);color:#fff;border-color:var(--red);font-weight:700;padding:8px 18px;">&#10515; Yükle</a>
     </div>
   </header>
 
   <!-- MAIN -->
   <main class="main">
+
+    <!-- HERO -->
+    <div class="hero">
+      <div class="hero-content">
+        <img src="../isbirligi.png" alt="İşbirliği">
+        <h1>TÜRKOD'U <span>BERABER</span> GELİŞTİRELİM!</h1>
+        <p>TÜRKOD, topluluk katkılarıyla büyüyor. Sen de kendi modülünü oluştur, binlerce geliştiriciye ulaş. Nasıl mı? İşte rehberimiz.</p>
+      </div>
+    </div>
+
+    <!-- BİLGİ KARTLARI -->
+    <div class="info-grid">
+      <div class="info-card">
+        <span class="icon">📦</span>
+        <h3>Modül Nedir?</h3>
+        <p>Modül, TÜRKOD'un yeteneklerini genişleten paketlerdir. Bir modül, birden fazla dosya ve komut içerebilir.</p>
+        <ul>
+          <li>.turkod uzantılı JSON paketi</li>
+          <li>İçinde kod dosyaları ve meta bilgi</li>
+          <li>Tek dosya halinde paylaşılabilir</li>
+          <li>Stüdyo üzerinden kurulabilir</li>
+        </ul>
+      </div>
+      <div class="info-card">
+        <span class="icon">💡</span>
+        <h3>Bize Faydası</h3>
+        <p>Her yeni modül, TÜRKOD ekosistemini güçlendirir. Topluluk katkıları sayesinde:</p>
+        <ul>
+          <li>Daha zengin bir dil havuzu</li>
+          <li>Yeni başlayanlar için hazır çözümler</li>
+          <li>Gerçek dünya uygulamaları</li>
+          <li>Ortak bilgi birikimi</li>
+        </ul>
+      </div>
+      <div class="info-card">
+        <span class="icon">🎁</span>
+        <h3>Sana Faydası</h3>
+        <p>Modül oluşturmak senin için de faydalı:</p>
+        <ul>
+          <li>Portföyünü güçlendirir</li>
+          <li>TÜRKOD topluluğunda tanınırsın</li>
+          <li>Kod becerilerini geliştirirsin</li>
+          <li>Başkalarının işine yararsın</li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- NASIL YAPILIR -->
+    <div style="margin-bottom:48px;">
+      <h2 style="font-size:24px;font-weight:800;color:#fff;text-align:center;margin-bottom:24px;">🛠️ Nasıl Yapılır?</h2>
+      <div class="steps">
+        <div class="step">
+          <div class="step-num">1</div>
+          <h4>Paketi Oluştur</h4>
+          <p>JSON formatında .turkod dosyası oluştur. İçine ad, açıklama, yazar ve dosyaları ekle.</p>
+        </div>
+        <div class="step">
+          <div class="step-num">2</div>
+          <h4>Kodlarını Yaz</h4>
+          <p>Modülün fonksiyonlarını TÜRKOD dilinde yaz. Referans sayfasından yardım al.</p>
+        </div>
+        <div class="step">
+          <div class="step-num">3</div>
+          <h4>Gönder</h4>
+          <p>Modül Gönder sayfasından .turkod dosyanı yükle. İncelemeye alınır.</p>
+        </div>
+        <div class="step">
+          <div class="step-num">4</div>
+          <h4>Yayınla</h4>
+          <p>Onay aldıktan sonra modülün mağazada yayınlanır. Herkes kullanabilir!</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- CTA -->
+    <div class="cta-box">
+      <h3>🚀 Hazırsan Başla!</h3>
+      <p>İlk modülünü oluşturmak için Modül Gönder sayfasına git veya Referans'tan komutları incele.</p>
+      <a href="../modul-gonder/" class="cta-btn">📦 Modül Gönder</a>
+      &nbsp;&nbsp;
+      <a href="../referans/" class="cta-btn" style="background:var(--bg3);border:1px solid var(--bd);">📚 Referans</a>
+    </div>
+
+    <!-- MODÜL LİSTESİ -->
     <div class="page-title">
       <h1>Modüller</h1>
       <p>TÜRKOD ile birlikte gelen güçlü modüller. Bir modüle tıklayarak detaylı bilgi alın.</p>
@@ -918,7 +1199,7 @@
         const hedef = document.activeElement;
         if (hedef.tagName !== 'INPUT' && hedef.tagName !== 'TEXTAREA' && !hedef.isContentEditable) {
           e.preventDefault();
-          window.location.href = '../gelistirici/index.html';
+          window.location.href = '../gelistirici/';
         }
       }
     });
