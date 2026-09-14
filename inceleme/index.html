@@ -1021,9 +1021,9 @@ function getPreviousVersion(paket) {
 }
 
 function computeDiff(oldFiles, newFiles) {
-  const allKeys = new Set([...Object.keys(oldFiles), ...Object.keys(newFiles)]);
+  const allKeys = [...new Set([...Object.keys(oldFiles), ...Object.keys(newFiles)])].sort();
   const result = [];
-  for (const name of allKeys.sort()) {
+  for (const name of allKeys) {
     const inOld = name in oldFiles;
     const inNew = name in newFiles;
     if (inOld && !inNew) {
