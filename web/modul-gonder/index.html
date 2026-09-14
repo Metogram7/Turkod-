@@ -376,35 +376,123 @@
 
     <!-- ÖRNEK -->
     <div style="margin-bottom:48px;">
-      <h2 style="font-size:24px;font-weight:800;color:#fff;text-align:center;margin-bottom:8px;">📋 Örnek: .turkod Dosyası Nasıl görünür?</h2>
-      <p style="font-size:14px;color:var(--tx2);text-align:center;margin-bottom:24px;">Stüdyo'da <code style="font-family:'JetBrains Mono',monospace;color:var(--cy);background:var(--bg3);padding:2px 6px;border-radius:4px;">modül_derle</code> ile oluşturduğun dosyanın yapısı şöyle olmalı:</p>
+      <h2 style="font-size:24px;font-weight:800;color:#fff;text-align:center;margin-bottom:8px;">📋 Örnek: modül_oluştur ile Neler Oluşur?</h2>
+      <p style="font-size:14px;color:var(--tx2);text-align:center;margin-bottom:24px;">Terminalde <code style="font-family:'JetBrains Mono',monospace;color:var(--cy);background:var(--bg3);padding:2px 6px;border-radius:4px;">modül_oluştur MerhabaDunya</code> yazınca şu klasör ve dosyalar oluşur:</p>
 
+      <!-- index.tr -->
+      <div class="example-box" style="margin-bottom:20px;">
+        <div class="example-header">
+          <span class="dot r"></span><span class="dot y"></span><span class="dot g"></span>
+          <span>index.tr — Modül tanımı (dışa aktarımlar)</span>
+        </div>
+        <div class="example-body">
+<pre><span class="comment"># MerhabaDunya Modülü</span>
+<span class="comment"># Bu dosya modülün dışa aktarımlarını tanımlar.</span>
+
+<span class="key">dışa_aktar</span> = {
+  <span class="comment"># Üye fonksiyonları buraya ekleyin</span>
+}</pre>
+        </div>
+        <div class="example-note">
+          <strong style="color:#fff;">📌 Bu dosyada ne yapılır?</strong><br>
+          • Modülün dışarıya açacağı fonksiyon ve değişkenler burada tanımlanır<br>
+          • <code>dışa_aktar = { ... }</code> içine eklenen isimler, başka dosyalarda kullanılabilir<br>
+          • Boş bırakılırsa modülün hiçbir üyesi dışarı açılmaz
+        </div>
+      </div>
+
+      <!-- modul.tr -->
+      <div class="example-box" style="margin-bottom:20px;">
+        <div class="example-header">
+          <span class="dot r"></span><span class="dot y"></span><span class="dot g"></span>
+          <span>modul.tr — Çalışan örnek kod</span>
+        </div>
+        <div class="example-body">
+<pre><span class="comment"># MerhabaDunya Modülü — Çalışan Örnek</span>
+
+<span class="comment"># Modülü içe aktar</span>
+<span class="comment"># içe_aktar MerhabaDunya</span>
+
+<span class="comment"># Örnek kullanım</span>
+<span class="key">yazdır</span>(<span class="str">"MerhabaDunya modülü başarıyla yüklendi!"</span>)</pre>
+        </div>
+        <div class="example-note">
+          <strong style="color:#fff;">📌 Bu dosyada ne yapılır?</strong><br>
+          • Modülün test kodları burada yazılır<br>
+          • <code>içe_aktar</code> ile kendi modülünüzü içe aktarıp test edebilirsiniz<br>
+          • Bu dosya .turkod paketine dahil edilmez, yalnızca geliştirme içindir
+        </div>
+      </div>
+
+      <!-- modul.json -->
+      <div class="example-box" style="margin-bottom:20px;">
+        <div class="example-header">
+          <span class="dot r"></span><span class="dot y"></span><span class="dot g"></span>
+          <span>modul.json — Modül künyesi (derleme için)</span>
+        </div>
+        <div class="example-body">
+<pre>{
+  <span class="key">"isim"</span>: <span class="str">"MerhabaDunya"</span>,
+  <span class="key">"version"</span>: <span class="str">"1.0.0"</span>,
+  <span class="key">"aciklama"</span>: <span class="str">""</span>,
+  <span class="key">"yazar"</span>: <span class="str">""</span>
+}</pre>
+        </div>
+        <div class="example-note">
+          <strong style="color:#fff;">📌 Bu dosyada ne yapılır?</strong><br>
+          • <code>aciklama</code> ve <code>yazar</code> alanlarını doldurmayı unutma!<br>
+          • <code>modül_derle</code> bu dosyadan bilgileri okur<br>
+          • Her derlemede <code>version</code> otomatik artar (1.0.0 → 1.0.1)<br>
+          • <strong style="color:var(--red);">Bu dosyayı silme!</strong> Derleme bundan beslenir
+        </div>
+      </div>
+
+      <!-- Klasör yapısı -->
       <div class="example-box">
         <div class="example-header">
-          <span class="dot r"></span>
-          <span class="dot y"></span>
-          <span class="dot g"></span>
-          <span>MerhabaDunya.turkod</span>
+          <span class="dot r"></span><span class="dot y"></span><span class="dot g"></span>
+          <span>Oluşan klasör yapısı</span>
+        </div>
+        <div class="example-body">
+<pre><span class="key">MerhabaDunya/</span>
+├── <span class="str">index.tr</span>      <span class="comment"># Modül tanımı</span>
+├── <span class="str">modul.tr</span>      <span class="comment"># Çalışan örnek</span>
+└── <span class="str">modul.json</span>    <span class="comment"># Künye (aciklama, yazar, versiyon)</span></pre>
+        </div>
+        <div class="example-note">
+          <strong style="color:#fff;">📌 Tam akış:</strong><br>
+          1. <code>modül_oluştur MerhabaDunya</code> → klasör ve dosyalar oluşur<br>
+          2. <code>index.tr</code>'de dışa aktarımları, <code>modul.tr</code>'de test kodlarını yaz<br>
+          3. <code>modul.json</code>'daki <code>aciklama</code> ve <code>yazar</code>'ı doldur<br>
+          4. <code>modül_derle MerhabaDunya</code> → <code>MerhabaDunya.turkod</code> paketi oluşur<br>
+          5. Aşağıdaki formu doldur, .turkod'u yükle — tamam! 🚀
+        </div>
+      </div>
+
+      <!-- .turkod çıktısı -->
+      <div class="example-box" style="margin-top:20px;">
+        <div class="example-header">
+          <span class="dot r"></span><span class="dot y"></span><span class="dot g"></span>
+          <span>MerhabaDunya.turkod — modül_derle çıktısı</span>
         </div>
         <div class="example-body">
 <pre>{
   <span class="key">"turkodModul"</span>: <span class="bool">true</span>,
   <span class="key">"ad"</span>: <span class="str">"MerhabaDunya"</span>,
   <span class="key">"version"</span>: <span class="str">"1.0.0"</span>,
-  <span class="key">"aciklama"</span>: <span class="str">"Merhaba Dünya programı. Temel giriş-çıkış ve değişken kullanımı."</span>,
-  <span class="key">"yazar"</span>: <span class="str">"Geliştirici Adı"</span>,
+  <span class="key">"aciklama"</span>: <span class="str">"Merhaba Dünya programı."</span>,
+  <span class="key">"yazar"</span>: <span class="str">"Geliştirici"</span>,
   <span class="key">"dosyalar"</span>: {
-    <span class="key">"ana.turkod"</span>: <span class="str">"yazdır(\"Merhaba Dünya!\")\ndeğişken x := 42\nyazdır(x)"</span>,
-    <span class="key">"yardimci.turkod"</span>: <span class="str">"fonksiyon selamla(isim) {\n  yazdır(\"Merhaba \" + isim)\n}"</span>
+    <span class="key">"index.tr"</span>: <span class="str">"dışa_aktar = {\n  # ...\n}"</span>,
+    <span class="key">"modul.tr"</span>: <span class="str">"yazdır(\"MerhabaDunya modülü yüklendi!\")"</span>
   }
 }</pre>
         </div>
         <div class="example-note">
-          <strong style="color:#fff;">📌 Dikkat edilecekler:</strong><br>
-          • <code>turkodModul</code> her zaman <code>true</code> olmalı<br>
-          • <code>dosyalar</code> içinde her dosya adı ve içeriği yazılır<br>
-          • Ana dosya genellikle <code>ana.turkod</code> olarak adlandırılır<br>
-          • İçerikler string (metin) olarak verilir, <code>\n</code> ile satır atlanır
+          <strong style="color:#fff;">📌 Bu dosya otomatik oluşur, elle düzenleme yapma!</strong><br>
+          • <code>modül_derle</code> komutu <code>modul.json</code>'u okur, <code>.tr</code> dosyalarını paketler<br>
+          • <code>turkodModul: true</code> imzası otomatik eklenir<br>
+          • Bu dosyayı bu sayfadan yükle, incelemeden geçsin! 📦
         </div>
       </div>
     </div>
