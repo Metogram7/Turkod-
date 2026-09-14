@@ -456,6 +456,17 @@
 
 <footer id="statusbar"></footer>
 
+<!-- DIFF MODAL -->
+<div id="diffModal">
+  <div class="diff-panel">
+    <div class="diff-header">
+      <h3>📊 Sürüm Karşılaştırma</h3>
+      <button class="close" onclick="closeDiffModal()">✖</button>
+    </div>
+    <div class="diff-body" id="diffModalBody"></div>
+  </div>
+</div>
+
 <script>
 "use strict";
 const $ = id => document.getElementById(id);
@@ -467,6 +478,7 @@ let paketDosyalari = [];   // [dosyaAdi...]
 let aktifDosya = "";
 let rawLines = [], fileText = "";
 let karar = null;          // { sonuc: "onay"|"red", not, tarih }
+let currentDiff = [];      // sürüm karşılaştırma farkları
 
 // ---------- satır analizi (Türkçe açıklama) ----------
 const RE = {
@@ -1073,8 +1085,6 @@ function lineDiff(oldLines, newLines) {
   return rows;
 }
 
-let currentDiff = [];
-
 function showDiffBanner(prev, paket) {
   const diffs = computeDiff(prev.dosyalar, paket.dosyalar);
   currentDiff = diffs;
@@ -1129,16 +1139,5 @@ function closeDiffModal() {
   $("diffModal").classList.remove("visible");
 }
 </script>
-
-<!-- DIFF MODAL -->
-<div id="diffModal">
-  <div class="diff-panel">
-    <div class="diff-header">
-      <h3>📊 Sürüm Karşılaştırma</h3>
-      <button class="close" onclick="closeDiffModal()">✖</button>
-    </div>
-    <div class="diff-body" id="diffModalBody"></div>
-  </div>
-</div>
 </body>
 </html>
