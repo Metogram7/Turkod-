@@ -223,6 +223,38 @@
     }
     .cta-btn:hover { background:#c53030; transform:translateY(-2px); box-shadow:0 8px 24px rgba(229,62,62,0.3); }
 
+    /* EXAMPLE */
+    .example-box {
+      margin-bottom:48px; background:var(--bg2); border:1px solid var(--bd);
+      border-radius:16px; overflow:hidden;
+    }
+    .example-header {
+      padding:16px 24px; background:var(--bg3); border-bottom:1px solid var(--bd);
+      display:flex; align-items:center; gap:10px;
+    }
+    .example-header .dot { width:10px; height:10px; border-radius:50%; }
+    .example-header .dot.r { background:#e53e3e; }
+    .example-header .dot.y { background:#facc15; }
+    .example-header .dot.g { background:#4ade80; }
+    .example-header span { font-size:13px; color:var(--tx2); margin-left:8px; font-family:'JetBrains Mono',monospace; }
+    .example-body { padding:24px; }
+    .example-body pre {
+      font-family:'JetBrains Mono',monospace; font-size:13px; line-height:1.7;
+      color:var(--tx); white-space:pre-wrap; word-break:break-word;
+    }
+    .example-body .key { color:var(--cy); }
+    .example-body .str { color:var(--gn); }
+    .example-body .bool { color:var(--pk); }
+    .example-body .comment { color:var(--tx3); font-style:italic; }
+    .example-note {
+      padding:16px 24px; border-top:1px solid var(--bd); font-size:13px;
+      color:var(--tx2); line-height:1.7; background:var(--bg3);
+    }
+    .example-note code {
+      font-family:'JetBrains Mono',monospace; font-size:12px; color:var(--cy);
+      background:var(--bg4); padding:1px 6px; border-radius:4px;
+    }
+
     @media (max-width:900px) {
       .info-grid { grid-template-columns:1fr; }
       .how-steps { grid-template-columns:repeat(2,1fr); }
@@ -340,6 +372,41 @@
       <h3>🚀 Hazırsan Başla!</h3>
       <p>İlk modülünü oluşturmak için Referans sayfasındaki komutları incele.</p>
       <a href="../referans/" class="cta-btn" style="background:var(--bg3);border:1px solid var(--bd);">📚 Referans</a>
+    </div>
+
+    <!-- ÖRNEK -->
+    <div style="margin-bottom:48px;">
+      <h2 style="font-size:24px;font-weight:800;color:#fff;text-align:center;margin-bottom:8px;">📋 Örnek: .turkod Dosyası Nasıl görünür?</h2>
+      <p style="font-size:14px;color:var(--tx2);text-align:center;margin-bottom:24px;">Stüdyo'da <code style="font-family:'JetBrains Mono',monospace;color:var(--cy);background:var(--bg3);padding:2px 6px;border-radius:4px;">modül_derle</code> ile oluşturduğun dosyanın yapısı şöyle olmalı:</p>
+
+      <div class="example-box">
+        <div class="example-header">
+          <span class="dot r"></span>
+          <span class="dot y"></span>
+          <span class="dot g"></span>
+          <span>MerhabaDunya.turkod</span>
+        </div>
+        <div class="example-body">
+<pre>{
+  <span class="key">"turkodModul"</span>: <span class="bool">true</span>,
+  <span class="key">"ad"</span>: <span class="str">"MerhabaDunya"</span>,
+  <span class="key">"version"</span>: <span class="str">"1.0.0"</span>,
+  <span class="key">"aciklama"</span>: <span class="str">"Merhaba Dünya programı. Temel giriş-çıkış ve değişken kullanımı."</span>,
+  <span class="key">"yazar"</span>: <span class="str">"Geliştirici Adı"</span>,
+  <span class="key">"dosyalar"</span>: {
+    <span class="key">"ana.turkod"</span>: <span class="str">"yazdır(\"Merhaba Dünya!\")\ndeğişken x := 42\nyazdır(x)"</span>,
+    <span class="key">"yardimci.turkod"</span>: <span class="str">"fonksiyon selamla(isim) {\n  yazdır(\"Merhaba \" + isim)\n}"</span>
+  }
+}</pre>
+        </div>
+        <div class="example-note">
+          <strong style="color:#fff;">📌 Dikkat edilecekler:</strong><br>
+          • <code>turkodModul</code> her zaman <code>true</code> olmalı<br>
+          • <code>dosyalar</code> içinde her dosya adı ve içeriği yazılır<br>
+          • Ana dosya genellikle <code>ana.turkod</code> olarak adlandırılır<br>
+          • İçerikler string (metin) olarak verilir, <code>\n</code> ile satır atlanır
+        </div>
+      </div>
     </div>
 
     <!-- FORM BAŞLIK -->
