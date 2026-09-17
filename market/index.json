@@ -132,6 +132,27 @@
           "icerik": "# Cowsay Modülü\n# Konuşan/düşünen ASCII inek 🐄\n\ndışa_aktar soyle, dusun\n"
         }
       ]
+    },
+    {
+      "isim": "deneme",
+      "aciklama": "",
+      "yazar": "Metehan",
+      "versiyon": "1.0.5",
+      "içeAktarAdi": "deneme",
+      "icon": "📦",
+      "onayli": true,
+      "topluluk": true,
+      "tarih": "2026-09-17",
+      "dosyalar": [
+        {
+          "isim": "deneme.tr",
+          "icerik": "fonksiyon selamla(isim)\n    yazdır(\"merbaha\", isim)\nson\n\n\n    "
+        },
+        {
+          "isim": "index.tr",
+          "icerik": "# Deneme Modülü\n# Bu dosya modülün dışa aktarımlarını tanımlar.\n\ndışa_aktar selamla\n"
+        }
+      ]
     }
   ]
 }
