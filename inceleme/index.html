@@ -191,6 +191,15 @@
   }
   #reportOut .row { display: flex; gap: 8px; margin-top: 8px; }
   #reportOut .row button { flex: 1; font-size: 12px; }
+  #marketOut { display: none; margin-top: 10px; }
+  #marketOut.visible { display: block; }
+  #marketOut pre {
+    background: var(--code-bg); border: 1px solid var(--border); border-radius: 8px;
+    padding: 10px; font-size: 11px; max-height: 220px; overflow: auto;
+    font-family: Consolas, monospace; white-space: pre-wrap; word-break: break-word;
+  }
+  #marketOut .row { display: flex; gap: 8px; margin-top: 8px; }
+  #marketOut .row button { flex: 1; font-size: 12px; }
 
   .stat-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
   .stat { background: var(--bg-soft); border: 1px solid var(--border); border-radius: 10px; padding: 10px 12px; }
@@ -431,6 +440,13 @@
             <button id="resetDecisionBtn" title="Formu sıfırla">↩ Sıfırla</button>
           </div>
         </div>
+        <div id="marketOut">
+          <label style="font-size:12px;color:var(--text-dim)">🏪 <b>market/index.json</b> kaydı — kopyala, <code>web/market/index.json</code> içindeki <code>moduller</code> listesine ekle, push et:</label>
+          <pre id="marketText"></pre>
+          <div class="row">
+            <button id="copyMarketBtn">📋 Market Kaydını Kopyala</button>
+          </div>
+        </div>
       </div>
     </section>
 
@@ -605,6 +621,7 @@ function openFile(name, text){
   karar = null; fbKarar = "onay"; updateBadge();
   document.querySelectorAll("#fbSeg button").forEach(x=>x.classList.toggle("active", x.dataset.v==="onay"));
   $("reportOut").classList.remove("visible");
+  $("marketOut").classList.remove("visible");
   $("fbEmail").value = ""; $("fbNote").value = ""; warn(null);
   const errBox = $("dropError"); errBox.style.display = "none";
 
@@ -723,27 +740,34 @@ function runChecks(){
 let fbKarar = "onay";
 function bugun(){ return new Date().toISOString().slice(0,10); }
 
+function buildMarketEntry(){
+  // market:yukle'nin beklediği format: dosyalar = [{isim, icerik}]
+  const dosyalar = Object.entries(paket.dosyalar || {}).map(([isim, icerik]) => ({
+    isim,
+    icerik: String(icerik ?? "")
+  }));
+  return {
+    isim: paket.ad,
+    aciklama: paket.aciklama || "",
+    yazar: paket.yazar || "",
+    versiyon: String(paket.version),
+    "içeAktarAdi": paket.ad,
+    icon: "📦",
+    onayli: true,
+    topluluk: true,
+    tarih: bugun(),
+    dosyalar
+  };
+}
+
 function buildReport(){
   const not = $("fbNote").value.trim();
   if(fbKarar === "onay"){
-    // market/index.json formatına uygun giriş üret
-    const giris = {
-      isim: paket.ad,
-      aciklama: paket.aciklama || "",
-      yazar: paket.yazar || "",
-      versiyon: String(paket.version),
-      "içeAktarAdi": paket.ad,
-      icon: "📦",
-      onayli: true,
-      tarih: bugun(),
-      dosyalar: []
-    };
     return {
       konu: "[TürkOD] Modülün onaylandı ✅ — " + paket.ad + " v" + paket.version,
       govde: "Merhaba,\n\n" + paket.ad + " (v" + paket.version + ") adlı modülün incelendi ve ONAYLANDI. ✅\n"
         + (not ? "\nİnceleme notu:\n" + not + "\n" : "")
         + "\nModülün 1 gün içinde online mağazada yayınlanacak. Elinize sağlık! 🚀\n\n──\nTürkOD Modül İnceleme"
-        + "\n\n── market/index.json dosyasına eklenecek kayıt ──\n" + JSON.stringify(giris, null, 2)
     };
   }
   return {
@@ -773,6 +797,14 @@ function sendFeedback(){
   updateBadge();
   $("reportText").textContent = "Kime: " + eposta + "\nKonu: " + r.konu + "\n\n" + r.govde;
   $("reportOut").classList.add("visible");
+  // Onaysa market/index.json kaydını ayrı kutuya koy (kopyala → repoya ekle → push)
+  if (fbKarar === "onay" && paket) {
+    $("marketText").textContent = JSON.stringify(buildMarketEntry(), null, 2);
+    $("marketOut").classList.add("visible");
+    $("copyMarketBtn").textContent = "📋 Market Kaydını Kopyala";
+  } else {
+    $("marketOut").classList.remove("visible");
+  }
   // E-posta uygulamanda hazır taslak açılır (alıcı + konu + metin doldurulmuş)
   window.location.href = "mailto:" + encodeURIComponent(eposta)
     + "?subject=" + encodeURIComponent(r.konu)
@@ -970,7 +1002,12 @@ $("resetDecisionBtn").addEventListener("click", ()=>{
   karar = null; fbKarar = "onay";
   document.querySelectorAll("#fbSeg button").forEach(x=>x.classList.toggle("active", x.dataset.v==="onay"));
   $("fbEmail").value = ""; $("fbNote").value = "";
-  warn(null); updateBadge(); $("reportOut").classList.remove("visible");
+  warn(null); updateBadge(); $("reportOut").classList.remove("visible"); $("marketOut").classList.remove("visible");
+});
+$("copyMarketBtn").addEventListener("click", async ()=>{
+  try { await navigator.clipboard.writeText($("marketText").textContent); $("copyMarketBtn").textContent = "✔ Kopyalandı"; }
+  catch { $("copyMarketBtn").textContent = "❌ Olmadı"; }
+  setTimeout(()=>$("copyMarketBtn").textContent = "📋 Market Kaydını Kopyala", 1500);
 });
 $("copyReportBtn").addEventListener("click", async ()=>{
   try { await navigator.clipboard.writeText($("reportText").textContent); $("copyReportBtn").textContent = "✔ Kopyalandı"; }
