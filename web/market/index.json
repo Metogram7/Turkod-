@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "sonGuncelleme": "2026-09-13",
+  "sonGuncelleme": "2026-09-17",
   "moduller": [
     {
       "isim": "Matematik",
@@ -111,6 +111,27 @@
       "onayli": true,
       "tarih": "2026-09-08",
       "dosyalar": []
+    },
+    {
+      "isim": "Cowsay",
+      "aciklama": "Konuşan ve düşünen ASCII inek. Eğlenceli mesaj baloncukları için.",
+      "yazar": "TÜRKOD",
+      "versiyon": "1.0.1",
+      "içeAktarAdi": "Cowsay",
+      "icon": "📦",
+      "onayli": true,
+      "topluluk": true,
+      "tarih": "2026-09-17",
+      "dosyalar": [
+        {
+          "isim": "Cowsay.tr",
+          "icerik": "# Cowsay Modülü — konuşan inek 🐄\n#\n# Kullanım:\n#   içe_aktar Cowsay\n#   Cowsay.soyle(\"Merhaba Dünya!\")\n#   Cowsay.dusun(\"Acaba ne yapsam?\")\n\nfonksiyon tekrarla(karakter, adet)\n  değişken sonuc := \"\"\n  için i içinde aralık(1, adet + 1)\n    sonuc := sonuc + karakter\n  son\n  geri_döndür sonuc\nson\n\nfonksiyon soyle(mesaj)\n  değişken gen := mesaj.uzunluk + 2\n  yazdır(\" \" + tekrarla(\"_\", gen))\n  yazdır(\"< \" + mesaj + \" >\")\n  yazdır(\" \" + tekrarla(\"-\", gen))\n  yazdır(\"        \\   ^__^\")\n  yazdır(\"         \\  (oo)\\_______\")\n  yazdır(\"            (__)\\       )\\/\\\")\n  yazdır(\"                ||----w |\")\n  yazdır(\"                ||     ||\")\nson\n\nfonksiyon dusun(mesaj)\n  değişken gen := mesaj.uzunluk + 2\n  yazdır(\" \" + tekrarla(\"_\", gen))\n  yazdır(\"( \" + mesaj + \" )\")\n  yazdır(\" \" + tekrarla(\"-\", gen))\n  yazdır(\"        o   ^__^\")\n  yazdır(\"         o  (oo)\\_______\")\n  yazdır(\"            (__)\\       )\\/\\\")\n  yazdır(\"                ||----w |\")\n  yazdır(\"                ||     ||\")\nson\n\ndışa_aktar soyle, dusun\n"
+        },
+        {
+          "isim": "index.tr",
+          "icerik": "# Cowsay Modülü\n# Konuşan/düşünen ASCII inek 🐄\n\ndışa_aktar soyle, dusun\n"
+        }
+      ]
     }
   ]
 }
