@@ -313,15 +313,15 @@
 
   <header class="header">
     <div class="header-left">
-      <a href="../index.html" class="header-logo"><img src="../turkod.png" alt="TÜRKOD"><span>TÜRKOD</span></a>
+      <a href="../" class="header-logo"><img src="../turkod.png" alt="TÜRKOD"><span>TÜRKOD</span></a>
       <span style="font-size:13px;color:var(--tx3);">Geliştirici</span>
     </div>
     <div class="header-links">
-      <a href="../index.html" class="header-link">Ana Sayfa</a>
-      <a href="../referans/index.html" class="header-link">Referans</a>
-      <a href="../moduller/index.html" class="header-link">Modüller</a>
-      <a href="../deneme/index.html" class="header-link">Canlı Deneme</a>
-      <a href="./index.html" class="header-link active">Geliştirici</a>
+      <a href="../" class="header-link">Ana Sayfa</a>
+      <a href="../referans/" class="header-link">Referans</a>
+      <a href="../moduller/" class="header-link">Modüller</a>
+      <a href="../deneme/" class="header-link">Canlı Deneme</a>
+      <a href="." class="header-link active">Geliştirici</a>
     </div>
   </header>
 
@@ -744,7 +744,7 @@
   <footer class="footer">
     <p>MetogramStudios &copy; 2026 &mdash; Tüm hakları saklıdır.</p>
     <p style="margin-top:8px;">
-      <a href="index.html">TÜRKOD</a> &middot;
+      <a href=".">TÜRKOD</a> &middot;
       <a href="https://novawebb.com" target="_blank">NovaWeBB</a> &middot;
       <a href="mailto:metehanakkaya30@gmail.com">İletişim</a>
     </p>
@@ -757,7 +757,7 @@
         const hedef = document.activeElement;
         if (hedef.tagName !== 'INPUT' && hedef.tagName !== 'TEXTAREA' && !hedef.isContentEditable) {
           e.preventDefault();
-          window.location.href = '../index.html';
+          window.location.href = '../';
         }
       }
     });

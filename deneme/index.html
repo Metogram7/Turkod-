@@ -207,15 +207,15 @@
 <body>
   <header class="header">
     <div class="header-left">
-      <a href="../index.html" class="header-logo"><img src="../turkod.png" alt="TÜRKOD"><span>TÜRKOD</span></a>
+      <a href="../" class="header-logo"><img src="../turkod.png" alt="TÜRKOD"><span>TÜRKOD</span></a>
       <span style="font-size:13px;color:var(--tx3);">Canlı Deneme</span>
     </div>
     <div class="header-links">
-      <a href="../index.html" class="header-link">Ana Sayfa</a>
-      <a href="../referans/index.html" class="header-link">Referans</a>
-      <a href="../moduller/index.html" class="header-link">Modüller</a>
-      <a href="./index.html" class="header-link active">Canlı Deneme</a>
-      <a href="../gelistirici/index.html" class="header-link">Geliştirici</a>
+      <a href="../" class="header-link">Ana Sayfa</a>
+      <a href="../referans/" class="header-link">Referans</a>
+      <a href="../moduller/" class="header-link">Modüller</a>
+      <a href="." class="header-link active">Canlı Deneme</a>
+      <a href="../gelistirici/" class="header-link">Geliştirici</a>
     </div>
   </header>
 
@@ -1461,7 +1461,7 @@ yazdır("Rastgele: " + Rastgele())
         const hedef = document.activeElement;
         if (hedef.tagName !== 'INPUT' && hedef.tagName !== 'TEXTAREA' && !hedef.isContentEditable) {
           e.preventDefault();
-          window.location.href = '../gelistirici/index.html';
+          window.location.href = '../gelistirici/';
         }
       }
     });
