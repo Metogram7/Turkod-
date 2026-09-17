@@ -1,3 +1,0 @@
-# Turkod-
-
-merhaba metehan
