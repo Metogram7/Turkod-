@@ -153,6 +153,31 @@
           "icerik": "# Deneme Modülü\n# Bu dosya modülün dışa aktarımlarını tanımlar.\n\ndışa_aktar selamla\n"
         }
       ]
+    },
+    {
+      "isim": "deneme",
+      "aciklama": "",
+      "yazar": "",
+      "versiyon": "1",
+      "içeAktarAdi": "deneme",
+      "icon": "📦",
+      "onayli": true,
+      "topluluk": true,
+      "tarih": "2026-09-19",
+      "dosyalar": [
+        {
+          "isim": "deneme.tr",
+          "icerik": "fonksiyon selamla(isim)\n    yazdır(\"Merhaba\", isim)\nson\n\nfonksiyon topla(a, b)\n    geri_döndür a + b\nson\n\nfonksiyon çıkar(a, b)\n    geri_döndür a - b\nson\n\nfonksiyon çarp(a, b)\n    geri_döndür a * b\nson\n\nfonksiyon böl(a, b)\n    geri_döndür a / b\nson\n\nfonksiyon kare(sayı)\n    geri_döndür sayı * sayı\nson"
+        },
+        {
+          "isim": "index.tr",
+          "icerik": "# Deneme Modülü\n# Bu dosya modülün dışa aktarımlarını tanımlar.\n\ndışa_aktar selamla, topla , çıkar, çarp, böl, kare\n"
+        },
+        {
+          "isim": "modul.json",
+          "icerik": "{\n  \"isim\": \"deneme\",\n  \"version\": \"1.0.5\",\n  \"aciklama\": \"\",\n  \"yazar\": \"Metehan\",\n  \"sonDerleme\": \"2026-09-17T20:09:52.737Z\"\n}\n"
+        }
+      ]
     }
   ]
 }
